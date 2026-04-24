@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ALL_TAGS, ResourceTag, TAG_CONFIG } from '../types';
 import { useOutsideClick } from '../hooks/useOutsideClick';
@@ -9,18 +9,29 @@ interface Props {
 }
 
 type PanelState = 'closed' | 'open' | 'closing';
-const CLOSE_MS = 180;
 
 export default function FilterBar({ activeFilters, onFilterChange }: Props) {
   const { t } = useTranslation();
   const [overflowing, setOverflowing] = useState(false);
   const [panel, setPanel] = useState<PanelState>('closed');
-  const rowRef = useRef<HTMLDivElement>(null);
+  const [openMaxH, setOpenMaxH] = useState(0);
+  // closedH: exact height of one chip row. Measured after first paint; 49 is a safe fallback.
+  const [closedH, setClosedH] = useState(49);
+  const panelRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLElement>(null);
-  // Mirrors (panel !== 'closed') so the ResizeObserver callback can skip
-  // measurements while the row is display:none.
-  const rowHiddenRef = useRef(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Measure the true single-row height from a rendered chip.
+  // closedH = 8px top-padding + chipHeight + 5px (partial gap — clips just before row 2 starts)
+  useLayoutEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+    const chip = el.querySelector<HTMLElement>('.filter-chip');
+    if (chip) {
+      // Row 2 starts at: 8 (top pad) + chipH + 6 (gap) = chipH + 14
+      // Setting max-height to chipH + 13 clips 1px before row 2 → row 2 fully hidden
+      setClosedH(Math.ceil(chip.getBoundingClientRect().height) + 13);
+    }
+  }, []);
 
   const toggle = (tag: ResourceTag) => {
     if (activeFilters.includes(tag)) {
@@ -31,121 +42,99 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
   };
 
   const open = () => {
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-    rowHiddenRef.current = true;
+    const el = panelRef.current;
+    if (!el) return;
+    const chip = el.querySelector<HTMLElement>('.filter-chip');
+    // scrollHeight doesn't include the Less button (not yet rendered).
+    // Less button adds: 6px gap + 2px margin-top + chipH to the content height.
+    const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height) : 33;
+    setOpenMaxH(el.scrollHeight + chipH + 10);
     setPanel('open');
   };
 
   const close = () => {
-    if (panel === 'closing') return;
+    if (panel === 'closed') return;
     setPanel('closing');
-    closeTimer.current = setTimeout(() => {
-      closeTimer.current = null;
-      rowHiddenRef.current = false;
-      setPanel('closed');
-    }, CLOSE_MS);
   };
 
-  // Prevent state update on unmounted component if timer is still pending.
-  useEffect(() => {
-    return () => { if (closeTimer.current) clearTimeout(closeTimer.current); };
-  }, []);
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (panel === 'closing' && e.propertyName === 'max-height') setPanel('closed');
+  };
 
-  // Detect overflow. Row is display:none while panel is visible — skip those
-  // zero-width measurements via rowHiddenRef.
+  // Detect whether chips wrap past the first row (only meaningful when closed)
   useEffect(() => {
-    const el = rowRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver(() => {
-      if (!rowHiddenRef.current) {
-        setOverflowing(el.scrollWidth > el.clientWidth + 2);
-      }
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    const el = panelRef.current;
+    if (!el || panel !== 'closed') return;
+    const check = () => setOverflowing(el.scrollHeight > closedH + 4);
+    const obs = new ResizeObserver(check);
+    obs.observe(el);
+    check();
+    return () => obs.disconnect();
+  }, [panel, closedH]);
 
   useOutsideClick(barRef, close, panel !== 'closed');
 
-  const panelVisible = panel !== 'closed';
+  const isExpanded = panel === 'open' || panel === 'closing';
 
-  const chipList = (
-    <>
-      <button
-        className={`filter-chip ${activeFilters.length === 0 ? 'active-all' : ''}`}
-        onClick={() => onFilterChange([])}
-        aria-pressed={activeFilters.length === 0}
-      >
-        {t('filter.all')}
-      </button>
-      {ALL_TAGS.map(tag => {
-        const cfg = TAG_CONFIG[tag];
-        const active = activeFilters.includes(tag);
-        return (
-          <button
-            key={tag}
-            className="filter-chip"
-            onClick={() => toggle(tag)}
-            aria-pressed={active}
-            style={active ? {
-              background: cfg.bgColor,
-              borderColor: cfg.color,
-              color: cfg.color,
-            } : {}}
-          >
-            <span aria-hidden="true">{cfg.icon}</span>
-            {t(`tags.${tag}`)}
-          </button>
-        );
-      })}
-    </>
-  );
+  const panelStyle: React.CSSProperties = {
+    maxHeight: panel === 'open' ? openMaxH : closedH,
+  };
+  if (overflowing && panel === 'closed') panelStyle.paddingRight = 88;
 
   return (
     <nav ref={barRef} className="filter-bar" aria-label="Resource filters">
-      {/*
-        Always in DOM so rowRef stays stable for the ResizeObserver.
-        Hidden (display:none) while the panel is open or closing so it takes
-        up no space. rowHiddenRef prevents the observer from clearing the
-        overflowing flag while the row has no layout.
-      */}
+      <div className="filter-bar-spacer" style={{ height: closedH }} aria-hidden="true" />
+
       <div
-        className="filter-bar-row"
-        style={panelVisible ? { display: 'none' } : undefined}
+        ref={panelRef}
+        className={`filter-chips-panel${isExpanded ? ' filter-chips-panel--expanded' : ''}`}
+        style={panelStyle}
+        onTransitionEnd={handleTransitionEnd}
+        role="group"
+        aria-label="Resource filters"
       >
-        <div
-          ref={rowRef}
-          className="filter-chips"
-          role="group"
-          aria-label="Resource filters"
+        <button
+          className={`filter-chip ${activeFilters.length === 0 ? 'active-all' : ''}`}
+          onClick={() => onFilterChange([])}
+          aria-pressed={activeFilters.length === 0}
         >
-          {chipList}
-        </div>
-        {overflowing && (
-          <button
-            className="filter-chip filter-chip--more"
-            onClick={open}
-            aria-expanded={false}
-          >
-            {t('filter.more')}
+          {t('filter.all')}
+        </button>
+        {ALL_TAGS.map(tag => {
+          const cfg = TAG_CONFIG[tag];
+          const active = activeFilters.includes(tag);
+          return (
+            <button
+              key={tag}
+              className="filter-chip"
+              onClick={() => toggle(tag)}
+              aria-pressed={active}
+              style={active ? {
+                background: cfg.bgColor,
+                borderColor: cfg.color,
+                color: cfg.color,
+              } : {}}
+            >
+              <span aria-hidden="true">{cfg.icon}</span>
+              {t(`tags.${tag}`)}
+            </button>
+          );
+        })}
+        {isExpanded && (
+          <button className="filter-chip filter-chip--less" onClick={close}>
+            {t('filter.less')}
           </button>
         )}
       </div>
 
-      {panelVisible && (
-        <div
-          className={`filter-chips-expanded${panel === 'closing' ? ' filter-chips-expanded--closing' : ''}`}
-          role="group"
-          aria-label="Resource filters"
+      {overflowing && panel === 'closed' && (
+        <button
+          className="filter-chip filter-chip--more"
+          onClick={open}
+          aria-expanded={false}
         >
-          {chipList}
-          <button className="filter-chip filter-chip--less" onClick={close}>
-            {t('filter.less')}
-          </button>
-        </div>
+          {t('filter.more')}
+        </button>
       )}
     </nav>
   );

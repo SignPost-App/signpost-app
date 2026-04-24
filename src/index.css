@@ -42,6 +42,9 @@ html, body, #root {
   flex: 1;
   position: relative;
   overflow: hidden;
+  /* z-index:1 creates a stacking context that contains Leaflet's internal
+     z-indexes (200, 400…) so they don't bleed above the filter bar (z-index:99) */
+  z-index: 1;
 }
 
 .leaflet-container {
@@ -158,65 +161,58 @@ html, body, #root {
 
 /* ---- Filter Bar ---- */
 .filter-bar {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
   z-index: 99;
+  position: relative;
+  overflow: visible;
 }
 
-.filter-bar-row {
-  display: flex;
-  align-items: center;
-  overflow: hidden;
+/* In-flow spacer — gives the bar consistent height without growing when expanded */
+.filter-bar-spacer {
+  height: 49px;
 }
 
-.filter-chips {
+/* Chips panel — always absolutely positioned so expanding it never shifts the map */
+.filter-chips-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 99;
   display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
   gap: 6px;
   padding: 8px 12px;
   overflow: hidden;
-  flex: 1;
-  min-width: 0;
+  /* max-height always set via inline style from JS measurement */
+  transition: max-height 0.28s ease, box-shadow 0.2s;
+}
+
+/* Box-shadow while expanded or collapsing */
+.filter-chips-panel--expanded {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
 .filter-chip--more {
-  flex-shrink: 0;
-  margin-right: 8px;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 100;
   border-color: var(--color-primary);
   color: var(--color-primary);
-}
-
-
-@keyframes filterReveal {
-  from { clip-path: inset(0 0 100% 0); }
-  to   { clip-path: inset(0 0 0% 0); }
-}
-
-@keyframes filterCollapse {
-  from { clip-path: inset(0 0 0% 0); }
-  to   { clip-path: inset(0 0 100% 0); }
-}
-
-.filter-chips-expanded {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 4px 12px 8px;
-  border-top: 1px solid var(--color-border);
-  animation: filterReveal 0.22s ease forwards;
-}
-
-.filter-chips-expanded--closing {
-  animation: filterCollapse 0.18s ease forwards;
+  background: var(--color-surface);
 }
 
 .filter-chip--less {
-  margin-top: 2px;
-  width: 100%;
+  flex-basis: 100%;
   justify-content: center;
   border-color: var(--color-primary);
   color: var(--color-primary);
   font-size: 12px;
+  margin-top: 2px;
 }
 
 .filter-chip {
@@ -1347,8 +1343,12 @@ html, body, #root {
     margin: 0;
   }
 
-  /* Hide the whole React app shell */
-  body > *:not(#print-poster-root) {
+  /* Hide app content by class — not by hiding #root itself — so React's DOM
+     tree stays intact and modals inside #root don't flash during the transition */
+  .app-shell,
+  .poster-page,
+  .page-container,
+  .skip-link {
     display: none !important;
   }
 

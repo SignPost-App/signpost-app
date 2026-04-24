@@ -27,6 +27,8 @@ Each chip uses the tag's color when active so the visual feedback is immediate a
 
 On narrow screens where not all chips fit in the single row, a "More …" button appears at the right edge. Tapping it expands the filter bar into a wrapping layout that shows every chip on screen at once, without scrolling. This keeps all filters reachable in two taps on any screen size, including very small phones.
 
+The expanded chip panel is `position: absolute` and overlaps the map rather than pushing it down. The filter bar's height in the page layout never changes. This prevents the map from jumping when the panel opens or closes, which is disorienting on mobile. The panel animates via a `max-height` transition on a single DOM element — the same chips are visible in both the collapsed and expanded state, so there is no flash or misalignment between the two states.
+
 **What was considered and rejected:** A dropdown filter or a collapsible sidebar. Both require an extra tap to reach. The chip bar keeps filters one tap away at all times, which matters when someone is standing on a street corner trying to find the nearest bathroom.
 
 ## Add resource: FAB + modal
@@ -40,16 +42,18 @@ The location picker offers two modes: address input and "use my location." The m
 ## Navigation structure
 
 The app has three pages: map (`/`), admin (`/admin`), and poster (`/poster`). Navigation is intentionally minimal:
-- Header has links to About and Poster
+- Header has a link to About; the About modal contains the "Print a poster" entry point
 - Both non-map pages have a back link to the map
 - The Admin panel (`/admin`) is not linked from the header — it is accessible by direct URL only. This keeps it invisible to end users and reduces curiosity-clicks from people who have no reason to be there.
 - No bottom navigation bar — the map is the entire experience, not one of several tabs
 
-A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Poster is accessed infrequently enough that a header link is fine.
+A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Poster is accessed infrequently enough that a link inside the About modal is fine.
 
 ## About modal
 
 An "About" button in the header (between the language selector and the "+ Add" button) opens a modal that explains what SignPost is, how to use it, and the app's privacy posture. It is aimed at first-time users who arrive via a poster QR scan and have no other context. The modal is dismissed with the ✕ button, a click outside it, or Escape.
+
+The About modal also contains the "Print a poster →" entry point. Clicking it opens the language-selection dialog directly — the user never navigates away from the map. After selecting languages and confirming, the browser print dialog opens (the poster is rendered as a React portal into `document.body`). The About modal remains open throughout and after printing.
 
 ## Poster / downloadable PDF
 
@@ -89,7 +93,7 @@ The current date is printed in small type in the poster header so volunteers kno
 
 ### Implementation note
 
-The printable poster is rendered into a React portal directly on `document.body` (separate from the `#root` div) and hidden with `display: none` on screen. The `@media print` rule shows it and hides everything else using `body > *:not(#print-poster-root)`. This avoids any risk of print CSS leaking into the screen layout and keeps the print-specific markup completely isolated.
+The printable poster is rendered into a React portal directly on `document.body` (separate from the `#root` div) and hidden with `display: none` on screen. The `@media print` rule shows `#print-poster-root` and hides the app UI by targeting specific classes (`.app-shell`, `.poster-page`, `.page-container`, `.skip-link`) rather than hiding `#root` itself. This keeps React's DOM tree intact during the print transition so that any open modals (e.g. the About modal) do not flash hidden and reappear when the print dialog opens and closes.
 
 ## Disclaimer banner
 
