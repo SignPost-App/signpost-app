@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ALL_TAGS, ResourceTag, TAG_CONFIG } from '../types';
 
 interface Props {
@@ -6,6 +7,8 @@ interface Props {
 }
 
 export default function FilterBar({ activeFilters, onFilterChange }: Props) {
+  const { t } = useTranslation();
+
   const toggle = (tag: ResourceTag) => {
     if (activeFilters.includes(tag)) {
       onFilterChange(activeFilters.filter(f => f !== tag));
@@ -15,13 +18,14 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
   };
 
   return (
-    <div className="filter-bar">
-      <div className="filter-chips">
+    <nav className="filter-bar" aria-label="Resource filters">
+      <div className="filter-chips" role="group" aria-label="Resource filters">
         <button
           className={`filter-chip ${activeFilters.length === 0 ? 'active-all' : ''}`}
           onClick={() => onFilterChange([])}
+          aria-pressed={activeFilters.length === 0}
         >
-          All
+          {t('filter.all')}
         </button>
         {ALL_TAGS.map(tag => {
           const cfg = TAG_CONFIG[tag];
@@ -31,17 +35,19 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
               key={tag}
               className="filter-chip"
               onClick={() => toggle(tag)}
+              aria-pressed={active}
               style={active ? {
                 background: cfg.bgColor,
                 borderColor: cfg.color,
                 color: cfg.color,
               } : {}}
             >
-              {cfg.icon} {cfg.label}
+              <span aria-hidden="true">{cfg.icon}</span>
+              {t(`tags.${tag}`)}
             </button>
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 }

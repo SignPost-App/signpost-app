@@ -1,0 +1,86 @@
+{
+  "header": {
+    "tagline": "Greater Seattle Resources",
+    "add": "+ Add",
+    "poster": "Poster",
+    "admin": "Admin",
+    "selectLanguage": "Select language"
+  },
+  "filter": {
+    "all": "All"
+  },
+  "tags": {
+    "food": "Food",
+    "water": "Water",
+    "shelter": "Shelter",
+    "bathroom": "Bathroom",
+    "charging": "Charging",
+    "shower": "Shower",
+    "harm-reduction": "Harm Reduction",
+    "propane": "Propane",
+    "safe-park": "Safe Park",
+    "covered": "Covered Area",
+    "avoid": "AVOID"
+  },
+  "panel": {
+    "close": "Close",
+    "communityVerified": "Community-verified",
+    "directions": "Get Directions",
+    "googleMaps": "Open in Google Maps",
+    "appleMaps": "Open in Apple Maps",
+    "communityNotes": "Community Notes ({{count}})",
+    "noNotes": "No notes yet — be the first to add one.",
+    "addNotePlaceholder": "Add a note (hours change, tips, warnings…)",
+    "postNote": "Post Note",
+    "editPrompt": "Hours wrong? Location off? Anyone can improve this listing.",
+    "added": "Added {{date}}",
+    "edit": "Edit",
+    "report": "Report inaccurate or harmful content"
+  },
+  "addModal": {
+    "title": "Add a Resource",
+    "close": "Close",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Community Food Bank",
+    "typeLabel": "Type (select all that apply)",
+    "locationLabel": "Location",
+    "address": "Address",
+    "dropPin": "Drop Pin",
+    "addressPlaceholder": "Street address or intersection",
+    "useMyLocation": "Use my location",
+    "dropPinHint": "Tap on the map to drop a pin",
+    "locationTip": "Tip: tap \"Use my location\" if you're standing there.",
+    "hoursLabel": "Hours / Availability",
+    "hoursPlaceholder": "e.g. Mon–Fri 8am–5pm, or 24/7",
+    "descriptionLabel": "Description / Notes",
+    "descriptionPlaceholder": "What should people know? No ID required, line gets long, etc.",
+    "disclaimer": "By submitting, you confirm this is accurate information that will help others. Do not post harmful, false, or illicit content.",
+    "cancel": "Cancel",
+    "submit": "Submit Resource"
+  },
+  "disclaimer": {
+    "short": "This map is provided for informational purposes only. Conditions change — always use your own judgment and stay safe.",
+    "long": "HoboSign is a community-maintained resource map. The developers make no warranties about the accuracy, safety, or availability of listed resources. This platform is not intended to facilitate illegal activity of any kind. Use of this map constitutes acceptance of these terms. If you see inaccurate or harmful content, please use the report feature. Developer contact: hobosign.app/about.",
+    "fullDisclaimer": "Full disclaimer",
+    "less": "Less",
+    "dismiss": "Dismiss"
+  },
+  "skipLink": "Skip to main content",
+  "poster": {
+    "selectLanguages": "Select languages for the poster",
+    "selectLanguagesHint": "Choose 1 to 3 languages to print on the poster.",
+    "printPoster": "Print / Save as PDF",
+    "cancel": "Cancel",
+    "subtitle": "Community Resource Map",
+    "area": "Greater Seattle Area",
+    "scanPrompt": "Scan to find free local resources",
+    "featureFood": "Food banks and pantries",
+    "featureShelter": "Shelters and showers",
+    "featureCharging": "Phone charging and WiFi",
+    "featureWater": "Drinking water and bathrooms",
+    "featureParks": "Safe parks and covered areas",
+    "featureHarm": "Harm reduction services",
+    "legal": "This map is maintained by community volunteers. Resources may change — verify before use. Not for illegal activity. Developers disclaim all warranties. hobosign.app/about",
+    "langLabel": "English"
+  }
+}

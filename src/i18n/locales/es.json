@@ -1,0 +1,86 @@
+{
+  "header": {
+    "tagline": "Recursos del Área de Seattle",
+    "add": "+ Agregar",
+    "poster": "Cartel",
+    "admin": "Admin",
+    "selectLanguage": "Seleccionar idioma"
+  },
+  "filter": {
+    "all": "Todos"
+  },
+  "tags": {
+    "food": "Comida",
+    "water": "Agua",
+    "shelter": "Refugio",
+    "bathroom": "Baño",
+    "charging": "Carga",
+    "shower": "Ducha",
+    "harm-reduction": "Reducción de daños",
+    "propane": "Propano",
+    "safe-park": "Parque seguro",
+    "covered": "Área techada",
+    "avoid": "EVITAR"
+  },
+  "panel": {
+    "close": "Cerrar",
+    "communityVerified": "Verificado por la comunidad",
+    "directions": "Cómo llegar",
+    "googleMaps": "Abrir en Google Maps",
+    "appleMaps": "Abrir en Apple Maps",
+    "communityNotes": "Notas de la comunidad ({{count}})",
+    "noNotes": "Aún no hay notas — sé el primero en agregar una.",
+    "addNotePlaceholder": "Agrega una nota (cambios de horario, consejos, advertencias…)",
+    "postNote": "Publicar nota",
+    "editPrompt": "¿Horario incorrecto? ¿Ubicación incorrecta? Cualquiera puede mejorar este listado.",
+    "added": "Añadido el {{date}}",
+    "edit": "Editar",
+    "report": "Reportar contenido inexacto o dañino"
+  },
+  "addModal": {
+    "title": "Agregar un recurso",
+    "close": "Cerrar",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Ej. Banco de alimentos comunitario",
+    "typeLabel": "Tipo (selecciona todos los que apliquen)",
+    "locationLabel": "Ubicación",
+    "address": "Dirección",
+    "dropPin": "Marcar en mapa",
+    "addressPlaceholder": "Dirección o intersección",
+    "useMyLocation": "Usar mi ubicación",
+    "dropPinHint": "Toca el mapa para marcar un punto",
+    "locationTip": "Consejo: toca \"Usar mi ubicación\" si estás ahí.",
+    "hoursLabel": "Horario / Disponibilidad",
+    "hoursPlaceholder": "Ej. Lun–Vie 8am–5pm, o 24/7",
+    "descriptionLabel": "Descripción / Notas",
+    "descriptionPlaceholder": "¿Qué deben saber? Sin ID requerido, la fila se alarga, etc.",
+    "disclaimer": "Al enviar, confirmas que esta información es precisa y ayudará a otros. No publiques contenido dañino, falso o ilícito.",
+    "cancel": "Cancelar",
+    "submit": "Enviar recurso"
+  },
+  "disclaimer": {
+    "short": "Este mapa es solo para fines informativos. Las condiciones cambian — usa tu propio criterio y mantente seguro.",
+    "long": "HoboSign es un mapa de recursos mantenido por la comunidad. Los desarrolladores no garantizan la exactitud, seguridad o disponibilidad de los recursos listados. Esta plataforma no está destinada a facilitar actividades ilegales de ningún tipo. El uso de este mapa constituye la aceptación de estos términos. Si ves contenido inexacto o dañino, usa la función de reporte. Contacto del desarrollador: hobosign.app/about.",
+    "fullDisclaimer": "Descargo completo",
+    "less": "Menos",
+    "dismiss": "Cerrar aviso"
+  },
+  "skipLink": "Ir al contenido principal",
+  "poster": {
+    "selectLanguages": "Seleccionar idiomas del cartel",
+    "selectLanguagesHint": "Elige entre 1 y 3 idiomas para imprimir en el cartel.",
+    "printPoster": "Imprimir / Guardar como PDF",
+    "cancel": "Cancelar",
+    "subtitle": "Mapa de Recursos Comunitarios",
+    "area": "Area Metropolitana de Seattle",
+    "scanPrompt": "Escanea para encontrar recursos locales gratis",
+    "featureFood": "Bancos y despensas de alimentos",
+    "featureShelter": "Refugios y duchas",
+    "featureCharging": "Carga de telefono y WiFi",
+    "featureWater": "Agua potable y banos",
+    "featureParks": "Parques seguros y areas cubiertas",
+    "featureHarm": "Servicios de reduccion de danos",
+    "legal": "Este mapa es mantenido por voluntarios de la comunidad. Los recursos pueden cambiar — verifique antes de depender de la informacion. No para uso ilegal. Los desarrolladores renuncian a toda garantia. hobosign.app/about",
+    "langLabel": "Espanol"
+  }
+}

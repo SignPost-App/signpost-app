@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Resource, TAG_CONFIG } from '../types';
 
 interface Props {
@@ -7,10 +8,11 @@ interface Props {
 }
 
 function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: string }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const menuId = `directions-menu-${lat}-${lng}`;
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
@@ -26,26 +28,39 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
 
   return (
     <div ref={ref} style={{ position: 'relative', flex: 1 }}>
-      <button className="btn-directions" onClick={() => setOpen(o => !o)}>
-        🧭 Get Directions ▾
+      <button
+        className="btn-directions"
+        onClick={() => setOpen(o => !o)}
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-controls={menuId}
+      >
+        <span aria-hidden="true">🧭</span>
+        {t('panel.directions')}
+        <span aria-hidden="true"> ▾</span>
       </button>
       {open && (
-        <div style={{
-          position: 'absolute',
-          bottom: 'calc(100% + 6px)',
-          left: 0,
-          right: 0,
-          background: '#fff',
-          border: '1px solid var(--color-border)',
-          borderRadius: 10,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
-          overflow: 'hidden',
-          zIndex: 10,
-        }}>
+        <div
+          id={menuId}
+          role="menu"
+          style={{
+            position: 'absolute',
+            bottom: 'calc(100% + 6px)',
+            left: 0,
+            right: 0,
+            background: '#fff',
+            border: '1px solid var(--color-border)',
+            borderRadius: 10,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.14)',
+            overflow: 'hidden',
+            zIndex: 10,
+          }}
+        >
           <a
             href={googleUrl}
             target="_blank"
             rel="noopener noreferrer"
+            role="menuitem"
             onClick={() => setOpen(false)}
             style={{
               display: 'flex',
@@ -67,12 +82,13 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
               style={{ borderRadius: 4, flexShrink: 0 }}
               onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
-            Open in Google Maps
+            {t('panel.googleMaps')}
           </a>
           <a
             href={appleUrl}
             target="_blank"
             rel="noopener noreferrer"
+            role="menuitem"
             onClick={() => setOpen(false)}
             style={{
               display: 'flex',
@@ -85,8 +101,8 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
               fontWeight: 600,
             }}
           >
-            <span style={{ fontSize: 20, lineHeight: 1, flexShrink: 0 }}>🍎</span>
-            Open in Apple Maps
+            <span aria-hidden="true" style={{ fontSize: 20, lineHeight: 1, flexShrink: 0 }}>🍎</span>
+            {t('panel.appleMaps')}
           </a>
         </div>
       )}
@@ -95,28 +111,39 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
 }
 
 export default function ResourcePanel({ resource, onClose }: Props) {
+  const { t } = useTranslation();
   const [commentText, setCommentText] = useState('');
   const isAvoid = resource.tags.includes('avoid');
 
   return (
-    <div className="resource-panel">
-      <div className="panel-drag-handle" />
+    <div
+      className="resource-panel"
+      role="complementary"
+      aria-label={resource.name}
+    >
+      <div className="panel-drag-handle" aria-hidden="true" />
       <div className="panel-scroll">
         {/* Header */}
         <div className="panel-header">
           <h2 className="panel-title">{resource.name}</h2>
-          <button className="panel-close" onClick={onClose} aria-label="Close">✕</button>
+          <button
+            className="panel-close"
+            onClick={onClose}
+            aria-label={t('panel.close')}
+          >
+            ✕
+          </button>
         </div>
 
         {/* Verified badge */}
         {resource.verified && (
           <div className="badge-verified" style={{ marginBottom: 10 }}>
-            ✓ Community-verified
+            ✓ {t('panel.communityVerified')}
           </div>
         )}
 
         {/* Tags */}
-        <div className="panel-tags">
+        <div className="panel-tags" aria-label="Resource types">
           {resource.tags.map(tag => {
             const cfg = TAG_CONFIG[tag];
             return (
@@ -125,33 +152,34 @@ export default function ResourcePanel({ resource, onClose }: Props) {
                 className="tag-badge"
                 style={{ background: cfg.bgColor, color: cfg.color }}
               >
-                {cfg.icon} {cfg.label}
+                <span aria-hidden="true">{cfg.icon}</span>
+                {t(`tags.${tag}`)}
               </span>
             );
           })}
         </div>
 
         {/* Meta */}
-        <div className="panel-meta">
+        <dl className="panel-meta">
           {resource.address && (
             <div className="panel-meta-row">
-              <span className="panel-meta-icon">📍</span>
-              <span className="panel-meta-text">{resource.address}</span>
+              <span className="panel-meta-icon" aria-hidden="true">📍</span>
+              <dd className="panel-meta-text">{resource.address}</dd>
             </div>
           )}
           {resource.hours && (
             <div className="panel-meta-row">
-              <span className="panel-meta-icon">🕐</span>
-              <span className="panel-meta-text">{resource.hours}</span>
+              <span className="panel-meta-icon" aria-hidden="true">🕐</span>
+              <dd className="panel-meta-text">{resource.hours}</dd>
             </div>
           )}
           <div className="panel-meta-row">
-            <span className="panel-meta-icon">📅</span>
-            <span className="panel-meta-text" style={{ color: 'var(--color-muted)' }}>
-              Added {resource.addedAt}
-            </span>
+            <span className="panel-meta-icon" aria-hidden="true">📅</span>
+            <dd className="panel-meta-text" style={{ color: 'var(--color-muted)' }}>
+              {t('panel.added', { date: resource.addedAt })}
+            </dd>
           </div>
-        </div>
+        </dl>
 
         {/* Description */}
         {resource.description && (
@@ -166,7 +194,9 @@ export default function ResourcePanel({ resource, onClose }: Props) {
         <div className="divider" />
 
         {/* Comments */}
-        <div className="section-label">Community Notes ({resource.comments.length})</div>
+        <h3 className="section-label">
+          {t('panel.communityNotes', { count: resource.comments.length })}
+        </h3>
         {resource.comments.length > 0 ? (
           <div className="comments-list">
             {resource.comments.map(c => (
@@ -178,13 +208,17 @@ export default function ResourcePanel({ resource, onClose }: Props) {
           </div>
         ) : (
           <p style={{ fontSize: 13, color: 'var(--color-muted)', marginBottom: 10 }}>
-            No notes yet — be the first to add one.
+            {t('panel.noNotes')}
           </p>
         )}
 
+        <label htmlFor="comment-input" className="sr-only">
+          {t('panel.addNotePlaceholder')}
+        </label>
         <textarea
+          id="comment-input"
           className="comment-input"
-          placeholder="Add a note (hours change, tips, warnings…)"
+          placeholder={t('panel.addNotePlaceholder')}
           value={commentText}
           onChange={e => setCommentText(e.target.value)}
         />
@@ -192,26 +226,29 @@ export default function ResourcePanel({ resource, onClose }: Props) {
           className="btn btn-outline btn-full btn-sm"
           disabled={!commentText.trim()}
           style={{ marginBottom: 8, opacity: commentText.trim() ? 1 : 0.5 }}
+          aria-disabled={!commentText.trim()}
         >
-          Post Note
+          {t('panel.postNote')}
         </button>
 
         <div className="divider" />
 
-        {/* Edit prompt */}
         <p style={{ fontSize: 12, color: 'var(--color-muted)', textAlign: 'center', marginBottom: 4 }}>
-          Hours wrong? Location off? Anyone can improve this listing.
+          {t('panel.editPrompt')}
         </p>
       </div>
 
       {/* Actions footer */}
       <div className="panel-actions">
         <DirectionsMenu lat={resource.lat} lng={resource.lng} name={resource.name} />
-        <button className="btn-edit-panel">✏️ Edit</button>
+        <button className="btn-edit-panel" aria-label={t('panel.edit')}>
+          <span aria-hidden="true">✏️</span> {t('panel.edit')}
+        </button>
         <button
           className="btn-edit-panel"
           style={{ color: 'var(--color-danger)', borderColor: '#fca5a5' }}
-          title="Report inaccurate or harmful content"
+          aria-label={t('panel.report')}
+          title={t('panel.report')}
         >
           🚩
         </button>
