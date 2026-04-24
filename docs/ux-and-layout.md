@@ -21,9 +21,11 @@ A drag handle is shown on mobile to suggest dismissibility. The panel closes on 
 
 ## Filter bar
 
-Horizontal scrollable chip row, positioned just below the header. Chips can be multi-selected — a user might want to see both shelters and food banks at once. Selecting "All" deselects everything and shows the full map.
+Horizontal chip row, positioned just below the header. Chips can be multi-selected — a user might want to see both shelters and food banks at once. Selecting "All" deselects everything and shows the full map.
 
-Each chip uses the tag's color when active so the visual feedback is immediate and matches the map pin colors. The bar is scrollable with `scrollbar-width: none` to avoid a visible scrollbar that would look awkward on mobile.
+Each chip uses the tag's color when active so the visual feedback is immediate and matches the map pin colors.
+
+On narrow screens where not all chips fit in the single row, a "More …" button appears at the right edge. Tapping it expands the filter bar into a wrapping layout that shows every chip on screen at once, without scrolling. This keeps all filters reachable in two taps on any screen size, including very small phones.
 
 **What was considered and rejected:** A dropdown filter or a collapsible sidebar. Both require an extra tap to reach. The chip bar keeps filters one tap away at all times, which matters when someone is standing on a street corner trying to find the nearest bathroom.
 
@@ -38,11 +40,16 @@ The location picker offers two modes: address input and "use my location." The m
 ## Navigation structure
 
 The app has three pages: map (`/`), admin (`/admin`), and poster (`/poster`). Navigation is intentionally minimal:
-- Header links to Admin and Poster
-- Both pages have a back link to the map
+- Header has links to About and Poster
+- Both non-map pages have a back link to the map
+- The Admin panel (`/admin`) is not linked from the header — it is accessible by direct URL only. This keeps it invisible to end users and reduces curiosity-clicks from people who have no reason to be there.
 - No bottom navigation bar — the map is the entire experience, not one of several tabs
 
-A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Admin and Poster are accessed infrequently enough that header links are fine.
+A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Poster is accessed infrequently enough that a header link is fine.
+
+## About modal
+
+An "About" button in the header (between the language selector and the "+ Add" button) opens a modal that explains what SignPost is, how to use it, and the app's privacy posture. It is aimed at first-time users who arrive via a poster QR scan and have no other context. The modal is dismissed with the ✕ button, a click outside it, or Escape.
 
 ## Poster / downloadable PDF
 
@@ -60,7 +67,7 @@ The PDF output is designed for a standard US letter sheet (8.5 × 11 in, 0.45 in
 
 The font stack is Arial → Helvetica Neue → Helvetica. These are the most legible sans-serif fonts available without embedding a custom font, and perform well for readers with dyslexia. Additional dyslexia-friendly choices applied: `line-height: 1.55`, moderate `letter-spacing` and `word-spacing`, left-aligned body text, no all-caps in running text, and generous whitespace between sections.
 
-The QR code is rendered as an inline SVG with correct QR finder patterns, timing patterns, and the required dark module — visually indistinguishable from a real QR code. The URL `hobosign.app` is printed in large type directly below it so the poster remains useful even if the QR cannot be scanned.
+The QR code is rendered as an inline SVG with correct QR finder patterns, timing patterns, and the required dark module — visually indistinguishable from a real QR code. The URL `signpost.app` is printed in large type directly below it so the poster remains useful even if the QR cannot be scanned.
 
 ### Multi-language layout
 
@@ -70,7 +77,15 @@ A single language produces a spacious single-column layout. Two languages produc
 
 ### Tear-off tabs
 
-Eight tear-off tabs run along the bottom, separated from the body by a dashed cut line with a scissors symbol (✂). Each tab contains `hobosign.app` in vertical text (`writing-mode: vertical-rl`) so when the strip is torn off and held upright, the URL reads normally. This is the standard tear-off flyer convention.
+Eight tear-off tabs run along the bottom of the page, separated from the body by a dashed cut line with a scissors symbol (✂). Each tab contains `signpost.app` in vertical text (`writing-mode: vertical-rl`) so when the strip is torn off and held upright, the URL reads normally. This is the standard tear-off flyer convention.
+
+The tabs are always pinned to the physical bottom of the printed page using flex layout (`margin-top: auto` on the tabs container) and `min-height: 11in` on the page. This ensures the cut line appears at the paper edge regardless of how much content is above it.
+
+### Print margins and date
+
+The `@page` margin is set to zero to suppress the browser's built-in header/footer text (page number, tab title, and origin URL) that would otherwise appear in the printed margins and collide with the tear tabs and poster title. Content padding is handled by `.pp-page` instead.
+
+The current date is printed in small type in the poster header so volunteers know when the poster was generated. The time is not included — only the date — to avoid the poster appearing stale after a few hours.
 
 ### Implementation note
 

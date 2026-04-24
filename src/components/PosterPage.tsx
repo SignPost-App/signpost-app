@@ -68,7 +68,7 @@ export default function PosterPage() {
 
       <div className="poster-preview">
         <div className="poster-inner">
-          <div className="poster-headline">HoboSign</div>
+          <div className="poster-headline">SignPost</div>
           <div className="poster-subtitle">Community Resource Map &middot; Greater Seattle Area</div>
 
           <div className="poster-qr">
@@ -114,12 +114,12 @@ export default function PosterPage() {
             ))}
           </div>
 
-          <div className="poster-url">hobosign.app</div>
+          <div className="poster-url">signpost.app</div>
 
           <div className="poster-legal">
             This map is maintained by community volunteers. Resources may change — always
             verify before relying on listed information. Not intended for illegal use.
-            Developers disclaim all warranties. For support: hobosign.app/about
+            Developers disclaim all warranties. For support: signpost.app/about
           </div>
         </div>
       </div>

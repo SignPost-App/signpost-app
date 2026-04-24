@@ -3,6 +3,10 @@ import { createPortal } from 'react-dom';
 import i18n from '../i18n/index';
 import type { LanguageCode } from '../i18n/index';
 
+function formatPrintDate(): string {
+  return new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
 // --- QR code visual (21×21 modules, correct finder + timing patterns) ---
 const QR_N = 21;
 const QR_PX = 8;
@@ -63,7 +67,7 @@ function QRSvg() {
       viewBox={`0 0 ${size} ${size}`}
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="QR code — scan or visit hobosign.app"
+      aria-label="QR code — scan or visit signpost.app"
     >
       <rect width={size} height={size} fill="#fff" />
       {Array.from({ length: QR_N }, (_, r) =>
@@ -115,7 +119,7 @@ export default function PrintablePoster({ languages }: Props) {
 
         {/* ── Header ── */}
         <header className="pp-header">
-          <div className="pp-title">HoboSign</div>
+          <div className="pp-title">SignPost</div>
           <div className="pp-subtitles">
             {translators.map(({ lang, t }) => (
               <div key={lang} className="pp-subtitle">
@@ -123,6 +127,7 @@ export default function PrintablePoster({ languages }: Props) {
               </div>
             ))}
           </div>
+          <div className="pp-date">{formatPrintDate()}</div>
         </header>
 
         {/* ── QR + URL ── */}
@@ -130,7 +135,7 @@ export default function PrintablePoster({ languages }: Props) {
           <div className="pp-qr-box">
             <QRSvg />
           </div>
-          <div className="pp-url">hobosign.app</div>
+          <div className="pp-url">signpost.app</div>
           <div className="pp-scan-prompts">
             {translators.map(({ lang, t }) => (
               <div key={lang} className="pp-scan-prompt">
@@ -176,7 +181,7 @@ export default function PrintablePoster({ languages }: Props) {
           <div className="pp-tabs">
             {Array.from({ length: TAB_COUNT }, (_, i) => (
               <div key={i} className="pp-tab">
-                <span className="pp-tab-text">hobosign.app</span>
+                <span className="pp-tab-text">signpost.app</span>
               </div>
             ))}
           </div>

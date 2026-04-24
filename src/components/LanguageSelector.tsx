@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, useId } from 'react';
+import { useState, useRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SUPPORTED_LANGUAGES, LanguageCode } from '../i18n';
+import { useOutsideClick } from '../hooks/useOutsideClick';
 
 interface DropdownPos { top: number; right: number; }
 
@@ -28,17 +29,7 @@ export default function LanguageSelector() {
     buttonRef.current?.focus();
   };
 
-  // Close on outside click
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
+  useOutsideClick(containerRef, () => setOpen(false), open);
 
   // Keyboard navigation on the button
   const handleButtonKeyDown = (e: React.KeyboardEvent) => {

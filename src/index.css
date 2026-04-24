@@ -55,6 +55,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 0 16px;
   height: 56px;
   background: var(--color-primary);
@@ -69,17 +70,22 @@ html, body, #root {
   gap: 8px;
   text-decoration: none;
   color: #fff;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
 }
 
 .header-logo {
-  font-size: 22px;
-  line-height: 1;
+  height: clamp(22px, 5.5vw, 34px);
+  width: auto;
+  flex-shrink: 0;
 }
 
 .header-name {
-  font-size: 20px;
+  font-size: clamp(14px, 4.2vw, 20px);
   font-weight: 700;
   letter-spacing: -0.3px;
+  white-space: nowrap;
 }
 
 .header-tagline {
@@ -96,7 +102,9 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
+
 
 /* ---- Buttons ---- */
 .btn {
@@ -156,16 +164,60 @@ html, body, #root {
   z-index: 99;
 }
 
+.filter-bar-row {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
 .filter-chips {
   display: flex;
   gap: 6px;
   padding: 8px 12px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
 }
 
-.filter-chips::-webkit-scrollbar { display: none; }
+.filter-chip--more {
+  flex-shrink: 0;
+  margin-right: 8px;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+
+@keyframes filterReveal {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0% 0); }
+}
+
+@keyframes filterCollapse {
+  from { clip-path: inset(0 0 0% 0); }
+  to   { clip-path: inset(0 0 100% 0); }
+}
+
+.filter-chips-expanded {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 12px 8px;
+  border-top: 1px solid var(--color-border);
+  animation: filterReveal 0.22s ease forwards;
+}
+
+.filter-chips-expanded--closing {
+  animation: filterCollapse 0.18s ease forwards;
+}
+
+.filter-chip--less {
+  margin-top: 2px;
+  width: 100%;
+  justify-content: center;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-size: 12px;
+}
 
 .filter-chip {
   display: inline-flex;
@@ -1143,7 +1195,7 @@ html, body, #root {
   box-shadow: var(--shadow-md);
   list-style: none;
   overflow: hidden;
-  z-index: 1000;
+  z-index: 9999;
   animation: fadeIn 0.15s ease;
 }
 
@@ -1291,7 +1343,8 @@ html, body, #root {
 @media print {
   @page {
     size: letter portrait;
-    margin: 0.45in;
+    /* Zero margins suppress browser-added header/footer text (page number, URL, title) */
+    margin: 0;
   }
 
   /* Hide the whole React app shell */
@@ -1310,6 +1363,10 @@ html, body, #root {
     color: #000;
     background: #fff;
     width: 100%;
+    /* Fill the full page height so tabs reach the bottom */
+    min-height: 11in;
+    box-sizing: border-box;
+    padding: 0.45in;
     display: flex;
     flex-direction: column;
     gap: 10pt;
@@ -1457,9 +1514,17 @@ html, body, #root {
     margin: 0;
   }
 
-  /* ── Tear-off tabs ── */
+  /* ── Date ── */
+  .pp-date {
+    font-size: 9pt;
+    color: #555;
+    margin-top: 3pt;
+  }
+
+  /* ── Tear-off tabs (always at page bottom) ── */
   .pp-tabs-container {
-    margin-top: 4pt;
+    margin-top: auto;
+    padding-top: 10pt;
   }
 
   .pp-cut-line {

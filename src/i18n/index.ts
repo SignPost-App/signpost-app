@@ -24,7 +24,7 @@ i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
-      lookupLocalStorage: 'hobosign-lang',
+      lookupLocalStorage: 'signpost-lang',
     },
     interpolation: {
       escapeValue: false,

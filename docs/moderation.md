@@ -4,6 +4,8 @@
 
 Moderators ("vetter volunteers") access the admin panel at `/admin` via a pre-shared access code. There is no username, no email, no password recovery flow. The code grants entry; the session lasts until the tab is closed or the user signs out.
 
+The `/admin` URL is not linked from anywhere in the public UI — it is shared with moderators out-of-band (e.g. over Signal). This keeps the existence of the panel invisible to casual users and reduces the surface area for curiosity-driven probing.
+
 Why this approach:
 - **No personal data collected from moderators.** Accounts create a table of who moderated what and when. We don't want that liability, and moderators (who may themselves be in vulnerable situations) shouldn't have to hand over an email address to help.
 - **Simple to manage.** Access codes can be rotated, shared with a new volunteer over Signal, revoked by changing the server-side accepted codes.

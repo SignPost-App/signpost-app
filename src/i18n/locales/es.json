@@ -7,7 +7,9 @@
     "selectLanguage": "Seleccionar idioma"
   },
   "filter": {
-    "all": "Todos"
+    "all": "Todos",
+    "more": "Más …",
+    "less": "Menos ↑"
   },
   "tags": {
     "food": "Comida",
@@ -62,10 +64,20 @@
   },
   "disclaimer": {
     "short": "Este mapa es solo para fines informativos. Las condiciones cambian — usa tu propio criterio y mantente seguro.",
-    "long": "HoboSign es un mapa de recursos mantenido por la comunidad. Los desarrolladores no garantizan la exactitud, seguridad o disponibilidad de los recursos listados. Esta plataforma no está destinada a facilitar actividades ilegales de ningún tipo. El uso de este mapa constituye la aceptación de estos términos. Si ves contenido inexacto o dañino, usa la función de reporte. Contacto del desarrollador: hobosign.app/about.",
+    "long": "SignPost es un mapa de recursos mantenido por la comunidad. Los desarrolladores no garantizan la exactitud, seguridad o disponibilidad de los recursos listados. Esta plataforma no está destinada a facilitar actividades ilegales de ningún tipo. El uso de este mapa constituye la aceptación de estos términos. Si ves contenido inexacto o dañino, usa la función de reporte. Contacto del desarrollador: signpost.app/about.",
     "fullDisclaimer": "Descargo completo",
     "less": "Menos",
     "dismiss": "Cerrar aviso"
+  },
+  "about": {
+    "button": "Acerca de",
+    "title": "Acerca de SignPost",
+    "body": "SignPost es un mapa gratuito mantenido por la comunidad que ayuda a las personas del Area Metropolitana de Seattle a encontrar recursos como bancos de alimentos, refugios, agua potable, banos, carga de telefono y servicios de reduccion de danos.\n\nCualquiera puede agregar o actualizar una ubicacion. Las notas comunitarias permiten compartir consejos, reportar cambios y verificar que la informacion sigue siendo precisa.\n\nToca un marcador en el mapa para ver detalles y obtener indicaciones.\n\nSignPost no recopila datos personales. No se requiere cuenta.",
+    "helpTitle": "Como ayudar",
+    "helpAddData": "¿Conoces un recurso que no esta en el mapa? Toca el boton + Agregar para enviarlo. Mantener el mapa actualizado es la forma mas directa de ayudar.",
+    "helpPoster": "Imprime un cartel y ponlo en tu comunidad — lavanderias, refugios, bibliotecas, centros comunitarios. Cualquiera que lo vea puede escanear el codigo QR o escribir la URL para acceder al mapa.",
+    "helpPosterLink": "Abrir pagina de carteles",
+    "close": "Cerrar"
   },
   "skipLink": "Ir al contenido principal",
   "poster": {
@@ -82,7 +94,7 @@
     "featureWater": "Agua potable y banos",
     "featureParks": "Parques seguros y areas cubiertas",
     "featureHarm": "Servicios de reduccion de danos",
-    "legal": "Este mapa es mantenido por voluntarios de la comunidad. Los recursos pueden cambiar — verifique antes de depender de la informacion. No para uso ilegal. Los desarrolladores renuncian a toda garantia. hobosign.app/about",
+    "legal": "Este mapa es mantenido por voluntarios de la comunidad. Los recursos pueden cambiar — verifique antes de depender de la informacion. No para uso ilegal. Los desarrolladores renuncian a toda garantia. signpost.app/about",
     "langLabel": "Espanol"
   }
 }

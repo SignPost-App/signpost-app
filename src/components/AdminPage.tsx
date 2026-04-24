@@ -14,7 +14,7 @@ export default function AdminPage() {
     return (
       <div className="page-container">
         <div className="admin-header">
-          <h1>🗺️ HoboSign Admin</h1>
+          <h1>SignPost Admin</h1>
           <Link to="/" className="btn btn-ghost btn-sm">← Map</Link>
         </div>
         <div className="login-card">
@@ -53,7 +53,7 @@ export default function AdminPage() {
   return (
     <div className="page-container">
       <div className="admin-header">
-        <h1>🗺️ HoboSign Admin</h1>
+        <h1>SignPost Admin</h1>
         <div style={{ display: 'flex', gap: 8 }}>
           <Link to="/" className="btn btn-ghost btn-sm">← Map</Link>
           <button className="btn btn-ghost btn-sm" onClick={() => setLoggedIn(false)}>Sign Out</button>
