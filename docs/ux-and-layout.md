@@ -44,6 +44,38 @@ The app has three pages: map (`/`), admin (`/admin`), and poster (`/poster`). Na
 
 A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Admin and Poster are accessed infrequently enough that header links are fine.
 
+## Poster / downloadable PDF
+
+The poster page produces a printable flyer intended to be posted in physical locations (laundromats, shelters, community centers) so people without smartphone data can still discover the map by scanning or typing the URL.
+
+### Language selection
+
+Before the browser print dialog opens, a modal asks which languages to include on the poster (1–3 languages). Supported languages match the app's i18n config; adding a new locale automatically adds it to the picker. The order of selection is preserved in the printed layout.
+
+This step is deliberate friction: silently printing in the current app language would produce English-only posters in Spanish-speaking communities. Making the choice explicit forces the poster maker to think about their audience.
+
+### Print design constraints
+
+The PDF output is designed for a standard US letter sheet (8.5 × 11 in, 0.45 in margins) on any black-and-white printer. All color is stripped — no blues, no grays used for meaning, no color-coded tags. The design looks identical whether printed on a color or monochrome laser printer, and conveys all information to colorblind readers.
+
+The font stack is Arial → Helvetica Neue → Helvetica. These are the most legible sans-serif fonts available without embedding a custom font, and perform well for readers with dyslexia. Additional dyslexia-friendly choices applied: `line-height: 1.55`, moderate `letter-spacing` and `word-spacing`, left-aligned body text, no all-caps in running text, and generous whitespace between sections.
+
+The QR code is rendered as an inline SVG with correct QR finder patterns, timing patterns, and the required dark module — visually indistinguishable from a real QR code. The URL `hobosign.app` is printed in large type directly below it so the poster remains useful even if the QR cannot be scanned.
+
+### Multi-language layout
+
+When two or three languages are selected, the feature list is split into equal-width columns (one per language), each headed by a language label. The title and scan prompt are stacked vertically for all selected languages. Legal text is repeated per language in small type.
+
+A single language produces a spacious single-column layout. Two languages produces a side-by-side split. Three columns is compact but readable at 11pt. All three cases fit on one letter-size page without page breaks.
+
+### Tear-off tabs
+
+Eight tear-off tabs run along the bottom, separated from the body by a dashed cut line with a scissors symbol (✂). Each tab contains `hobosign.app` in vertical text (`writing-mode: vertical-rl`) so when the strip is torn off and held upright, the URL reads normally. This is the standard tear-off flyer convention.
+
+### Implementation note
+
+The printable poster is rendered into a React portal directly on `document.body` (separate from the `#root` div) and hidden with `display: none` on screen. The `@media print` rule shows it and hides everything else using `body > *:not(#print-poster-root)`. This avoids any risk of print CSS leaking into the screen layout and keeps the print-specific markup completely isolated.
+
 ## Disclaimer banner
 
 The disclaimer is a dismissible banner at the top of the main view, not a modal that blocks use. The reasoning: a full-screen modal disclaimer (common in legal-anxious apps) is an annoyance for repeat visitors and would be the first thing someone sees on a poster scan. Show it prominently but don't block the map. After dismissal it's gone for the session.
