@@ -37,16 +37,22 @@ export default function AboutModal({ onClose }: Props) {
 
   return (
     <>
-      {printLanguages.length > 0 && <PrintablePoster languages={printLanguages} />}
-
       <div
         className="modal-overlay"
         role="dialog"
         aria-modal="true"
         aria-labelledby="about-title"
         onClick={e => { if (e.target === e.currentTarget && !showLangModal) onClose(); }}
+        onAnimationEnd={e => { (e.currentTarget as HTMLElement).style.animation = 'none'; }}
       >
-        <div className="modal" style={{ maxWidth: 480 }}>
+        <div
+          className="modal"
+          style={{ maxWidth: 480 }}
+          onAnimationEnd={e => {
+            e.stopPropagation();
+            (e.currentTarget as HTMLElement).style.animation = 'none';
+          }}
+        >
           <div className="modal-header">
             <span id="about-title" className="modal-title">{t('about.title')}</span>
             <button
@@ -99,6 +105,7 @@ export default function AboutModal({ onClose }: Props) {
           onCancel={() => setShowLangModal(false)}
         />
       )}
+      {printLanguages.length > 0 && <PrintablePoster languages={printLanguages} />}
     </>
   );
 }

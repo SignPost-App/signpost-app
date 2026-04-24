@@ -17,6 +17,9 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
   const [openMaxH, setOpenMaxH] = useState(0);
   // closedH: exact height of one chip row. Measured after first paint; 49 is a safe fallback.
   const [closedH, setClosedH] = useState(49);
+  // Suppress the max-height transition until after the first measurement paint so
+  // the initial closedH → measured-closedH change doesn't play a slide animation.
+  const [transitionReady, setTransitionReady] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLElement>(null);
 
@@ -31,6 +34,10 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
       // Setting max-height to chipH + 13 clips 1px before row 2 → row 2 fully hidden
       setClosedH(Math.ceil(chip.getBoundingClientRect().height) + 13);
     }
+  }, []);
+
+  useEffect(() => {
+    setTransitionReady(true);
   }, []);
 
   const toggle = (tag: ResourceTag) => {
@@ -79,6 +86,7 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
   const panelStyle: React.CSSProperties = {
     maxHeight: panel === 'open' ? openMaxH : closedH,
   };
+  if (!transitionReady) panelStyle.transition = 'none';
   if (overflowing && panel === 'closed') panelStyle.paddingRight = 88;
 
   return (
