@@ -11,8 +11,8 @@ export const mockResources: Resource[] = [
     hours: 'Shelter: 7pm–7am daily  •  Meals: 6pm daily',
     description: 'Emergency shelter and services. Dinner served at 6pm sharp.',
     comments: [
-      { id: 'c1', text: 'Good hot meals, staff is friendly', addedAt: '2 days ago' },
-      { id: 'c2', text: 'Bring your ID if you have one', addedAt: '1 week ago' },
+      { id: 'c1', text: 'Good hot meals, staff is friendly', addedAt: '2 days ago', accuracyVotes: { accurate: 5, outdated: 0 } },
+      { id: 'c2', text: 'Bring your ID if you have one', addedAt: '1 week ago', accuracyVotes: { accurate: 3, outdated: 1 } },
     ],
     addedAt: '3 months ago',
     verified: true,
@@ -27,7 +27,7 @@ export const mockResources: Resource[] = [
     hours: 'Mon–Thu: 10am–8pm  •  Fri–Sat: 10am–6pm  •  Sun: 12pm–6pm',
     description: 'Free outlet charging at tables, public restrooms, water fountain inside.',
     comments: [
-      { id: 'c3', text: 'Outlets near the entrance windows, no one bothers you', addedAt: '5 days ago' },
+      { id: 'c3', text: 'Outlets near the entrance windows, no one bothers you', addedAt: '5 days ago', accuracyVotes: { accurate: 7, outdated: 0 } },
       { id: 'c4', text: 'AC in summer, warm in winter', addedAt: '3 days ago' },
     ],
     addedAt: '1 month ago',

@@ -407,6 +407,36 @@ html, body, #root {
   margin-top: 4px;
 }
 
+.comment-vote-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.comment-vote-btn {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.comment-vote-btn--accurate.selected {
+  border-color: #16a34a;
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.comment-vote-btn--outdated.selected {
+  border-color: #d97706;
+  background: #fffbeb;
+  color: #d97706;
+}
+
 .comment-input {
   width: 100%;
   border: 1.5px solid var(--color-border);

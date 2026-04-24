@@ -35,7 +35,9 @@
     "editPrompt": "¿Horario incorrecto? ¿Ubicación incorrecta? Cualquiera puede mejorar este listado.",
     "added": "Añadido el {{date}}",
     "edit": "Editar",
-    "report": "Reportar contenido inexacto o dañino"
+    "report": "Reportar contenido inexacto o dañino",
+    "stillAccurate": "Sigue siendo preciso",
+    "outdatedOrWrong": "Desactualizado o incorrecto"
   },
   "addModal": {
     "title": "Agregar un recurso",

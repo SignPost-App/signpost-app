@@ -38,6 +38,7 @@ export interface Comment {
   id: string;
   text: string;
   addedAt: string;
+  accuracyVotes?: { accurate: number; outdated: number };
 }
 
 export interface Resource {

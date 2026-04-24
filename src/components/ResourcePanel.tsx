@@ -113,6 +113,18 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
 export default function ResourcePanel({ resource, onClose }: Props) {
   const { t } = useTranslation();
   const [commentText, setCommentText] = useState('');
+  const [votes, setVotes] = useState<Record<string, 'accurate' | 'outdated'>>({});
+
+  const handleVote = (id: string, choice: 'accurate' | 'outdated') => {
+    setVotes(prev => {
+      if (prev[id] === choice) {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      }
+      return { ...prev, [id]: choice };
+    });
+  };
   const isAvoid = resource.tags.includes('avoid');
 
   return (
@@ -199,12 +211,33 @@ export default function ResourcePanel({ resource, onClose }: Props) {
         </h3>
         {resource.comments.length > 0 ? (
           <div className="comments-list">
-            {resource.comments.map(c => (
-              <div key={c.id} className="comment-card">
-                <div>{c.text}</div>
-                <div className="comment-meta">{c.addedAt}</div>
-              </div>
-            ))}
+            {resource.comments.map(c => {
+              const myVote = votes[c.id];
+              const accurateCount = (c.accuracyVotes?.accurate ?? 0) + (myVote === 'accurate' ? 1 : 0);
+              const outdatedCount = (c.accuracyVotes?.outdated ?? 0) + (myVote === 'outdated' ? 1 : 0);
+              return (
+                <div key={c.id} className="comment-card">
+                  <div>{c.text}</div>
+                  <div className="comment-meta">{c.addedAt}</div>
+                  <div className="comment-vote-bar">
+                    <button
+                      className={`comment-vote-btn comment-vote-btn--accurate${myVote === 'accurate' ? ' selected' : ''}`}
+                      onClick={() => handleVote(c.id, 'accurate')}
+                      aria-pressed={myVote === 'accurate'}
+                    >
+                      ✓ {t('panel.stillAccurate')}{accurateCount > 0 ? ` · ${accurateCount}` : ''}
+                    </button>
+                    <button
+                      className={`comment-vote-btn comment-vote-btn--outdated${myVote === 'outdated' ? ' selected' : ''}`}
+                      onClick={() => handleVote(c.id, 'outdated')}
+                      aria-pressed={myVote === 'outdated'}
+                    >
+                      ⚠ {t('panel.outdatedOrWrong')}{outdatedCount > 0 ? ` · ${outdatedCount}` : ''}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p style={{ fontSize: 13, color: 'var(--color-muted)', marginBottom: 10 }}>
