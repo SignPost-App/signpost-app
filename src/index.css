@@ -1590,12 +1590,25 @@ html, body, #root {
     border-bottom: 2pt solid #000;
   }
 
+  .pp-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10pt;
+    margin-bottom: 4pt;
+  }
+
+  .pp-logo-svg {
+    width: 56pt;
+    height: auto;
+    flex-shrink: 0;
+  }
+
   .pp-title {
     font-size: 40pt;
     font-weight: 900;
     color: #000;
     line-height: 1.1;
-    margin-bottom: 4pt;
     letter-spacing: -0.5pt;
   }
 

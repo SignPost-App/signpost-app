@@ -7,6 +7,35 @@ function formatPrintDate(): string {
   return new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+// --- SignPost logo (inline, black) ---
+function LogoSvg() {
+  return (
+    <svg
+      width="100%"
+      viewBox="0 0 167.96948 105"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="SignPost logo"
+      className="pp-logo-svg"
+    >
+      <g transform="translate(-13.366516,-85.008179)">
+        <circle
+          style={{ fill: 'none', stroke: '#000', strokeWidth: 15, strokeDasharray: 'none', strokeOpacity: 1 }}
+          cx="65.866516" cy="137.50818" r="45"
+        />
+        <path
+          style={{ fill: 'none', stroke: '#000', strokeWidth: 15, strokeLinecap: 'round', strokeDasharray: 'none', strokeOpacity: 1 }}
+          d="m 110.86652,137.50818 h 59.68437"
+        />
+        <path
+          style={{ fill: 'none', stroke: '#000', strokeWidth: 15, strokeLinecap: 'round', strokeDasharray: 'none', strokeOpacity: 1 }}
+          d="m 132.05592,100.08707 38.49497,37.42111 -38.24906,36.84498"
+        />
+      </g>
+    </svg>
+  );
+}
+
 // --- QR code visual (21×21 modules, correct finder + timing patterns) ---
 const QR_N = 21;
 const QR_PX = 8;
@@ -119,7 +148,10 @@ export default function PrintablePoster({ languages }: Props) {
 
         {/* ── Header ── */}
         <header className="pp-header">
-          <div className="pp-title">SignPost</div>
+          <div className="pp-title-row">
+            <LogoSvg />
+            <div className="pp-title">SignPost</div>
+          </div>
           <div className="pp-subtitles">
             {translators.map(({ lang, t }) => (
               <div key={lang} className="pp-subtitle">
