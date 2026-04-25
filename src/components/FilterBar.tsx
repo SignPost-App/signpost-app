@@ -6,11 +6,13 @@ import { useOutsideClick } from '../hooks/useOutsideClick';
 interface Props {
   activeFilters: ResourceTag[];
   onFilterChange: (filters: ResourceTag[]) => void;
+  openNow: boolean;
+  onOpenNowChange: (v: boolean) => void;
 }
 
 type PanelState = 'closed' | 'open' | 'closing';
 
-export default function FilterBar({ activeFilters, onFilterChange }: Props) {
+export default function FilterBar({ activeFilters, onFilterChange, openNow, onOpenNowChange }: Props) {
   const { t } = useTranslation();
   const [overflowing, setOverflowing] = useState(false);
   const [panel, setPanel] = useState<PanelState>('closed');
@@ -52,10 +54,10 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
     const el = panelRef.current;
     if (!el) return;
     const chip = el.querySelector<HTMLElement>('.filter-chip');
-    // scrollHeight doesn't include the Less button (not yet rendered).
-    // Less button adds: 6px gap + 2px margin-top + chipH to the content height.
+    // scrollHeight doesn't include Less button, divider, or Open Now (not yet rendered).
+    // Extra: Less (chipH + 6 gap) + divider (~26px) + Open Now (chipH + 6 gap) + padding
     const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height) : 33;
-    setOpenMaxH(el.scrollHeight + chipH + 10);
+    setOpenMaxH(el.scrollHeight + chipH * 2 + 54);
     setPanel('open');
   };
 
@@ -129,9 +131,20 @@ export default function FilterBar({ activeFilters, onFilterChange }: Props) {
           );
         })}
         {isExpanded && (
-          <button className="filter-chip filter-chip--less" onClick={close}>
-            {t('filter.less')}
-          </button>
+          <>
+            <hr className="filter-section-divider" aria-hidden="true" />
+            <button
+              className="filter-chip filter-chip--open-now"
+              onClick={() => onOpenNowChange(!openNow)}
+              aria-pressed={openNow}
+              style={openNow ? { background: '#059669', borderColor: '#059669', color: '#fff' } : {}}
+            >
+              🕐 {t('filter.openNow')}
+            </button>
+            <button className="filter-chip filter-chip--less" onClick={close}>
+              {t('filter.less')}
+            </button>
+          </>
         )}
       </div>
 

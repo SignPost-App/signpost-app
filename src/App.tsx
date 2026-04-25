@@ -9,21 +9,23 @@ import AddResourceModal from './components/AddResourceModal';
 import DisclaimerBanner from './components/DisclaimerBanner';
 import AdminPage from './components/AdminPage';
 import PosterPage from './components/PosterPage';
-import { Resource, ResourceTag, Comment, AddDraft } from './types';
+import { Resource, ResourceTag, Comment, AddDraft, isOpenNow } from './types';
 import { mockResources } from './mockData';
 
 function MainPage() {
   const { t } = useTranslation();
   const [activeFilters, setActiveFilters] = useState<ResourceTag[]>([]);
+  const [openNow, setOpenNow] = useState(false);
   const [resources, setResources] = useState<Resource[]>(mockResources);
   const [selected, setSelected] = useState<Resource | null>(null);
   const [showAdd, setShowAdd] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [addDraft, setAddDraft] = useState<AddDraft | null>(null);
 
-  const filtered = activeFilters.length === 0
+  const tagFiltered = activeFilters.length === 0
     ? resources
     : resources.filter(r => r.tags.some(tag => activeFilters.includes(tag)));
+  const filtered = openNow ? tagFiltered.filter(isOpenNow) : tagFiltered;
 
   const handleAddClose = (draft: AddDraft | null) => {
     setAddDraft(draft);
@@ -62,7 +64,12 @@ function MainPage() {
       <a href="#main-content" className="skip-link">{t('skipLink')}</a>
       <div className="app-shell">
         <Header onAddClick={() => setShowAdd(true)} />
-        <FilterBar activeFilters={activeFilters} onFilterChange={setActiveFilters} />
+        <FilterBar
+          activeFilters={activeFilters}
+          onFilterChange={setActiveFilters}
+          openNow={openNow}
+          onOpenNowChange={setOpenNow}
+        />
         {showDisclaimer && <DisclaimerBanner onDismiss={() => setShowDisclaimer(false)} />}
         <main id="main-content" className="map-area">
           <MapView

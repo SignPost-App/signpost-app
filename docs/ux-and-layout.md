@@ -37,13 +37,26 @@ Saving writes the updated resource back to state; the panel returns to view mode
 
 ## Filter bar
 
-Horizontal chip row, positioned just below the header. Chips can be multi-selected — a user might want to see both shelters and food banks at once. Selecting "All" deselects everything and shows the full map.
+Horizontal chip row, positioned just below the header. Chips can be multi-selected — a user might want to see both shelters and food banks at once. Selecting "All" deselects everything and shows the full map (including clearing "Open Now").
 
 Each chip uses the tag's color when active so the visual feedback is immediate and matches the map pin colors.
 
 On narrow screens where not all chips fit in the single row, a "More …" button appears at the right edge. Tapping it expands the filter bar into a wrapping layout that shows every chip on screen at once, without scrolling. This keeps all filters reachable in two taps on any screen size, including very small phones.
 
 The expanded chip panel is `position: absolute` and overlaps the map rather than pushing it down. The filter bar's height in the page layout never changes. This prevents the map from jumping when the panel opens or closes, which is disorienting on mobile. The panel animates via a `max-height` transition on a single DOM element — the same chips are visible in both the collapsed and expanded state, so there is no flash or misalignment between the two states.
+
+### "Open Now" filter
+
+An **Open Now** chip appears between the "All" button and the tag chips, separated by a thin vertical divider. It is styled in green (distinct from the tag-specific colors) to signal that it is a different kind of filter — time-based rather than category-based.
+
+When active, "Open Now" filters the map to resources whose current hours indicate they are open. The logic uses `isOpenNow()` in `types.ts`, which calls `parseHoursString()` on each resource's `hours` field:
+
+- `mode: 'always'` (24/7) → shown
+- `mode: 'closed'` → hidden
+- `mode: 'custom'` → checks the current day of week and time against the day's open/close window
+- No hours set → shown (unknown hours, assume accessible)
+
+"Open Now" is independent of the tag filters — both can be active simultaneously. Clicking "All" clears both tag filters and the "Open Now" state.
 
 **What was considered and rejected:** A dropdown filter or a collapsible sidebar. Both require an extra tap to reach. The chip bar keeps filters one tap away at all times, which matters when someone is standing on a street corner trying to find the nearest bathroom.
 

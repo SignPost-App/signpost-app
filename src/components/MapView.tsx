@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -144,9 +145,18 @@ function createClusterCustomIcon(cluster: any): L.DivIcon {
   });
 }
 
-function LocationMarker() {
-  return null;
-}
+const userLocationIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:16px;height:16px;
+    background:#2563eb;
+    border:3px solid #fff;
+    border-radius:50%;
+    box-shadow:0 0 0 3px rgba(37,99,235,0.3),0 2px 8px rgba(0,0,0,0.25);
+  "></div>`,
+  iconSize: [16, 16],
+  iconAnchor: [8, 8],
+});
 
 interface Props {
   resources: Resource[];
@@ -155,36 +165,75 @@ interface Props {
 }
 
 export default function MapView({ resources, selectedId, onSelect }: Props) {
+  const mapRef = useRef<L.Map | null>(null);
+  const [locating, setLocating] = useState(false);
+  const [userPos, setUserPos] = useState<[number, number] | null>(null);
+
+  const handleLocate = () => {
+    if (!navigator.geolocation || locating) return;
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const latlng: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserPos(latlng);
+        mapRef.current?.flyTo(latlng, 15, { animate: true, duration: 1.5 });
+        setLocating(false);
+      },
+      () => setLocating(false),
+      { timeout: 10000, maximumAge: 30000 },
+    );
+  };
+
   return (
-    <MapContainer
-      center={DEFAULT_CENTER}
-      zoom={DEFAULT_ZOOM}
-      style={{ height: '100%', width: '100%' }}
-      zoomControl={false}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <MarkerClusterGroup
-        chunkedLoading
-        iconCreateFunction={createClusterCustomIcon}
-        showCoverageOnHover={false}
-        zoomToBoundsOnClick={true}
-        maxClusterRadius={60}
-        spiderfyOnMaxZoom={true}
+    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+      <MapContainer
+        ref={mapRef}
+        center={DEFAULT_CENTER}
+        zoom={DEFAULT_ZOOM}
+        style={{ height: '100%', width: '100%' }}
+        zoomControl={false}
       >
-        {resources.map(r => (
-          <Marker
-            key={r.id}
-            position={[r.lat, r.lng]}
-            icon={createPinIcon(r.tags, r.id === selectedId)}
-            title={JSON.stringify(r.tags)}
-            eventHandlers={{ click: () => onSelect(r) }}
-          />
-        ))}
-      </MarkerClusterGroup>
-      <LocationMarker />
-    </MapContainer>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MarkerClusterGroup
+          chunkedLoading
+          iconCreateFunction={createClusterCustomIcon}
+          showCoverageOnHover={false}
+          zoomToBoundsOnClick={true}
+          maxClusterRadius={60}
+          spiderfyOnMaxZoom={true}
+        >
+          {resources.map(r => (
+            <Marker
+              key={r.id}
+              position={[r.lat, r.lng]}
+              icon={createPinIcon(r.tags, r.id === selectedId)}
+              title={JSON.stringify(r.tags)}
+              eventHandlers={{ click: () => onSelect(r) }}
+            />
+          ))}
+        </MarkerClusterGroup>
+        {userPos && (
+          <Marker position={userPos} icon={userLocationIcon} zIndexOffset={1000} />
+        )}
+      </MapContainer>
+      <button
+        className={`locate-btn${locating ? ' locate-btn--loading' : ''}`}
+        onClick={handleLocate}
+        disabled={locating}
+        aria-label="Go to my location"
+        title="Go to my location"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="18" height="18" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <line x1="12" y1="2" x2="12" y2="6" />
+          <line x1="12" y1="18" x2="12" y2="22" />
+          <line x1="2" y1="12" x2="6" y2="12" />
+          <line x1="18" y1="12" x2="22" y2="12" />
+        </svg>
+      </button>
+    </div>
   );
 }

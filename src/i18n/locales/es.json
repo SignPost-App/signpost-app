@@ -9,7 +9,8 @@
   "filter": {
     "all": "Todos",
     "more": "Más …",
-    "less": "Menos ↑"
+    "less": "Menos ↑",
+    "openNow": "Abierto Ahora"
   },
   "tags": {
     "food": "Comida",

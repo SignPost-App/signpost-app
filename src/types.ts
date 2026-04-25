@@ -163,6 +163,29 @@ export function parseHoursString(s: string | undefined): HoursValue {
   return { mode: 'custom', days: openFlags.map(open => mkDay(open, openTime, closeTime)) };
 }
 
+export function isOpenNow(resource: Resource): boolean {
+  if (!resource.hours) return true;
+  const parsed = parseHoursString(resource.hours);
+  if (parsed.mode === 'always') return true;
+  if (parsed.mode === 'closed') return false;
+
+  const now = new Date();
+  const dayIndex = (now.getDay() + 6) % 7; // Mon=0 … Sun=6
+  const day = parsed.days[dayIndex];
+  if (!day.open) return false;
+
+  const currentMins = now.getHours() * 60 + now.getMinutes();
+  const [oh, om] = day.openTime.split(':').map(Number);
+  const [ch, cm] = day.closeTime.split(':').map(Number);
+  const openMins = oh * 60 + om;
+  const closeMins = ch * 60 + cm;
+
+  if (closeMins <= openMins) {
+    return currentMins >= openMins || currentMins < closeMins;
+  }
+  return currentMins >= openMins && currentMins < closeMins;
+}
+
 export interface AddDraft {
   name: string;
   selectedTags: ResourceTag[];

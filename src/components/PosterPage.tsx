@@ -68,7 +68,16 @@ export default function PosterPage() {
 
       <div className="poster-preview">
         <div className="poster-inner">
-          <div className="poster-headline">SignPost</div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 2 }}>
+            <svg viewBox="0 0 167.96948 105" xmlns="http://www.w3.org/2000/svg" style={{ width: 32, height: 'auto', flexShrink: 0 }} aria-hidden="true">
+              <g transform="translate(-13.366516,-85.008179)">
+                <circle style={{ fill: 'none', stroke: '#111827', strokeWidth: 15 }} cx="65.866516" cy="137.50818" r="45" />
+                <path style={{ fill: 'none', stroke: '#111827', strokeWidth: 15, strokeLinecap: 'round' }} d="m 110.86652,137.50818 h 59.68437" />
+                <path style={{ fill: 'none', stroke: '#111827', strokeWidth: 15, strokeLinecap: 'round' }} d="m 132.05592,100.08707 38.49497,37.42111 -38.24906,36.84498" />
+              </g>
+            </svg>
+            <div className="poster-headline">SignPost</div>
+          </div>
           <div className="poster-subtitle">Community Resource Map &middot; Greater Seattle Area</div>
 
           <div className="poster-qr">

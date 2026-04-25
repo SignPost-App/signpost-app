@@ -31,7 +31,15 @@ One known issue with `divIcon`: Leaflet's z-index management doesn't work the sa
 
 ## Default viewport
 
-Center: `[47.6062, -122.3321]` (downtown Seattle), zoom 13. This puts the majority of mock resources in view on first load. When real geolocation is implemented, the map should fly to the user's location on first visit (with permission), falling back to this default.
+Center: `[47.6062, -122.3321]` (downtown Seattle), zoom 13. This puts the majority of mock resources in view on first load.
+
+## Locate button (go to my location)
+
+A crosshair button is overlaid on the bottom-right of the map (above the FAB). Tapping it calls `navigator.geolocation.getCurrentPosition()` and, on success, flies the map to the user's position at zoom 15 and drops a blue dot marker at that location. The button shows a muted loading state while the browser is resolving the position.
+
+The blue dot uses `L.divIcon` styled as a filled circle with a white border and a faint blue halo ring, matching the visual convention of Google Maps / Apple Maps. It is NOT a standard resource pin and has no click handler.
+
+Geolocation is entirely on-demand (no auto-request on load) to avoid the browser permission prompt appearing before the user has any reason to share their location.
 
 ## Scope: Seattle and Greater Seattle Area
 
