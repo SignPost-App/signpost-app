@@ -1543,6 +1543,11 @@ html, body, #root {
     margin: 0;
   }
 
+  /* Collapse height so #root doesn't fill a blank first page before the portal */
+  html, body, #root {
+    height: auto !important;
+  }
+
   /* Hide app content by class — not by hiding #root itself — so React's DOM
      tree stays intact and modals inside #root don't flash during the transition */
   .app-shell,
