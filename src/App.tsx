@@ -9,19 +9,53 @@ import AddResourceModal from './components/AddResourceModal';
 import DisclaimerBanner from './components/DisclaimerBanner';
 import AdminPage from './components/AdminPage';
 import PosterPage from './components/PosterPage';
-import { Resource, ResourceTag } from './types';
+import { Resource, ResourceTag, Comment, AddDraft } from './types';
 import { mockResources } from './mockData';
 
 function MainPage() {
   const { t } = useTranslation();
   const [activeFilters, setActiveFilters] = useState<ResourceTag[]>([]);
+  const [resources, setResources] = useState<Resource[]>(mockResources);
   const [selected, setSelected] = useState<Resource | null>(null);
   const [showAdd, setShowAdd] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [addDraft, setAddDraft] = useState<AddDraft | null>(null);
 
   const filtered = activeFilters.length === 0
-    ? mockResources
-    : mockResources.filter(r => r.tags.some(tag => activeFilters.includes(tag)));
+    ? resources
+    : resources.filter(r => r.tags.some(tag => activeFilters.includes(tag)));
+
+  const handleAddClose = (draft: AddDraft | null) => {
+    setAddDraft(draft);
+    setShowAdd(false);
+  };
+
+  const handleAddSubmit = (resource: Resource) => {
+    setResources(prev => [...prev, resource]);
+    setAddDraft(null);
+    setShowAdd(false);
+    setSelected(resource);
+  };
+
+  const handleAddComment = (resourceId: string, text: string) => {
+    const newComment: Comment = {
+      id: `c-${Date.now()}`,
+      text,
+      addedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      accuracyVotes: { accurate: 0, outdated: 0 },
+    };
+    setResources(prev => prev.map(r =>
+      r.id === resourceId ? { ...r, comments: [...r.comments, newComment] } : r
+    ));
+    setSelected(prev =>
+      prev?.id === resourceId ? { ...prev, comments: [...prev.comments, newComment] } : prev
+    );
+  };
+
+  const handleUpdateResource = (updated: Resource) => {
+    setResources(prev => prev.map(r => r.id === updated.id ? updated : r));
+    setSelected(updated);
+  };
 
   return (
     <>
@@ -45,10 +79,19 @@ function MainPage() {
           </button>
         </main>
         {selected && (
-          <ResourcePanel resource={selected} onClose={() => setSelected(null)} />
+          <ResourcePanel
+            resource={selected}
+            onClose={() => setSelected(null)}
+            onAddComment={handleAddComment}
+            onUpdateResource={handleUpdateResource}
+          />
         )}
         {showAdd && (
-          <AddResourceModal onClose={() => setShowAdd(false)} />
+          <AddResourceModal
+            onClose={handleAddClose}
+            onSubmit={handleAddSubmit}
+            draft={addDraft}
+          />
         )}
       </div>
     </>

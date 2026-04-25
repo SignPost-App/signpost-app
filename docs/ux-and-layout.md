@@ -19,6 +19,22 @@ The bottom sheet covers ~65% of the viewport, leaving the map visible behind it.
 
 A drag handle is shown on mobile to suggest dismissibility. The panel closes on the ✕ button or can be dismissed by selecting another pin (which replaces it).
 
+### Community Notes: Post Note
+
+The **Post Note** button is active (not disabled-only). Submitting a non-empty note appends it to the resource's comment list in state and clears the textarea. The new note appears immediately in the comments section with today's date. In production this would write to the backend.
+
+### Edit mode
+
+Tapping **✏️ Edit** transforms the panel into an inline edit form. The footer swaps to **Cancel** and **Save Changes** buttons. The edit form exposes:
+
+- Name (text input)
+- Type (same tag-checkbox grid as the Add modal)
+- Location (address string only — pin coordinates are not editable here; a separate "move pin" flow should be added before launch)
+- Hours / Availability (the same HoursPicker component used in the Add modal, pre-populated by parsing the resource's stored hours string)
+- Description / Notes (textarea)
+
+Saving writes the updated resource back to state; the panel returns to view mode and the map pin reflects any tag changes immediately. Cancel reverts without saving. The ✕ button closes the panel entirely (does not just cancel the edit).
+
 ## Filter bar
 
 Horizontal chip row, positioned just below the header. Chips can be multi-selected — a user might want to see both shelters and food banks at once. Selecting "All" deselects everything and shows the full map.
@@ -37,7 +53,35 @@ The FAB (floating action button) is the primary entry point for adding a resourc
 
 The modal slides up from the bottom on mobile (matching the bottom sheet pattern) and centers as a dialog on larger screens.
 
-The location picker offers two modes: address input and "use my location." The map pin-drop mode (showing a map to tap) is stubbed in the prototype but should be implemented — many resources don't have a formal address (a covered spot under a bridge, a water fountain in a park).
+### Location: Address vs. Drop Pin
+
+The location field offers two modes toggled by pill buttons:
+
+- **Address** — text input for a street address or intersection, plus a "Use my location" button that requests the device's GPS and, if granted, switches to Drop Pin mode with the pin placed at the user's current coordinates.
+- **Drop Pin** — renders a full interactive Leaflet map (200px tall) centered on Seattle. Tapping anywhere on the map drops a 📍 marker; the map flies to the tapped position. The marker is draggable for fine-tuning. Coordinates are shown below the map with a "Remove pin" link. If Drop Pin mode is active but no pin is placed, the submit flow falls back to a randomized location near Seattle (mockup behavior until geocoding is wired up).
+
+Many resources don't have a formal address (a covered spot under a bridge, a park water fountain), so the Drop Pin path is the more important one for this use case.
+
+### Hours / Availability picker
+
+The hours field is a structured UI rather than a free-text input:
+
+- Two preset toggle buttons: **24/7** and **Closed**. Tapping an active preset toggles it off and returns to custom mode.
+- When neither preset is active (custom mode): a row of day-of-week toggles (Mo Tu We Th Fr Sa Su) and two `<input type="time">` fields for opening and closing time.
+- A live summary line (e.g. "Mon–Fri 8am–5pm") updates as the user makes selections.
+- The structured value is serialized to a human-readable string (e.g. "Daily 9am–6pm") on submit and stored on the Resource.
+
+### Draft persistence
+
+If the user dismisses the Add dialog via the ✕ button, the Escape key, or clicking the backdrop — without pressing Cancel or Submit Resource — all form inputs are preserved. Reopening the dialog restores the draft. Pressing **Cancel** explicitly discards the draft. Pressing **Submit Resource** also clears it.
+
+### Clear button
+
+A **Clear** button in the modal footer resets all fields to their empty defaults without closing the modal.
+
+### Submit creates a map pin
+
+Submitting a valid form (name + at least one type required) immediately adds the resource to the in-memory resource list. A pin appears on the map and the resource panel opens for the new entry. In production this would persist to the backend; in the current prototype it is stored in React state for the session.
 
 ## Navigation structure
 
