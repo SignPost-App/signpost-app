@@ -59,6 +59,7 @@ export interface Resource {
   tags: ResourceTag[];
   address?: string;
   hours?: string;
+  directions?: string;
   description?: string;
   wifiNetworks?: WifiNetwork[];
   comments: Comment[];
@@ -265,11 +266,10 @@ export function isOpenNow(resource: Resource): boolean {
 export interface AddDraft {
   name: string;
   selectedTags: ResourceTag[];
-  locationMode: 'address' | 'coords';
-  address: string;
   pinLat: number | null;
   pinLng: number | null;
   hours: HoursValue;
+  directions: string;
   description: string;
   wifiNetworks: WifiNetwork[];
 }

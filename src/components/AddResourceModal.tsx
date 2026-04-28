@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { ALL_TAGS, ResourceTag, TAG_CONFIG, Resource, HoursValue, EMPTY_HOURS, AddDraft, hoursToString, WifiNetwork } from '../types';
+import { ALL_TAGS, ResourceTag, TAG_CONFIG, Resource, HoursValue, AddDraft, hoursToString, WifiNetwork } from '../types';
 import HoursPicker from './HoursPicker';
 import WifiNetworkPicker from './WifiNetworkPicker';
 
@@ -42,11 +42,10 @@ interface Props {
 const emptyDraft = (): AddDraft => ({
   name: '',
   selectedTags: [],
-  locationMode: 'address',
-  address: '',
   pinLat: null,
   pinLng: null,
   hours: { mode: 'custom', days: Array.from({ length: 7 }, () => ({ open: false, openTime: null, closeTime: null })) },
+  directions: '',
   description: '',
   wifiNetworks: [],
 });
@@ -58,17 +57,15 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
 
   const [name, setName] = useState(draft?.name ?? '');
   const [selectedTags, setSelectedTags] = useState<ResourceTag[]>(draft?.selectedTags ?? []);
-  const [locationMode, setLocationMode] = useState<'address' | 'coords'>(draft?.locationMode ?? 'address');
-  const [address, setAddress] = useState(draft?.address ?? '');
   const [pinLat, setPinLat] = useState<number | null>(draft?.pinLat ?? null);
   const [pinLng, setPinLng] = useState<number | null>(draft?.pinLng ?? null);
   const [hours, setHours] = useState<HoursValue>(draft?.hours ?? emptyDraft().hours);
+  const [directions, setDirections] = useState(draft?.directions ?? '');
   const [description, setDescription] = useState(draft?.description ?? '');
   const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>(draft?.wifiNetworks ?? []);
 
-  // Keep a ref to current form state so event handlers don't go stale
   const draftRef = useRef<AddDraft>(emptyDraft());
-  draftRef.current = { name, selectedTags, locationMode, address, pinLat, pinLng, hours, description, wifiNetworks };
+  draftRef.current = { name, selectedTags, pinLat, pinLng, hours, directions, description, wifiNetworks };
 
   const toggleTag = (tag: ResourceTag) => {
     setSelectedTags(prev =>
@@ -80,11 +77,10 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
     const d = emptyDraft();
     setName(d.name);
     setSelectedTags(d.selectedTags);
-    setLocationMode(d.locationMode);
-    setAddress(d.address);
     setPinLat(d.pinLat);
     setPinLng(d.pinLng);
     setHours(d.hours);
+    setDirections(d.directions);
     setDescription(d.description);
     setWifiNetworks(d.wifiNetworks);
   };
@@ -100,8 +96,9 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
       lat,
       lng,
       tags: selectedTags,
-      address: address.trim() || undefined,
+      address: pinLat !== null ? `${lat.toFixed(5)}, ${lng.toFixed(5)}` : undefined,
       hours: hoursToString(hours) || undefined,
+      directions: directions.trim() || undefined,
       description: description.trim() || undefined,
       wifiNetworks: filteredWifi.length > 0 ? filteredWifi : undefined,
       comments: [],
@@ -115,19 +112,16 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
     navigator.geolocation.getCurrentPosition(pos => {
       setPinLat(pos.coords.latitude);
       setPinLng(pos.coords.longitude);
-      setLocationMode('coords');
     });
   };
 
   const canSubmit = name.trim().length > 0 && selectedTags.length > 0;
 
-  // Focus first element when modal opens
   useEffect(() => {
     const first = modalRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE)[0];
     first?.focus();
   }, []);
 
-  // Focus trap + Escape key (uses draftRef to avoid stale closure)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { onClose(draftRef.current); return; }
@@ -216,49 +210,46 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
             </div>
           </div>
 
-          {/* Location */}
+          {/* Location — pin only */}
           <div className="form-group">
             <span className="form-label" id="location-label">
-              {t('addModal.locationLabel')} *
+              {t('addModal.locationLabel')}
             </span>
-            <div
-              role="group"
-              aria-labelledby="location-label"
-              style={{ display: 'flex', gap: 8, marginBottom: 8 }}
-            >
-              <button
-                type="button"
-                className="btn btn-sm"
-                style={locationMode === 'address'
-                  ? { background: 'var(--color-primary)', color: '#fff', border: 'none' }
-                  : { background: 'var(--color-bg)', border: '1px solid var(--color-border)' }}
-                onClick={() => setLocationMode('address')}
-                aria-pressed={locationMode === 'address'}
-              >
-                {t('addModal.address')}
-              </button>
-              <button
-                type="button"
-                className="btn btn-sm"
-                style={locationMode === 'coords'
-                  ? { background: 'var(--color-primary)', color: '#fff', border: 'none' }
-                  : { background: 'var(--color-bg)', border: '1px solid var(--color-border)' }}
-                onClick={() => setLocationMode('coords')}
-                aria-pressed={locationMode === 'coords'}
-              >
-                {t('addModal.dropPin')}
-              </button>
-            </div>
-
-            {locationMode === 'address' ? (
-              <div className="location-row">
-                <input
-                  className="form-input"
-                  placeholder={t('addModal.addressPlaceholder')}
-                  aria-label={t('addModal.addressPlaceholder')}
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                />
+            <div className="drop-pin-container">
+              <div className="drop-pin-hint">
+                {pinLat === null
+                  ? <><span aria-hidden="true">👆</span> {t('addModal.dropPinInstruction')}</>
+                  : <><span aria-hidden="true">✅</span> {t('addModal.dropPinPlaced')}</>
+                }
+              </div>
+              <div className="drop-pin-map">
+                <MapContainer
+                  center={[47.6062, -122.3321]}
+                  zoom={12}
+                  style={{ height: '100%', width: '100%' }}
+                  zoomControl
+                  attributionControl={false}
+                >
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <MapClickHandler onPin={(lat, lng) => { setPinLat(lat); setPinLng(lng); }} />
+                  <FlyToPinEffect lat={pinLat} lng={pinLng} />
+                  {pinLat !== null && pinLng !== null && (
+                    <Marker
+                      position={[pinLat, pinLng]}
+                      icon={dropPinIcon}
+                      draggable
+                      eventHandlers={{
+                        dragend: e => {
+                          const latlng = (e.target as L.Marker).getLatLng();
+                          setPinLat(latlng.lat);
+                          setPinLng(latlng.lng);
+                        },
+                      }}
+                    />
+                  )}
+                </MapContainer>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                 <button
                   type="button"
                   className="btn-locate"
@@ -269,45 +260,11 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
                   <span className="sr-only">{t('addModal.useMyLocation')}</span>
                   <span aria-hidden="true">{t('addModal.useMyLocation')}</span>
                 </button>
-              </div>
-            ) : (
-              <div className="drop-pin-container">
-                <div className="drop-pin-hint">
-                  {pinLat === null
-                    ? <><span aria-hidden="true">👆</span> {t('addModal.dropPinInstruction')}</>
-                    : <><span aria-hidden="true">✅</span> {t('addModal.dropPinPlaced')}</>
-                  }
-                </div>
-                <div className="drop-pin-map">
-                  <MapContainer
-                    center={[47.6062, -122.3321]}
-                    zoom={12}
-                    style={{ height: '100%', width: '100%' }}
-                    zoomControl
-                    attributionControl={false}
-                  >
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <MapClickHandler onPin={(lat, lng) => { setPinLat(lat); setPinLng(lng); }} />
-                    <FlyToPinEffect lat={pinLat} lng={pinLng} />
-                    {pinLat !== null && pinLng !== null && (
-                      <Marker
-                        position={[pinLat, pinLng]}
-                        icon={dropPinIcon}
-                        draggable
-                        eventHandlers={{
-                          dragend: e => {
-                            const latlng = (e.target as L.Marker).getLatLng();
-                            setPinLat(latlng.lat);
-                            setPinLng(latlng.lng);
-                          },
-                        }}
-                      />
-                    )}
-                  </MapContainer>
-                </div>
                 {pinLat !== null && (
-                  <div className="drop-pin-coords">
-                    <span>📍 {pinLat.toFixed(5)}, {pinLng!.toFixed(5)}</span>
+                  <>
+                    <span style={{ fontSize: 12, color: 'var(--color-muted)' }}>
+                      {pinLat.toFixed(5)}, {pinLng!.toFixed(5)}
+                    </span>
                     <button
                       type="button"
                       className="btn-link"
@@ -315,11 +272,25 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
                     >
                       {t('addModal.removePin')}
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
-            )}
+            </div>
             <div className="form-hint">{t('addModal.locationTip')}</div>
+          </div>
+
+          {/* Directions */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="resource-directions">
+              {t('addModal.directionsLabel')}
+            </label>
+            <input
+              id="resource-directions"
+              className="form-input"
+              placeholder={t('addModal.directionsPlaceholder')}
+              value={directions}
+              onChange={e => setDirections(e.target.value)}
+            />
           </div>
 
           {/* Hours */}

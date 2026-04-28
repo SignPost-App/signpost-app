@@ -44,7 +44,17 @@
     "cancelEdit": "Cancel",
     "report": "Report inaccurate or harmful content",
     "stillAccurate": "Still accurate",
-    "outdatedOrWrong": "Outdated or wrong"
+    "outdatedOrWrong": "Outdated or wrong",
+    "confirmChangesTitle": "Confirm changes?",
+    "confirmSave": "Save",
+    "confirmGoBack": "Go back",
+    "changedName": "Name",
+    "changedTags": "Tags updated",
+    "changedLocation": "Location moved",
+    "changedHours": "Hours changed",
+    "changedDirections": "Directions changed",
+    "changedDescription": "Description changed",
+    "changedWifi": "Wi-Fi networks changed"
   },
   "addModal": {
     "title": "Add a Resource",
@@ -76,6 +86,8 @@
     "dropPinInstruction": "Tap the map to place a pin",
     "dropPinPlaced": "Pin placed — drag to adjust",
     "removePin": "Remove pin",
+    "directionsLabel": "Directions",
+    "directionsPlaceholder": "Optional — e.g. north entrance, side door, ask for staff",
     "descriptionLabel": "Description / Notes",
     "descriptionPlaceholder": "What should people know? No ID required, line gets long, etc.",
     "disclaimer": "By submitting, you confirm this is accurate information that will help others. Do not post harmful, false, or illicit content.",

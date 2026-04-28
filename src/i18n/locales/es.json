@@ -44,7 +44,17 @@
     "cancelEdit": "Cancelar",
     "report": "Reportar contenido inexacto o dañino",
     "stillAccurate": "Sigue siendo preciso",
-    "outdatedOrWrong": "Desactualizado o incorrecto"
+    "outdatedOrWrong": "Desactualizado o incorrecto",
+    "confirmChangesTitle": "¿Confirmar cambios?",
+    "confirmSave": "Guardar",
+    "confirmGoBack": "Volver",
+    "changedName": "Nombre",
+    "changedTags": "Etiquetas actualizadas",
+    "changedLocation": "Ubicación movida",
+    "changedHours": "Horario cambiado",
+    "changedDirections": "Indicaciones cambiadas",
+    "changedDescription": "Descripción cambiada",
+    "changedWifi": "Redes Wi-Fi cambiadas"
   },
   "addModal": {
     "title": "Agregar un recurso",
@@ -76,6 +86,8 @@
     "dropPinInstruction": "Toca el mapa para colocar un marcador",
     "dropPinPlaced": "Marcador colocado — arrastra para ajustar",
     "removePin": "Quitar marcador",
+    "directionsLabel": "Indicaciones",
+    "directionsPlaceholder": "Opcional — p. ej. entrada norte, puerta lateral, preguntar al personal",
     "descriptionLabel": "Descripción / Notas",
     "descriptionPlaceholder": "¿Qué deben saber? Sin ID requerido, la fila se alarga, etc.",
     "disclaimer": "Al enviar, confirmas que esta información es precisa y ayudará a otros. No publiques contenido dañino, falso o ilícito.",

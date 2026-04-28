@@ -9,8 +9,9 @@ interface Resource {
   lat: number;
   lng: number;
   tags: ResourceTag[];       // at least one required
-  address?: string;          // human-readable, not required (many spots have none)
+  address?: string;          // derived from pin placement — formatted as "lat, lng" for new entries
   hours?: string;            // free-text, not structured — too many formats to normalize
+  directions?: string;       // optional human-written text clarifying how to find the location
   description?: string;      // community-written free text
   comments: Comment[];       // ongoing notes, separate from description
   addedAt: string;           // display string, e.g. "2 weeks ago"
@@ -23,6 +24,10 @@ interface Comment {
   addedAt: string;
 }
 ```
+
+`address` is auto-populated from the pin position (formatted as `"lat, lng"`) when a resource is created or edited. It is never a user-typed text field. Legacy mock data entries may carry readable text addresses that predate this convention.
+
+`directions` is optional free text for clarifying *how* to reach the location — entrance details, landmarks, staff to ask, etc. It is separate from `address` (which is purely coordinate-derived) and `description` (which covers what the resource offers).
 
 Hours are stored as a human-readable string (e.g. `"Mon–Fri 9am–5pm, Sat 10am–3pm"`) serialized from a structured `HoursValue` object by `hoursToString()`. The Add/Edit form uses `HoursPicker`, which produces this structure, and `parseHoursString()` parses it back when opening the Edit dialog. Days with times set are parsed individually per group, so "Mon 9am–5pm, Tue–Fri 8am–5pm" correctly round-trips without collapsing all days to the first group's times.
 
