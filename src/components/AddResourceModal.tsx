@@ -46,7 +46,7 @@ const emptyDraft = (): AddDraft => ({
   address: '',
   pinLat: null,
   pinLng: null,
-  hours: { ...EMPTY_HOURS, days: Array.from({ length: 7 }, () => ({ open: false, openTime: '08:00', closeTime: '17:00' })) },
+  hours: { mode: 'custom', days: Array.from({ length: 7 }, () => ({ open: false, openTime: null, closeTime: null })) },
   description: '',
   wifiNetworks: [],
 });
@@ -62,7 +62,7 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
   const [address, setAddress] = useState(draft?.address ?? '');
   const [pinLat, setPinLat] = useState<number | null>(draft?.pinLat ?? null);
   const [pinLng, setPinLng] = useState<number | null>(draft?.pinLng ?? null);
-  const [hours, setHours] = useState<HoursValue>(draft?.hours ?? { ...EMPTY_HOURS, days: Array.from({ length: 7 }, () => ({ open: false, openTime: '08:00', closeTime: '17:00' })) });
+  const [hours, setHours] = useState<HoursValue>(draft?.hours ?? emptyDraft().hours);
   const [description, setDescription] = useState(draft?.description ?? '');
   const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>(draft?.wifiNetworks ?? []);
 

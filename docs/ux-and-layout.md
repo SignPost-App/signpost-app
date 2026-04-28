@@ -80,9 +80,12 @@ Many resources don't have a formal address (a covered spot under a bridge, a par
 The hours field is a structured UI rather than a free-text input:
 
 - Two preset toggle buttons: **24/7** and **Closed**. Tapping an active preset toggles it off and returns to custom mode.
-- When neither preset is active (custom mode): a row of day-of-week toggles (Mo Tu We Th Fr Sa Su) and two `<input type="time">` fields for opening and closing time.
+- When neither preset is active (custom mode): a row of day-of-week toggles (Mon–Sun), each with two `<select>` dropdowns for open and close times (15-minute increments). Time is displayed in the system's preferred format: 12-hour with AM/PM if the user's locale uses it, 24-hour otherwise.
+- Times default to unset ("--") for all days. When the user first sets a time for any day and all other days have no time yet, that time is automatically applied to all seven days — reducing tedium when hours are the same every day.
+- A **×** button on each day (shown only when times are set) clears that day's time back to unset, while leaving the day's toggle on or off unchanged.
+- Time is only changeable via the dropdown selects — there is no manual text entry.
 - A live summary line (e.g. "Mon–Fri 8am–5pm") updates as the user makes selections.
-- The structured value is serialized to a human-readable string (e.g. "Daily 9am–6pm") on submit and stored on the Resource.
+- The structured value is serialized to a human-readable string (e.g. "Mon–Fri 9am–5pm") on submit and stored on the Resource.
 
 ### Draft persistence
 

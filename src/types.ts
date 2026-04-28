@@ -68,8 +68,8 @@ export interface Resource {
 
 export interface DayHours {
   open: boolean;
-  openTime: string;  // "08:00"
-  closeTime: string; // "17:00"
+  openTime: string | null;  // "08:00" or null when not set
+  closeTime: string | null;
 }
 
 export interface HoursValue {
@@ -77,14 +77,18 @@ export interface HoursValue {
   days: DayHours[]; // [mon, tue, wed, thu, fri, sat, sun]
 }
 
-const mkDay = (open: boolean, openTime = '08:00', closeTime = '17:00'): DayHours =>
+const mkDay = (open: boolean, openTime: string | null = null, closeTime: string | null = null): DayHours =>
   ({ open, openTime, closeTime });
 
 // Mon–Fri 8–5, Sat–Sun closed — sensible starting point for Edit mode
 export const DEFAULT_HOURS: HoursValue = {
   mode: 'custom',
-  days: [mkDay(true), mkDay(true), mkDay(true), mkDay(true), mkDay(true),
-         mkDay(false, '10:00', '15:00'), mkDay(false, '10:00', '15:00')],
+  days: [
+    mkDay(true, '08:00', '17:00'), mkDay(true, '08:00', '17:00'),
+    mkDay(true, '08:00', '17:00'), mkDay(true, '08:00', '17:00'),
+    mkDay(true, '08:00', '17:00'),
+    mkDay(false), mkDay(false),
+  ],
 };
 
 // All days blank — used as the starting point for a new Add form
@@ -98,7 +102,8 @@ export function hoursToString(h: HoursValue): string {
   if (h.mode === 'closed') return 'Closed';
 
   const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const fmt = (t: string) => {
+  const fmt = (t: string | null): string | null => {
+    if (!t) return null;
     const [hh, mm] = t.split(':').map(Number);
     const ampm = hh >= 12 ? 'pm' : 'am';
     const hour = hh > 12 ? hh - 12 : hh === 0 ? 12 : hh;
@@ -107,12 +112,12 @@ export function hoursToString(h: HoursValue): string {
 
   const openDays = h.days
     .map((d, i) => d.open ? { i, openTime: d.openTime, closeTime: d.closeTime } : null)
-    .filter((d): d is { i: number; openTime: string; closeTime: string } => d !== null);
+    .filter((d): d is { i: number; openTime: string | null; closeTime: string | null } => d !== null);
 
   if (openDays.length === 0) return '';
 
   // Group consecutive days that share the same open/close times
-  const groups: { start: number; end: number; openTime: string; closeTime: string }[] = [];
+  const groups: { start: number; end: number; openTime: string | null; closeTime: string | null }[] = [];
   for (const day of openDays) {
     const last = groups[groups.length - 1];
     if (last && last.end === day.i - 1
@@ -130,12 +135,15 @@ export function hoursToString(h: HoursValue): string {
       : span === 1
         ? `${DAY_LABELS[g.start]}, ${DAY_LABELS[g.end]}`
         : `${DAY_LABELS[g.start]}–${DAY_LABELS[g.end]}`;
-    return `${dayStr} ${fmt(g.openTime)}–${fmt(g.closeTime)}`;
+    const openFmt = fmt(g.openTime);
+    const closeFmt = fmt(g.closeTime);
+    if (openFmt && closeFmt) return `${dayStr} ${openFmt}–${closeFmt}`;
+    return dayStr;
   }).join(', ');
 }
 
 export function parseHoursString(s: string | undefined): HoursValue {
-  if (!s) return { ...EMPTY_HOURS, days: Array.from({ length: 7 }, () => mkDay(false)) };
+  if (!s) return { mode: 'custom', days: Array.from({ length: 7 }, () => mkDay(false)) };
   const lower = s.toLowerCase().trim();
   if (lower.includes('24/7') || lower === 'always open') {
     return { mode: 'always', days: Array.from({ length: 7 }, () => mkDay(true, '00:00', '23:59')) };
@@ -144,34 +152,90 @@ export function parseHoursString(s: string | undefined): HoursValue {
     return { mode: 'closed', days: Array.from({ length: 7 }, () => mkDay(false)) };
   }
 
-  // Extract first pair of am/pm times
-  const timeRegex = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)/gi;
-  const times: number[] = [];
-  let m;
-  while ((m = timeRegex.exec(s)) !== null) {
+  const DAY_MAP: Record<string, number> = {
+    mon: 0, tue: 1, wed: 2, thu: 3, fri: 4, sat: 5, sun: 6,
+  };
+
+  const parseTimePart = (t: string): string | null => {
+    const m = t.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
+    if (!m) return null;
     let hh = parseInt(m[1]);
     const min = m[2] ? parseInt(m[2]) : 0;
     const ap = m[3].toLowerCase();
     if (ap === 'pm' && hh !== 12) hh += 12;
     if (ap === 'am' && hh === 12) hh = 0;
-    times.push(hh * 60 + min);
-  }
-  const toTime = (mins: number) =>
-    `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
-  const openTime = times.length >= 1 ? toTime(times[0]) : '08:00';
-  const closeTime = times.length >= 2 ? toTime(times[1]) : '17:00';
+    return `${String(hh).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+  };
 
-  const openFlags = [false, false, false, false, false, false, false];
-  if (lower.includes('daily') || lower.includes('mon–sun') || lower.includes('every day')) {
-    openFlags.fill(true);
-  } else if (lower.includes('mon–fri') || lower.includes('mon-fri') || lower.includes('weekdays')) {
-    openFlags[0] = openFlags[1] = openFlags[2] = openFlags[3] = openFlags[4] = true;
-  } else if (lower.includes('sat') && lower.includes('sun') && !lower.includes('mon')) {
-    openFlags[5] = openFlags[6] = true;
-  } else {
-    openFlags[0] = openFlags[1] = openFlags[2] = openFlags[3] = openFlags[4] = true;
+  const days: DayHours[] = Array.from({ length: 7 }, () => mkDay(false));
+
+  // Match groups like "Mon–Fri 8am–5pm", "Mon 9am–5pm", "Mon, Tue 8am–5pm"
+  const groupRegex = /((?:[A-Za-z]+(?:\s*[–\-]\s*[A-Za-z]+|,\s*[A-Za-z]+)?))\s+(\d{1,2}(?::\d{2})?\s*[ap]m)\s*[–\-]\s*(\d{1,2}(?::\d{2})?\s*[ap]m)/gi;
+
+  let matched = false;
+  let match;
+  while ((match = groupRegex.exec(s)) !== null) {
+    matched = true;
+    const daySpan = match[1].trim();
+    const openT = parseTimePart(match[2]);
+    const closeT = parseTimePart(match[3]);
+
+    const rangeMatch = daySpan.match(/^([A-Za-z]+)\s*[–\-]\s*([A-Za-z]+)$/);
+    const commaMatch = daySpan.match(/^([A-Za-z]+),\s*([A-Za-z]+)$/);
+
+    if (rangeMatch) {
+      const start = DAY_MAP[rangeMatch[1].toLowerCase()];
+      const end = DAY_MAP[rangeMatch[2].toLowerCase()];
+      if (start !== undefined && end !== undefined && end >= start) {
+        for (let i = start; i <= end; i++) {
+          days[i] = { open: true, openTime: openT, closeTime: closeT };
+        }
+      }
+    } else if (commaMatch) {
+      const d1 = DAY_MAP[commaMatch[1].toLowerCase()];
+      const d2 = DAY_MAP[commaMatch[2].toLowerCase()];
+      if (d1 !== undefined) days[d1] = { open: true, openTime: openT, closeTime: closeT };
+      if (d2 !== undefined) days[d2] = { open: true, openTime: openT, closeTime: closeT };
+    } else {
+      const d = DAY_MAP[daySpan.toLowerCase()];
+      if (d !== undefined) days[d] = { open: true, openTime: openT, closeTime: closeT };
+    }
   }
-  return { mode: 'custom', days: openFlags.map(open => mkDay(open, openTime, closeTime)) };
+
+  if (!matched) {
+    // Legacy fallback for simple strings without per-day time groups
+    const timeRegex = /(\d{1,2})(?::(\d{2}))?\s*(am|pm)/gi;
+    const times: number[] = [];
+    let m2;
+    while ((m2 = timeRegex.exec(s)) !== null) {
+      let hh = parseInt(m2[1]);
+      const min = m2[2] ? parseInt(m2[2]) : 0;
+      const ap = m2[3].toLowerCase();
+      if (ap === 'pm' && hh !== 12) hh += 12;
+      if (ap === 'am' && hh === 12) hh = 0;
+      times.push(hh * 60 + min);
+    }
+    const toTime = (mins: number): string =>
+      `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+    const openTime = times.length >= 1 ? toTime(times[0]) : null;
+    const closeTime = times.length >= 2 ? toTime(times[1]) : null;
+
+    const openFlags = [false, false, false, false, false, false, false];
+    if (lower.includes('daily') || lower.includes('mon–sun') || lower.includes('every day')) {
+      openFlags.fill(true);
+    } else if (lower.includes('mon–fri') || lower.includes('mon-fri') || lower.includes('weekdays')) {
+      openFlags[0] = openFlags[1] = openFlags[2] = openFlags[3] = openFlags[4] = true;
+    } else if (lower.includes('sat') && lower.includes('sun') && !lower.includes('mon')) {
+      openFlags[5] = openFlags[6] = true;
+    } else {
+      openFlags[0] = openFlags[1] = openFlags[2] = openFlags[3] = openFlags[4] = true;
+    }
+    openFlags.forEach((open, i) => {
+      if (open) days[i] = { open: true, openTime, closeTime };
+    });
+  }
+
+  return { mode: 'custom', days };
 }
 
 export function isOpenNow(resource: Resource): boolean {
@@ -184,6 +248,7 @@ export function isOpenNow(resource: Resource): boolean {
   const dayIndex = (now.getDay() + 6) % 7; // Mon=0 … Sun=6
   const day = parsed.days[dayIndex];
   if (!day.open) return false;
+  if (!day.openTime || !day.closeTime) return true; // open but hours unknown
 
   const currentMins = now.getHours() * 60 + now.getMinutes();
   const [oh, om] = day.openTime.split(':').map(Number);

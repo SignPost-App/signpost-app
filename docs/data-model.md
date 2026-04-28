@@ -24,7 +24,19 @@ interface Comment {
 }
 ```
 
-Hours are stored as a free-text string rather than a structured schedule. This was a deliberate tradeoff: a structured format (opening hours spec, JSON arrays of day/time pairs) would enable filtering by "open now" but would make the add/edit form significantly more complex — a problem for users submitting from a phone. Accuracy of a simple string is higher than accuracy of a complex form.
+Hours are stored as a human-readable string (e.g. `"Mon–Fri 9am–5pm, Sat 10am–3pm"`) serialized from a structured `HoursValue` object by `hoursToString()`. The Add/Edit form uses `HoursPicker`, which produces this structure, and `parseHoursString()` parses it back when opening the Edit dialog. Days with times set are parsed individually per group, so "Mon 9am–5pm, Tue–Fri 8am–5pm" correctly round-trips without collapsing all days to the first group's times.
+
+The `DayHours` type used internally:
+
+```ts
+interface DayHours {
+  open: boolean;
+  openTime: string | null;  // "HH:MM" in 24-hour format, or null when unset
+  closeTime: string | null;
+}
+```
+
+A day can be toggled open with `openTime`/`closeTime` still null — meaning "open, but hours unknown". Such days are shown without a time range in the summary, and `isOpenNow()` treats them as open.
 
 ## Tag taxonomy
 
