@@ -41,7 +41,7 @@ Horizontal chip row, positioned just below the header. Chips can be multi-select
 
 Each chip uses the tag's color when active so the visual feedback is immediate and matches the map pin colors.
 
-On narrow screens where not all chips fit in the single row, a "More …" button appears at the right edge. Tapping it expands the filter bar into a wrapping layout that shows every chip on screen at once, without scrolling. This keeps all filters reachable in two taps on any screen size, including very small phones.
+A "More …" button always appears at the right edge of the chip row. Tapping it expands the filter bar into a wrapping layout that shows every chip on screen at once, without scrolling — including the "Open Now" filter, which is only visible in the expanded state. This keeps all filters reachable in two taps on any screen size, including very small phones.
 
 The expanded chip panel is `position: absolute` and overlaps the map rather than pushing it down. The filter bar's height in the page layout never changes. This prevents the map from jumping when the panel opens or closes, which is disorienting on mobile. The panel animates via a `max-height` transition on a single DOM element — the same chips are visible in both the collapsed and expanded state, so there is no flash or misalignment between the two states.
 

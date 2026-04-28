@@ -89,7 +89,7 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
     maxHeight: panel === 'open' ? openMaxH : closedH,
   };
   if (!transitionReady) panelStyle.transition = 'none';
-  if (overflowing && panel === 'closed') panelStyle.paddingRight = 88;
+  if (panel === 'closed') panelStyle.paddingRight = 88;
 
   return (
     <nav ref={barRef} className="filter-bar" aria-label="Resource filters">
@@ -148,7 +148,7 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
         )}
       </div>
 
-      {overflowing && panel === 'closed' && (
+      {panel === 'closed' && (
         <button
           className="filter-chip filter-chip--more"
           onClick={open}
