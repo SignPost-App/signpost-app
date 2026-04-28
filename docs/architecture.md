@@ -32,6 +32,17 @@ The prototype uses `mockData.ts` — a static array of resources. There is no AP
 
 When a backend is added, the constraint is: it must be simple to redeploy. That points toward a managed database (Supabase, PocketBase, or a simple SQLite file served via a small Go/Node API) over a complex microservice setup. The admin export feature (JSON/CSV) exists partly to ensure data is never locked into whichever backend is chosen.
 
+## Feedback collection (prototype)
+
+The About modal includes a feedback form. Because there is no backend, feedback is handled by a Vite dev-server plugin (`vite.config.ts`) that:
+
+- Registers a `POST /api/feedback` middleware during `npm run dev` only
+- Writes each submission to `./feedback/<timestamp>_<id>.txt`
+- Applies basic sanitization (strips non-printable control chars, enforces 10,000-char limit) and per-IP rate limiting (5 submissions / hour)
+- Returns 404 in production builds (handled gracefully in the UI)
+
+**This is intentionally temporary.** When the app has a real API, replace `submitFeedback()` in `AboutModal.tsx` and remove the plugin from `vite.config.ts`. The `./feedback/` directory is local-only and should be in `.gitignore`.
+
 ## Dependency philosophy
 
 Keep the dependency count low. Current runtime deps: React, ReactDOM, react-router-dom, Leaflet, react-leaflet. Each one carries real cost (update burden, breaking changes, supply chain surface). Before adding a new dependency, ask whether it can be done in ~20 lines of code first.

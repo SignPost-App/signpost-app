@@ -4,6 +4,9 @@ node_modules/
 # Build output
 dist/
 
+# Feedback submissions (dev-only, written by Vite plugin)
+feedback/
+
 # Environment variables
 .env
 .env.local

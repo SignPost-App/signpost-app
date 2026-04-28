@@ -687,6 +687,22 @@ html, body, #root {
   to   { opacity: 1; }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
 @media (min-width: 640px) {
   .modal-overlay { align-items: center; }
 }
@@ -846,6 +862,8 @@ html, body, #root {
   font-family: var(--font);
 }
 .btn-submit:hover { background: var(--color-primary-dk); }
+.btn-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-submit:disabled:hover { background: var(--color-primary); }
 
 .btn-cancel {
   background: var(--color-bg);
