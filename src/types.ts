@@ -12,6 +12,14 @@ export type ResourceTag =
   | 'covered'
   | 'avoid';
 
+export type WifiPasswordType = 'open' | 'password' | 'ask' | 'login' | 'unknown';
+
+export interface WifiNetwork {
+  ssid: string;
+  passwordType: WifiPasswordType;
+  password?: string;
+}
+
 export interface TagConfig {
   icon: string;
   label: string;
@@ -25,7 +33,7 @@ export const TAG_CONFIG: Record<ResourceTag, TagConfig> = {
   shelter:          { icon: '🏠', label: 'Shelter',       color: '#7c3aed', bgColor: '#f5f3ff' },
   bathroom:         { icon: '🚻', label: 'Bathroom',      color: '#4b5563', bgColor: '#f3f4f6' },
   charging:         { icon: '🔌', label: 'Charging',      color: '#ca8a04', bgColor: '#fefce8' },
-  wifi:             { icon: '📶', label: 'Wi-Fi',         color: '#4f46e5', bgColor: '#eef2ff' },
+  wifi:             { icon: '🛜', label: 'Wi-Fi',         color: '#4f46e5', bgColor: '#eef2ff' },
   shower:           { icon: '🚿', label: 'Shower',        color: '#0891b2', bgColor: '#ecfeff' },
   'harm-reduction': { icon: '💊', label: 'Harm Reduction',color: '#db2777', bgColor: '#fdf2f8' },
   propane:          { icon: '🔥', label: 'Propane',       color: '#d97706', bgColor: '#fffbeb' },
@@ -52,6 +60,7 @@ export interface Resource {
   address?: string;
   hours?: string;
   description?: string;
+  wifiNetworks?: WifiNetwork[];
   comments: Comment[];
   addedAt: string;
   verified?: boolean;
@@ -197,4 +206,5 @@ export interface AddDraft {
   pinLng: number | null;
   hours: HoursValue;
   description: string;
+  wifiNetworks: WifiNetwork[];
 }

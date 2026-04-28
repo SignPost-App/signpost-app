@@ -2,8 +2,9 @@ import { useState, useRef, useEffect, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { ALL_TAGS, ResourceTag, TAG_CONFIG, Resource, HoursValue, EMPTY_HOURS, AddDraft, hoursToString } from '../types';
+import { ALL_TAGS, ResourceTag, TAG_CONFIG, Resource, HoursValue, EMPTY_HOURS, AddDraft, hoursToString, WifiNetwork } from '../types';
 import HoursPicker from './HoursPicker';
+import WifiNetworkPicker from './WifiNetworkPicker';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])';
 
@@ -47,6 +48,7 @@ const emptyDraft = (): AddDraft => ({
   pinLng: null,
   hours: { ...EMPTY_HOURS, days: Array.from({ length: 7 }, () => ({ open: false, openTime: '08:00', closeTime: '17:00' })) },
   description: '',
+  wifiNetworks: [],
 });
 
 export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
@@ -62,10 +64,11 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
   const [pinLng, setPinLng] = useState<number | null>(draft?.pinLng ?? null);
   const [hours, setHours] = useState<HoursValue>(draft?.hours ?? { ...EMPTY_HOURS, days: Array.from({ length: 7 }, () => ({ open: false, openTime: '08:00', closeTime: '17:00' })) });
   const [description, setDescription] = useState(draft?.description ?? '');
+  const [wifiNetworks, setWifiNetworks] = useState<WifiNetwork[]>(draft?.wifiNetworks ?? []);
 
   // Keep a ref to current form state so event handlers don't go stale
   const draftRef = useRef<AddDraft>(emptyDraft());
-  draftRef.current = { name, selectedTags, locationMode, address, pinLat, pinLng, hours, description };
+  draftRef.current = { name, selectedTags, locationMode, address, pinLat, pinLng, hours, description, wifiNetworks };
 
   const toggleTag = (tag: ResourceTag) => {
     setSelectedTags(prev =>
@@ -83,12 +86,14 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
     setPinLng(d.pinLng);
     setHours(d.hours);
     setDescription(d.description);
+    setWifiNetworks(d.wifiNetworks);
   };
 
   const handleSubmit = () => {
     if (!name.trim() || selectedTags.length === 0) return;
     const lat = pinLat ?? (47.6062 + (Math.random() - 0.5) * 0.05);
     const lng = pinLng ?? (-122.3321 + (Math.random() - 0.5) * 0.05);
+    const filteredWifi = wifiNetworks.filter(n => n.ssid.trim());
     const resource: Resource = {
       id: `r-${Date.now()}`,
       name: name.trim(),
@@ -98,6 +103,7 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
       address: address.trim() || undefined,
       hours: hoursToString(hours) || undefined,
       description: description.trim() || undefined,
+      wifiNetworks: filteredWifi.length > 0 ? filteredWifi : undefined,
       comments: [],
       addedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
     };
@@ -321,6 +327,14 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
             <span className="form-label">{t('addModal.hoursLabel')}</span>
             <HoursPicker value={hours} onChange={setHours} />
           </div>
+
+          {/* Wi-Fi networks */}
+          {selectedTags.includes('wifi') && (
+            <div className="form-group">
+              <span className="form-label">{t('wifi.networksLabel')}</span>
+              <WifiNetworkPicker value={wifiNetworks} onChange={setWifiNetworks} />
+            </div>
+          )}
 
           {/* Description */}
           <div className="form-group">

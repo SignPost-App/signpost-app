@@ -146,6 +146,10 @@ export const mockResources: Resource[] = [
     address: '1000 4th Ave, Seattle, WA 98104',
     hours: 'Mon–Thu: 10am–8pm  •  Fri–Sat: 10am–6pm  •  Sun: 12pm–6pm',
     description: 'Free Wi-Fi, outlets throughout all floors, water fountain and restrooms on each level. No library card needed for Wi-Fi.',
+    wifiNetworks: [
+      { ssid: 'SPL_Free_WiFi', passwordType: 'open' },
+      { ssid: 'SPL_Staff', passwordType: 'password', password: 'library2024' },
+    ],
     comments: [
       { id: 'c15', text: 'Wi-Fi is fast and no time limit', addedAt: '3 days ago', accuracyVotes: { accurate: 6, outdated: 0 } },
       { id: 'c16', text: 'Security is generally respectful, warm in winter', addedAt: '1 week ago' },
@@ -162,6 +166,9 @@ export const mockResources: Resource[] = [
     address: '1400 3rd Ave, Seattle, WA 98101',
     hours: '24/7',
     description: 'Free Wi-Fi, outlets near window seats. Open 24 hours — one of the few spots with overnight Wi-Fi access.',
+    wifiNetworks: [
+      { ssid: "McDonald's", passwordType: 'login' },
+    ],
     comments: [
       { id: 'c17', text: 'Buy a coffee and they leave you alone', addedAt: '2 days ago' },
       { id: 'c18', text: 'Wi-Fi requires accepting terms on a browser — works fine', addedAt: '5 days ago' },

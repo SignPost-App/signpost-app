@@ -37,10 +37,11 @@ Tags are the primary classification mechanism. A resource can have multiple tags
 | `shelter` | Emergency shelters, overnight facilities |
 | `bathroom` | Public restrooms |
 | `charging` | Electrical outlets for phone/device charging |
+| `wifi` | Locations with publicly accessible Wi-Fi |
 | `shower` | Shower access |
 | `harm-reduction` | Needle exchanges, naloxone, crisis services |
 | `propane` | Propane tank sale or refill locations |
-| `safe-park` | Parks where people aren't harassed |
+| `park` | Parks where people aren't harassed |
 | `covered` | Rain shelter: overhangs, awnings, covered walkways |
 | `avoid` | Hostile areas, aggressive security, police sweeps |
 

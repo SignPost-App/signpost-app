@@ -104,6 +104,22 @@
     "splashBody": "This app is not real or operational. All locations, names, and data shown are made-up placeholders. Do not rely on any of this information.",
     "splashContinue": "I understand"
   },
+  "wifi": {
+    "networksLabel": "Wi-Fi Networks",
+    "ssidPlaceholder": "Network name (SSID)",
+    "passwordPlaceholder": "Password",
+    "addNetwork": "Add network",
+    "removeNetwork": "Remove",
+    "showPassword": "tap to see password",
+    "hidePassword": "tap to hide",
+    "type": {
+      "open": "Open",
+      "password": "Has password",
+      "ask": "Ask staff",
+      "login": "Login required",
+      "unknown": "Unknown"
+    }
+  },
   "skipLink": "Skip to main content",
   "poster": {
     "selectLanguages": "Select languages for the poster",

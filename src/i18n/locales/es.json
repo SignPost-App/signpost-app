@@ -104,6 +104,22 @@
     "splashBody": "Esta aplicación no es real ni está en funcionamiento. Todas las ubicaciones, nombres y datos mostrados son marcadores de posición ficticios. No confíe en ninguna de esta información.",
     "splashContinue": "Entendido"
   },
+  "wifi": {
+    "networksLabel": "Redes Wi-Fi",
+    "ssidPlaceholder": "Nombre de red (SSID)",
+    "passwordPlaceholder": "Contraseña",
+    "addNetwork": "Agregar red",
+    "removeNetwork": "Quitar",
+    "showPassword": "toca para ver contraseña",
+    "hidePassword": "toca para ocultar",
+    "type": {
+      "open": "Abierta",
+      "password": "Tiene contraseña",
+      "ask": "Preguntar al personal",
+      "login": "Requiere inicio de sesión",
+      "unknown": "Desconocido"
+    }
+  },
   "skipLink": "Ir al contenido principal",
   "poster": {
     "selectLanguages": "Seleccionar idiomas del cartel",

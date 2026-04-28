@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Resource, TAG_CONFIG, ALL_TAGS, HoursValue, DEFAULT_HOURS, parseHoursString, hoursToString } from '../types';
+import { Resource, TAG_CONFIG, ALL_TAGS, HoursValue, DEFAULT_HOURS, parseHoursString, hoursToString, WifiNetwork } from '../types';
 import HoursPicker from './HoursPicker';
+import WifiNetworkPicker from './WifiNetworkPicker';
 
 interface Props {
   resource: Resource;
@@ -113,6 +114,56 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
   );
 }
 
+function WifiNetworkRow({ network }: { network: WifiNetwork }) {
+  const { t } = useTranslation();
+  const [revealed, setRevealed] = useState(false);
+  return (
+    <div>
+      <span style={{ fontWeight: 600, fontSize: 14 }}>
+        {network.ssid || <em style={{ color: 'var(--color-muted)', fontStyle: 'normal' }}>Unnamed network</em>}
+      </span>
+      {network.passwordType === 'password' ? (
+        <div style={{ marginTop: 2, height: 22, display: 'flex', alignItems: 'center' }}>
+          {revealed ? (
+            <span
+              onClick={() => setRevealed(false)}
+              style={{ fontSize: 13, fontFamily: 'monospace', color: 'var(--color-text)', cursor: 'pointer', lineHeight: 1 }}
+              title={t('wifi.hidePassword')}
+            >
+              {network.password || '—'}
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setRevealed(true)}
+              aria-label={t('wifi.showPassword')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: '#111',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 4,
+                padding: '2px 8px',
+                fontSize: 12,
+                lineHeight: 1,
+                cursor: 'pointer',
+                userSelect: 'none',
+              }}
+            >
+              {t('wifi.showPassword')}
+            </button>
+          )}
+        </div>
+      ) : network.passwordType !== 'unknown' ? (
+        <div style={{ fontSize: 13, color: 'var(--color-muted)', marginTop: 1 }}>
+          {t(`wifi.type.${network.passwordType}`)}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export default function ResourcePanel({ resource, onClose, onAddComment, onUpdateResource }: Props) {
   const { t } = useTranslation();
   const [commentText, setCommentText] = useState('');
@@ -125,6 +176,7 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
   const [editAddress, setEditAddress] = useState('');
   const [editHours, setEditHours] = useState<HoursValue>({ ...DEFAULT_HOURS });
   const [editDescription, setEditDescription] = useState('');
+  const [editWifiNetworks, setEditWifiNetworks] = useState<WifiNetwork[]>([]);
 
   // Reset edit state when switching to a different resource
   useEffect(() => {
@@ -155,12 +207,14 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
     setEditAddress(resource.address ?? '');
     setEditHours(parseHoursString(resource.hours));
     setEditDescription(resource.description ?? '');
+    setEditWifiNetworks(resource.wifiNetworks ? [...resource.wifiNetworks] : []);
     setEditing(true);
   };
 
   const cancelEdit = () => setEditing(false);
 
   const saveEdit = () => {
+    const filteredWifi = editWifiNetworks.filter(n => n.ssid.trim());
     const updated: Resource = {
       ...resource,
       name: editName.trim() || resource.name,
@@ -168,6 +222,7 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
       address: editAddress.trim() || undefined,
       hours: hoursToString(editHours) || undefined,
       description: editDescription.trim() || undefined,
+      wifiNetworks: filteredWifi.length > 0 ? filteredWifi : undefined,
     };
     onUpdateResource(updated);
     setEditing(false);
@@ -264,6 +319,13 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
               <HoursPicker value={editHours} onChange={setEditHours} />
             </div>
 
+            {editTags.includes('wifi') && (
+              <div className="form-group">
+                <span className="form-label">{t('wifi.networksLabel')}</span>
+                <WifiNetworkPicker value={editWifiNetworks} onChange={setEditWifiNetworks} />
+              </div>
+            )}
+
             <div className="form-group">
               <label className="form-label" htmlFor="edit-description">
                 {t('addModal.descriptionLabel')}
@@ -325,6 +387,16 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
               <div className="panel-meta-row">
                 <span className="panel-meta-icon" aria-hidden="true">🕐</span>
                 <dd className="panel-meta-text">{resource.hours}</dd>
+              </div>
+            )}
+            {resource.wifiNetworks && resource.wifiNetworks.length > 0 && (
+              <div className="panel-meta-row" style={{ alignItems: 'flex-start' }}>
+                <span className="panel-meta-icon" aria-hidden="true">🛜</span>
+                <dd className="panel-meta-text" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {resource.wifiNetworks.map((net, i) => (
+                    <WifiNetworkRow key={i} network={net} />
+                  ))}
+                </dd>
               </div>
             )}
             <div className="panel-meta-row">
