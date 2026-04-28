@@ -1549,7 +1549,8 @@ html, body, #root {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   list-style: none;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: min(420px, 65vh);
   z-index: 9999;
   animation: fadeIn 0.15s ease;
 }
@@ -1601,6 +1602,9 @@ html, body, #root {
   max-width: 420px;
   width: 100%;
   box-shadow: var(--shadow-lg);
+  max-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
 }
 
 .lang-modal-title {
@@ -1622,6 +1626,10 @@ html, body, #root {
   flex-direction: column;
   gap: 10px;
   margin-bottom: 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: 4px;
 }
 
 .lang-modal-option {

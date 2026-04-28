@@ -8,8 +8,9 @@ interface Props {
 }
 
 export default function LanguageSelectModal({ onConfirm, onCancel }: Props) {
-  const { t } = useTranslation();
-  const [selected, setSelected] = useState<Set<LanguageCode>>(new Set(['en']));
+  const { t, i18n } = useTranslation();
+  const defaultLang = (SUPPORTED_LANGUAGES.find(l => l.code === i18n.resolvedLanguage)?.code ?? 'en') as LanguageCode;
+  const [selected, setSelected] = useState<Set<LanguageCode>>(new Set([defaultLang]));
   const firstCheckRef = useRef<HTMLInputElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 

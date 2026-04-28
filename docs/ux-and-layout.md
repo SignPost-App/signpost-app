@@ -121,7 +121,9 @@ The poster page produces a printable flyer intended to be posted in physical loc
 
 ### Language selection
 
-Before the browser print dialog opens, a modal asks which languages to include on the poster (1–3 languages). Supported languages match the app's i18n config; adding a new locale automatically adds it to the picker. The order of selection is preserved in the printed layout.
+Before the browser print dialog opens, a modal asks which languages to include on the poster (1–3 languages). The modal defaults to whichever language the app is currently set to. Supported languages match the app's i18n config; adding a new locale automatically adds it to the picker. The option list scrolls to accommodate the full set of languages. The order of selection is preserved in the printed layout.
+
+The app currently ships with 26 language options: Amharic, Arabic, Chinese, Dutch, English, French, German, Haitian Creole, Hindi, Igbo, Italian, Japanese, Korean, Oromo, Polish, Portuguese, Russian, Somali, Spanish, Tagalog (Filipino), Tigrinya, Twi, Ukrainian, Urdu, Vietnamese, and Yoruba. Languages without a full translation fall back to English for app UI text; the poster column header (`langLabel`) is always rendered in the native language.
 
 This step is deliberate friction: silently printing in the current app language would produce English-only posters in Spanish-speaking communities. Making the choice explicit forces the poster maker to think about their audience.
 
