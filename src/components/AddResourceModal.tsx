@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { ALL_TAGS, ResourceTag, TAG_CONFIG, Resource, HoursValue, AddDraft, hoursToString, WifiNetwork } from '../types';
+import { reverseGeocode } from '../geocode';
 import HoursPicker from './HoursPicker';
 import WifiNetworkPicker from './WifiNetworkPicker';
 
@@ -59,6 +60,8 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
   const [selectedTags, setSelectedTags] = useState<ResourceTag[]>(draft?.selectedTags ?? []);
   const [pinLat, setPinLat] = useState<number | null>(draft?.pinLat ?? null);
   const [pinLng, setPinLng] = useState<number | null>(draft?.pinLng ?? null);
+  const [resolvedAddress, setResolvedAddress] = useState<string | null>(null);
+  const geocodeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hours, setHours] = useState<HoursValue>(draft?.hours ?? emptyDraft().hours);
   const [directions, setDirections] = useState(draft?.directions ?? '');
   const [description, setDescription] = useState(draft?.description ?? '');
@@ -66,6 +69,17 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
 
   const draftRef = useRef<AddDraft>(emptyDraft());
   draftRef.current = { name, selectedTags, pinLat, pinLng, hours, directions, description, wifiNetworks };
+
+  // Reverse-geocode the pin whenever it moves (debounced 900 ms)
+  useEffect(() => {
+    if (pinLat === null || pinLng === null) { setResolvedAddress(null); return; }
+    if (geocodeTimer.current) clearTimeout(geocodeTimer.current);
+    geocodeTimer.current = setTimeout(async () => {
+      const addr = await reverseGeocode(pinLat, pinLng);
+      setResolvedAddress(addr);
+    }, 900);
+    return () => { if (geocodeTimer.current) clearTimeout(geocodeTimer.current); };
+  }, [pinLat, pinLng]);
 
   const toggleTag = (tag: ResourceTag) => {
     setSelectedTags(prev =>
@@ -96,7 +110,7 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
       lat,
       lng,
       tags: selectedTags,
-      address: pinLat !== null ? `${lat.toFixed(5)}, ${lng.toFixed(5)}` : undefined,
+      address: pinLat !== null ? (resolvedAddress ?? `${lat.toFixed(5)}, ${lng.toFixed(5)}`) : undefined,
       hours: hoursToString(hours) || undefined,
       directions: directions.trim() || undefined,
       description: description.trim() || undefined,
@@ -249,30 +263,37 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
                   )}
                 </MapContainer>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-                <button
-                  type="button"
-                  className="btn-locate"
-                  onClick={handleUseMyLocation}
-                  title={t('addModal.useMyLocation')}
-                >
-                  <span aria-hidden="true">📍</span>
-                  <span className="sr-only">{t('addModal.useMyLocation')}</span>
-                  <span aria-hidden="true">{t('addModal.useMyLocation')}</span>
-                </button>
-                {pinLat !== null && (
-                  <>
-                    <span style={{ fontSize: 12, color: 'var(--color-muted)' }}>
-                      {pinLat.toFixed(5)}, {pinLng!.toFixed(5)}
-                    </span>
-                    <button
-                      type="button"
-                      className="btn-link"
-                      onClick={() => { setPinLat(null); setPinLng(null); }}
-                    >
-                      {t('addModal.removePin')}
-                    </button>
-                  </>
+              <div style={{ marginTop: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <button
+                    type="button"
+                    className="btn-locate"
+                    onClick={handleUseMyLocation}
+                    title={t('addModal.useMyLocation')}
+                  >
+                    <span aria-hidden="true">📍</span>
+                    <span className="sr-only">{t('addModal.useMyLocation')}</span>
+                    <span aria-hidden="true">{t('addModal.useMyLocation')}</span>
+                  </button>
+                  {pinLat !== null && (
+                    <>
+                      <span style={{ fontSize: 12, color: 'var(--color-muted)' }}>
+                        {pinLat.toFixed(5)}, {pinLng!.toFixed(5)}
+                      </span>
+                      <button
+                        type="button"
+                        className="btn-link"
+                        onClick={() => { setPinLat(null); setPinLng(null); setResolvedAddress(null); }}
+                      >
+                        {t('addModal.removePin')}
+                      </button>
+                    </>
+                  )}
+                </div>
+                {resolvedAddress && (
+                  <div style={{ fontSize: 12, color: 'var(--color-muted)', paddingLeft: 2 }}>
+                    {resolvedAddress}
+                  </div>
                 )}
               </div>
             </div>

@@ -9,7 +9,7 @@ interface Resource {
   lat: number;
   lng: number;
   tags: ResourceTag[];       // at least one required
-  address?: string;          // derived from pin placement — formatted as "lat, lng" for new entries
+  address?: string;          // reverse-geocoded from pin; falls back to "lat, lng" if geocoding fails
   hours?: string;            // free-text, not structured — too many formats to normalize
   directions?: string;       // optional human-written text clarifying how to find the location
   description?: string;      // community-written free text
@@ -25,7 +25,7 @@ interface Comment {
 }
 ```
 
-`address` is auto-populated from the pin position (formatted as `"lat, lng"`) when a resource is created or edited. It is never a user-typed text field. Legacy mock data entries may carry readable text addresses that predate this convention.
+`address` is auto-populated when a resource is created or edited: the pin coordinates are sent to the Nominatim reverse-geocoding API (see `src/geocode.ts`), and the resulting street address (e.g. `"318 2nd Ave Ext S, Pioneer Square, Seattle, WA"`) is stored. If the geocoding request fails or returns no result, the fallback is the raw coordinates formatted as `"lat, lng"`. The field is never a user-typed text input. Legacy mock data entries carry readable text addresses that predate this convention.
 
 `directions` is optional free text for clarifying *how* to reach the location — entrance details, landmarks, staff to ask, etc. It is separate from `address` (which is purely coordinate-derived) and `description` (which covers what the resource offers).
 

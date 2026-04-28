@@ -13,6 +13,8 @@ The map uses OpenStreetMap tiles via react-leaflet. This is a hard requirement f
 
 One tradeoff: OSM tile servers have a [usage policy](https://operations.osmfoundation.org/policies/tiles/) that discourages heavy usage on the default tiles. At real scale we should self-host tiles or use a commercial OSM-compatible provider (Stadia Maps, Maptiler free tier) that still uses OSM data but has capacity SLAs. This doesn't require changing any code — just the TileLayer URL.
 
+The app also uses [Nominatim](https://nominatim.openstreetmap.org/) — the OSMF's geocoding service — to reverse-geocode pin placements into human-readable addresses (see `architecture.md` and `src/geocode.ts`). At scale, the Nominatim usage policy applies here too; consider self-hosting or a commercial geocoder at that point.
+
 ## Map library: react-leaflet
 
 Leaflet is the canonical open-source map library. react-leaflet wraps it with React lifecycle management. The alternative, MapLibre GL (via react-map-gl), is more powerful (vector tiles, WebGL rendering, better mobile performance) but heavier to set up and overkill for a pin-based resource map. If we ever need heatmaps, clustering, or offline tile packs, revisit MapLibre.

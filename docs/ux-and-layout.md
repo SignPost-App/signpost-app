@@ -29,11 +29,22 @@ Tapping **✏️ Edit** transforms the panel into an inline edit form. The foote
 
 - Name (text input)
 - Type (same tag-checkbox grid as the Add modal)
-- Location (address string only — pin coordinates are not editable here; a separate "move pin" flow should be added before launch)
+- Location (same interactive Leaflet pin picker used in Add, initialized at the resource's current coordinates — drag or tap to reposition)
+- Directions (optional text input for contextual navigation help, separate from the coordinate-derived address)
 - Hours / Availability (the same HoursPicker component used in the Add modal, pre-populated by parsing the resource's stored hours string)
+- Wi-Fi Networks (shown only when the Wi-Fi tag is selected)
 - Description / Notes (textarea)
 
-Saving writes the updated resource back to state; the panel returns to view mode and the map pin reflects any tag changes immediately. Cancel reverts without saving. The ✕ button closes the panel entirely (does not just cancel the edit).
+**Save Changes** is disabled until at least one field differs from the saved resource (dirty-state check). Clicking it transitions to a **Review changes** screen rather than saving immediately.
+
+**Review changes screen:** The panel header updates to "Review changes" and the scroll area shows a styled diff card for every modified field:
+
+- **Text fields** (name, location, directions, description): a word-level LCS diff is applied. Removed words are shown in red strikethrough; added words are highlighted in green. For short values the whole diff is rendered inline. For longer values (combined before + after > 80 chars) the card shows a stacked Before / After layout — each line shows the full text with only its relevant changes marked (removals in Before, additions in After).
+- **Tags**: removed tags appear as faded, struck-through colored badges; added tags appear with a `+` prefix and a colored border.
+- **Hours**: only the days whose times or open/closed state actually changed are shown in a compact table (day label · old hours → new hours via word diff). Unchanged days are omitted entirely.
+- **Wi-Fi networks**: networks are matched by SSID. Added networks show with a `+` prefix; removed networks show struck through. Changed networks (same SSID, different properties) show the SSID unchanged and then diff the specific property that changed: password type is shown as a word diff, and if the password value changed the old and new password strings are shown inline (old struck through, new highlighted) in monospace.
+
+The footer in review mode shows **Go back** (returns to the edit form without losing changes) and **Save** (applies all changes). Saving writes the updated resource back to state; the panel returns to view mode and the map pin reflects any tag changes immediately. Cancel reverts without saving. The ✕ button closes the panel entirely (does not just cancel the edit).
 
 ## Filter bar
 
@@ -66,14 +77,17 @@ The FAB (floating action button) is the primary entry point for adding a resourc
 
 The modal slides up from the bottom on mobile (matching the bottom sheet pattern) and centers as a dialog on larger screens.
 
-### Location: Address vs. Drop Pin
+### Location: Pin only
 
-The location field offers two modes toggled by pill buttons:
+The location field is always a pin-based picker — there is no free-text address input. An interactive Leaflet map (200px tall) is shown centered on Seattle. Tapping anywhere on the map drops a 📍 marker; the map flies to the tapped position. The marker is draggable for fine-tuning. Raw coordinates are shown below the map alongside a "Remove pin" link and a "Use my location" button (GPS). A "Use my location" button requests the device's GPS and places the pin at the user's current position.
 
-- **Address** — text input for a street address or intersection, plus a "Use my location" button that requests the device's GPS and, if granted, switches to Drop Pin mode with the pin placed at the user's current coordinates.
-- **Drop Pin** — renders a full interactive Leaflet map (200px tall) centered on Seattle. Tapping anywhere on the map drops a 📍 marker; the map flies to the tapped position. The marker is draggable for fine-tuning. Coordinates are shown below the map with a "Remove pin" link. If Drop Pin mode is active but no pin is placed, the submit flow falls back to a randomized location near Seattle (mockup behavior until geocoding is wired up).
+After the pin stops moving, the app calls the Nominatim reverse-geocoding API (debounced 900 ms) and displays the resolved address as a hint below the coordinates — e.g. "318 2nd Ave Ext S, Pioneer Square, Seattle, WA". This address is what gets stored on submit; it falls back to raw `"lat, lng"` if geocoding fails. The field is never user-typed.
 
-Many resources don't have a formal address (a covered spot under a bridge, a park water fountain), so the Drop Pin path is the more important one for this use case.
+If the form is submitted without placing a pin, the resource is assigned a randomized location near Seattle (mockup behavior until geocoding is wired up).
+
+### Directions
+
+A **Directions** field (optional text input) appears below Location. It is for human-readable navigation context that coordinates alone cannot convey — entrance details, landmarks, staff to ask, which side of the building, etc. It is separate from Description, which covers what the resource offers rather than how to find it.
 
 ### Hours / Availability picker
 

@@ -43,6 +43,19 @@ The About modal includes a feedback form. Because there is no backend, feedback 
 
 **This is intentionally temporary.** When the app has a real API, replace `submitFeedback()` in `AboutModal.tsx` and remove the plugin from `vite.config.ts`. The `./feedback/` directory is local-only and should be in `.gitignore`.
 
+## Reverse geocoding: Nominatim
+
+When a pin is placed or moved in the Add or Edit form, the app calls the [Nominatim reverse-geocoding API](https://nominatim.openstreetmap.org/reverse) to resolve the coordinates to a human-readable street address. The call is debounced 900 ms after the pin stops moving. The resolved address (e.g. `"318 2nd Ave Ext S, Pioneer Square, Seattle, WA"`) is displayed as a hint in the form and stored in `resource.address` on submit.
+
+Nominatim is operated by the OpenStreetMap Foundation and is free with no API key. Its [usage policy](https://operations.osmfoundation.org/policies/nominatim/) requires:
+- No more than 1 request per second (the 900 ms debounce satisfies this)
+- A descriptive `User-Agent` header (sent as `SignPostApp/1.0`)
+- Caching where possible (not yet implemented; acceptable at prototype scale)
+
+At real scale, self-hosting Nominatim or switching to a commercial OSM-compatible geocoding service (Photon, Stadia Maps, Geoapify) is preferred. The logic lives in `src/geocode.ts` and is isolated from the rest of the app — swapping the implementation requires touching only that file.
+
 ## Dependency philosophy
 
 Keep the dependency count low. Current runtime deps: React, ReactDOM, react-router-dom, Leaflet, react-leaflet. Each one carries real cost (update burden, breaking changes, supply chain surface). Before adding a new dependency, ask whether it can be done in ~20 lines of code first.
+
+Nominatim is a runtime network call rather than a package dependency. It is the only external service the client contacts beyond the OSM tile server.

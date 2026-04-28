@@ -40,6 +40,7 @@
     "added": "Añadido el {{date}}",
     "edit": "Editar",
     "editTitle": "Editar recurso",
+    "reviewTitle": "Revisar cambios",
     "saveEdit": "Guardar cambios",
     "cancelEdit": "Cancelar",
     "report": "Reportar contenido inexacto o dañino",
@@ -54,7 +55,8 @@
     "changedHours": "Horario cambiado",
     "changedDirections": "Indicaciones cambiadas",
     "changedDescription": "Descripción cambiada",
-    "changedWifi": "Redes Wi-Fi cambiadas"
+    "changedWifi": "Redes Wi-Fi cambiadas",
+    "tagsLabel": "Tipo"
   },
   "addModal": {
     "title": "Agregar un recurso",
