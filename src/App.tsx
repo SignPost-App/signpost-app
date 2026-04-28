@@ -7,6 +7,7 @@ import MapView from './components/MapView';
 import ResourcePanel from './components/ResourcePanel';
 import AddResourceModal from './components/AddResourceModal';
 import DisclaimerBanner from './components/DisclaimerBanner';
+import DemoBanner from './components/DemoBanner';
 import AdminPage from './components/AdminPage';
 import PosterPage from './components/PosterPage';
 import { Resource, ResourceTag, Comment, AddDraft, isOpenNow } from './types';
@@ -113,10 +114,15 @@ function LangSync() {
   return null;
 }
 
+const demoMode = import.meta.env.VITE_DEMO_MODE === 'true';
+
 export default function App() {
+  const [demoDismissed, setDemoDismissed] = useState(false);
+
   return (
     <BrowserRouter>
       <LangSync />
+      {demoMode && !demoDismissed && <DemoBanner onDismiss={() => setDemoDismissed(true)} />}
       <Routes>
         <Route path="/"       element={<MainPage />} />
         <Route path="/admin"  element={<AdminPage />} />

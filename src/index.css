@@ -259,6 +259,72 @@ html, body, #root {
   margin: 4px 0;
 }
 
+/* ---- Demo Splash ---- */
+.demo-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.demo-splash-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px 32px 32px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+.demo-splash-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.demo-splash-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #dc2626;
+  margin-bottom: 16px;
+}
+.demo-splash-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #374151;
+  margin-bottom: 28px;
+}
+.demo-splash-btn {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  width: 100%;
+}
+.demo-splash-btn:hover { background: #b91c1c; }
+.demo-splash-btn:focus-visible {
+  outline: 3px solid #dc2626;
+  outline-offset: 3px;
+}
+.demo-splash-lang {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.demo-splash-lang .lang-btn {
+  border-color: #d1d5db;
+  background: transparent;
+  color: #374151;
+}
+.demo-splash-lang .lang-btn:hover { background: #f3f4f6; }
+.demo-splash-lang .lang-btn:focus-visible { outline-color: var(--color-primary); }
+
 /* ---- Disclaimer Banner ---- */
 .disclaimer {
   background: #fef3c7;

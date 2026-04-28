@@ -21,7 +21,8 @@
     "shower": "Ducha",
     "harm-reduction": "Reducción de daños",
     "propane": "Propano",
-    "safe-park": "Parque seguro",
+    "wifi": "Wi-Fi",
+    "park": "Parque",
     "covered": "Área techada",
     "avoid": "EVITAR"
   },
@@ -97,6 +98,11 @@
     "helpPoster": "Imprime un cartel y ponlo en tu comunidad — lavanderias, refugios, bibliotecas, centros comunitarios. Cualquiera que lo vea puede escanear el codigo QR o escribir la URL para acceder al mapa.",
     "helpPosterLink": "Imprimir un cartel",
     "close": "Cerrar"
+  },
+  "demo": {
+    "splashTitle": "Esto es una demostración",
+    "splashBody": "Esta aplicación no es real ni está en funcionamiento. Todas las ubicaciones, nombres y datos mostrados son marcadores de posición ficticios. No confíe en ninguna de esta información.",
+    "splashContinue": "Entendido"
   },
   "skipLink": "Ir al contenido principal",
   "poster": {

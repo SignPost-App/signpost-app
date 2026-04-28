@@ -4,10 +4,11 @@ export type ResourceTag =
   | 'shelter'
   | 'bathroom'
   | 'charging'
+  | 'wifi'
   | 'shower'
   | 'harm-reduction'
   | 'propane'
-  | 'safe-park'
+  | 'park'
   | 'covered'
   | 'avoid';
 
@@ -24,10 +25,11 @@ export const TAG_CONFIG: Record<ResourceTag, TagConfig> = {
   shelter:          { icon: '🏠', label: 'Shelter',       color: '#7c3aed', bgColor: '#f5f3ff' },
   bathroom:         { icon: '🚻', label: 'Bathroom',      color: '#4b5563', bgColor: '#f3f4f6' },
   charging:         { icon: '🔌', label: 'Charging',      color: '#ca8a04', bgColor: '#fefce8' },
+  wifi:             { icon: '📶', label: 'Wi-Fi',         color: '#4f46e5', bgColor: '#eef2ff' },
   shower:           { icon: '🚿', label: 'Shower',        color: '#0891b2', bgColor: '#ecfeff' },
   'harm-reduction': { icon: '💊', label: 'Harm Reduction',color: '#db2777', bgColor: '#fdf2f8' },
   propane:          { icon: '🔥', label: 'Propane',       color: '#d97706', bgColor: '#fffbeb' },
-  'safe-park':      { icon: '🌳', label: 'Safe Park',     color: '#16a34a', bgColor: '#f0fdf4' },
+  park:             { icon: '🌳', label: 'Park',          color: '#16a34a', bgColor: '#f0fdf4' },
   covered:          { icon: '☔', label: 'Covered Area',  color: '#2563eb', bgColor: '#eff6ff' },
   avoid:            { icon: '⛔', label: 'AVOID',         color: '#dc2626', bgColor: '#fef2f2' },
 };

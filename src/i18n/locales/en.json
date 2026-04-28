@@ -21,7 +21,8 @@
     "shower": "Shower",
     "harm-reduction": "Harm Reduction",
     "propane": "Propane",
-    "safe-park": "Safe Park",
+    "wifi": "Wi-Fi",
+    "park": "Park",
     "covered": "Covered Area",
     "avoid": "AVOID"
   },
@@ -97,6 +98,11 @@
     "helpPoster": "Print a poster and put it up in your community — laundromats, shelters, libraries, community centers. Anyone who sees it can scan the QR code or type the URL to access the map without needing to know the app exists.",
     "helpPosterLink": "Print a poster",
     "close": "Close"
+  },
+  "demo": {
+    "splashTitle": "This is a demo",
+    "splashBody": "This app is not real or operational. All locations, names, and data shown are made-up placeholders. Do not rely on any of this information.",
+    "splashContinue": "I understand"
   },
   "skipLink": "Skip to main content",
   "poster": {
