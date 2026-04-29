@@ -92,7 +92,7 @@ export default function FeedbackModal({ text, onTextChange, onClose, onCancel, o
             onClick={onClose}
             disabled={status === 'submitting'}
           >
-            ×
+            ✕
           </button>
         </div>
 

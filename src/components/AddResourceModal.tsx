@@ -172,7 +172,7 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
             onClick={() => onClose(draftRef.current)}
             aria-label={t('addModal.close')}
           >
-            ×
+            ✕
           </button>
         </div>
 

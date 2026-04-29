@@ -87,7 +87,7 @@ export default function AboutModal({ onClose }: Props) {
                 aria-label={t('about.close')}
                 onClick={onClose}
               >
-                ×
+                ✕
               </button>
             </div>
             <div className="modal-body">

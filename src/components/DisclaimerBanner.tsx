@@ -27,7 +27,7 @@ export default function DisclaimerBanner({ onDismiss }: Props) {
         onClick={onDismiss}
         aria-label={t('disclaimer.dismiss')}
       >
-        ×
+        ✕
       </button>
     </div>
   );

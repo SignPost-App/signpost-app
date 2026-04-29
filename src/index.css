@@ -355,13 +355,22 @@ html, body, #root {
 .disclaimer-dismiss {
   background: none;
   border: none;
+  border-radius: 50%;
   color: #92400e;
   font-size: 18px;
   cursor: pointer;
   padding: 0;
   line-height: 1;
   flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
 }
+.disclaimer-dismiss:hover { background: rgba(146, 64, 14, 0.1); }
 
 /* ---- Resource Panel (bottom sheet / sidebar) ---- */
 .resource-panel {
@@ -382,6 +391,13 @@ html, body, #root {
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Edit mode needs more vertical space to show the full form */
+@media (max-width: 767px) {
+  .resource-panel--editing {
+    max-height: 90vh;
+  }
 }
 
 @media (min-width: 768px) {
@@ -440,15 +456,16 @@ html, body, #root {
   background: var(--color-bg);
   border: none;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   flex-shrink: 0;
   color: var(--color-muted);
+  padding: 0;
 }
 .panel-close:hover { background: var(--color-border); }
 
@@ -737,14 +754,22 @@ html, body, #root {
 }
 
 .modal-close {
-  background: none;
+  background: var(--color-bg);
   border: none;
-  font-size: 22px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  font-size: 18px;
+  flex-shrink: 0;
   color: var(--color-muted);
   padding: 0;
   line-height: 1;
 }
+.modal-close:hover { background: var(--color-border); }
 
 .modal-body {
   padding: 20px;

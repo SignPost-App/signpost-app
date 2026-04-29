@@ -549,7 +549,7 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
   const isAvoid = resource.tags.includes('avoid');
 
   return (
-    <div className="resource-panel" role="complementary" aria-label={resource.name}>
+    <div className={`resource-panel${editing ? ' resource-panel--editing' : ''}`} role="complementary" aria-label={resource.name}>
       <div className="panel-drag-handle" aria-hidden="true" />
 
       {editing ? (

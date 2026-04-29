@@ -83,6 +83,25 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
 
   useOutsideClick(barRef, close, panel !== 'closed');
 
+  // Keep openMaxH accurate while expanded — update whenever the bar width changes
+  // (chips wrap more at narrower widths, pushing the Less button off-screen otherwise)
+  useEffect(() => {
+    if (panel !== 'open') return;
+    const el = panelRef.current;
+    const bar = barRef.current;
+    if (!el || !bar) return;
+    const recalc = () => {
+      const chip = el.querySelector<HTMLElement>('.filter-chip');
+      const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height) : 33;
+      setOpenMaxH(el.scrollHeight + chipH + 8);
+    };
+    // Delay until after the open animation completes so we don't jump mid-animation
+    const timer = setTimeout(recalc, 300);
+    const obs = new ResizeObserver(recalc);
+    obs.observe(bar);
+    return () => { clearTimeout(timer); obs.disconnect(); };
+  }, [panel]);
+
   const isExpanded = panel === 'open' || panel === 'closing';
 
   const panelStyle: React.CSSProperties = {
