@@ -6,6 +6,8 @@ This app builds to static files and is served by nginx. No runtime process is ne
 
 - A DigitalOcean Droplet (or equivalent) running Ubuntu 24.04
 - A domain you control, with access to its DNS settings
+- Minimum server specs: 1 vCPU, 512MB RAM, 10GB disk
+  - 512MB RAM is enough to run the app, but the build step requires more memory than is typically available. Add a 1GB swap file before building (see [Deploying](#deploying)).
 
 ## Point your subdomain at the server
 
@@ -74,6 +76,18 @@ sudo certbot --nginx -d app.yourdomain.com
 Certbot edits the nginx config and sets up auto-renewal via a systemd timer.
 
 ## Deploying
+
+### Add swap (required on 512MB servers)
+
+The Node.js build process needs more memory than a 512MB server has available. Do this once:
+
+```bash
+sudo fallocate -l 1G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
 
 ### First deploy
 
