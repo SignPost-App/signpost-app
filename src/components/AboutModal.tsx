@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import type { LanguageCode } from '../i18n';
 import FeedbackModal from './FeedbackModal';
 import LanguageSelectModal from './LanguageSelectModal';
-import PrintablePoster from './PrintablePoster';
 
 
 interface Props {
@@ -26,7 +25,6 @@ export default function AboutModal({ onClose }: Props) {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [aboutVisible, setAboutVisible] = useState(true);
   const [feedbackText, setFeedbackText] = useState('');
-  const [printLanguages, setPrintLanguages] = useState<LanguageCode[]>([]);
 
   useEffect(() => {
     closeRef.current?.focus();
@@ -37,16 +35,9 @@ export default function AboutModal({ onClose }: Props) {
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose, showLangModal, showFeedbackModal]);
 
-  useEffect(() => {
-    const handler = () => setPrintLanguages([]);
-    window.addEventListener('afterprint', handler);
-    return () => window.removeEventListener('afterprint', handler);
-  }, []);
-
   const handlePrintConfirm = (langs: LanguageCode[]) => {
     setShowLangModal(false);
-    setPrintLanguages(langs);
-    setTimeout(() => window.print(), 0);
+    window.open(`/poster?langs=${langs.join(',')}`, '_blank');
   };
 
   const handleFeedbackSuccess = () => {
@@ -164,12 +155,6 @@ export default function AboutModal({ onClose }: Props) {
           onCancel={() => { setFeedbackText(''); setShowFeedbackModal(false); }}
           onSuccess={handleFeedbackSuccess}
           onDone={handleFeedbackDone}
-        />
-      )}
-      {printLanguages.length > 0 && (
-        <PrintablePoster
-          languages={printLanguages}
-          demoMode={import.meta.env.VITE_DEMO_MODE === 'true'}
         />
       )}
     </>

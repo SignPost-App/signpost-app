@@ -1601,28 +1601,354 @@ html, body, #root {
   border: none;
 }
 
-/* ---- Print Poster (hidden on screen, visible when printing) ---- */
+/* ---- Poster page save bar (screen only) ---- */
+.pp-save-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #1e40af;
+  padding: 14px 16px;
+  display: none;
+  justify-content: center;
+}
+
+body.pp-printing .pp-save-bar {
+  display: flex;
+}
+
+.pp-save-btn {
+  background: #fff;
+  color: #1e40af;
+  border: none;
+  padding: 10px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+@media (max-width: 768px) {
+  .pp-save-bar {
+    padding: 16px;
+  }
+
+  .pp-save-btn {
+    width: 100%;
+    padding: 18px;
+    font-size: 20px;
+    border-radius: 8px;
+  }
+}
+
+@media print {
+  .pp-save-bar { display: none !important; }
+}
+
+/* ---- Print Poster (hidden until JS sets body.pp-printing) ---- */
 #print-poster-root {
   display: none;
 }
 
 /* ================================================================
-   @media print — everything except the poster hidden; poster fills page
+   body.pp-printing — JS-applied class; primary mechanism for
+   show/hide and styling. Works on Chrome Android where @media print
+   CSS may not be applied when saving to PDF via the system dialog.
+   ================================================================ */
+html.pp-printing,
+body.pp-printing,
+body.pp-printing #root {
+  height: auto !important;
+}
+
+body.pp-printing .app-shell,
+body.pp-printing .page-container,
+body.pp-printing .skip-link {
+  display: none !important;
+}
+
+body.pp-printing #print-poster-root {
+  display: block !important;
+}
+
+/* ---- Poster page layout ---- */
+body.pp-printing .pp-page {
+  font-family: 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
+  font-size: 12pt;
+  color: #000;
+  background: #fff;
+  width: 100%;
+  /* Fill the full page height so tabs reach the bottom */
+  min-height: 11in;
+  box-sizing: border-box;
+  padding: 0.5in;
+  display: flex;
+  flex-direction: column;
+  gap: 8pt;
+  /* Dyslexia-friendly: generous spacing and clean layout */
+  line-height: 1.55;
+  letter-spacing: 0.03em;
+  word-spacing: 0.06em;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Demo watermark ── */
+body.pp-printing .pp-demo-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 100;
+  transform: rotate(-40deg);
+}
+
+body.pp-printing .pp-demo-watermark span {
+  font-size: 46pt;
+  font-weight: 900;
+  color: rgba(200, 0, 0, 0.28);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ── Header ── */
+body.pp-printing .pp-header {
+  text-align: center;
+  padding-bottom: 8pt;
+  border-bottom: 2pt solid #000;
+}
+
+body.pp-printing .pp-header-top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 4pt;
+}
+
+body.pp-printing .pp-date {
+  font-size: 9pt;
+  color: #555;
+}
+
+body.pp-printing .pp-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10pt;
+  margin-bottom: 4pt;
+}
+
+body.pp-printing .pp-logo-svg {
+  width: 52pt;
+  height: auto;
+  flex-shrink: 0;
+}
+
+body.pp-printing .pp-title {
+  font-size: 38pt;
+  font-weight: 900;
+  color: #000;
+  line-height: 1.1;
+  letter-spacing: -0.5pt;
+}
+
+body.pp-printing .pp-subtitles {
+  display: flex;
+  flex-direction: column;
+  gap: 2pt;
+}
+
+body.pp-printing .pp-subtitle {
+  font-size: 11pt;
+  font-weight: 600;
+  color: #000;
+}
+
+/* ── QR + URL (QR left, text right) ── */
+body.pp-printing .pp-qr-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16pt;
+}
+
+body.pp-printing .pp-qr-box {
+  border: 2pt solid #000;
+  padding: 5pt;
+  background: #fff;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+body.pp-printing .pp-qr-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6pt;
+}
+
+body.pp-printing .pp-url {
+  font-size: 24pt;
+  font-weight: 900;
+  letter-spacing: 1pt;
+  color: #000;
+  line-height: 1.1;
+}
+
+body.pp-printing .pp-scan-prompts {
+  display: flex;
+  flex-direction: column;
+  gap: 2pt;
+}
+
+body.pp-printing .pp-scan-prompt {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #000;
+}
+
+/* ── Feature columns ── */
+body.pp-printing .pp-features {
+  display: grid;
+  gap: 14pt;
+  border-top: 1pt solid #888;
+  padding: 10pt 0;
+}
+
+body.pp-printing .pp-features--1 { grid-template-columns: 1fr; }
+body.pp-printing .pp-features--2 { grid-template-columns: 1fr 1fr; }
+body.pp-printing .pp-features--3 { grid-template-columns: 1fr 1fr 1fr; }
+
+body.pp-printing .pp-feature-col {
+  padding-left: 0;
+}
+
+body.pp-printing .pp-features--2 .pp-feature-col:not(:first-child),
+body.pp-printing .pp-features--3 .pp-feature-col:not(:first-child) {
+  border-left: 1pt solid #aaa;
+  padding-left: 14pt;
+}
+
+body.pp-printing .pp-lang-label {
+  font-size: 10pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6pt;
+  padding-bottom: 3pt;
+  border-bottom: 1pt solid #000;
+  color: #000;
+}
+
+body.pp-printing .pp-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5pt;
+}
+
+body.pp-printing .pp-feature-item {
+  font-size: 11pt;
+  padding-left: 14pt;
+  position: relative;
+  line-height: 1.45;
+  color: #000;
+}
+
+body.pp-printing .pp-feature-item::before {
+  content: '\2014';
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+/* ── Tear-off tabs (always at page bottom) ── */
+body.pp-printing .pp-tabs-container {
+  margin-top: auto;
+  padding-top: 8pt;
+  flex-shrink: 1;
+}
+
+body.pp-printing .pp-cut-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+body.pp-printing .pp-cut-dashes {
+  display: block;
+  flex: 1;
+  border-top: 1pt dashed #555;
+}
+
+body.pp-printing .pp-tabs {
+  display: flex;
+  flex-direction: row;
+  border-top: 1.5pt dashed #000;
+  min-height: 80pt;
+}
+
+body.pp-printing .pp-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4pt;
+  border-right: 1pt dashed #666;
+  padding: 4pt 2pt;
+  box-sizing: border-box;
+}
+
+body.pp-printing .pp-tab:last-child {
+  border-right: none;
+}
+
+body.pp-printing .pp-tab-qr {
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+body.pp-printing .pp-tab-text {
+  font-size: 6pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: #000;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ================================================================
+   @media print — page geometry only; show/hide is handled by the
+   body.pp-printing class above. Kept as a fallback for desktop
+   browsers triggered via keyboard shortcut (Cmd/Ctrl+P) without
+   the JS class being set.
    ================================================================ */
 @media print {
   @page {
     size: letter portrait;
-    /* Zero margins suppress browser-added header/footer text (page number, URL, title) */
+    /* Zero margins suppress browser-added header/footer text */
     margin: 0;
   }
 
-  /* Collapse height so #root doesn't fill a blank first page before the portal */
   html, body, #root {
     height: auto !important;
   }
 
-  /* Hide app content by class — not by hiding #root itself — so React's DOM
-     tree stays intact and modals inside #root don't flash during the transition */
   .app-shell,
   .page-container,
   .skip-link {
@@ -1631,265 +1957,5 @@ html, body, #root {
 
   #print-poster-root {
     display: block !important;
-  }
-
-  /* ---- Poster page layout ---- */
-  .pp-page {
-    font-family: 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
-    font-size: 12pt;
-    color: #000;
-    background: #fff;
-    width: 100%;
-    /* Fill the full page height so tabs reach the bottom */
-    min-height: 11in;
-    box-sizing: border-box;
-    padding: 0.5in;
-    display: flex;
-    flex-direction: column;
-    gap: 8pt;
-    /* Dyslexia-friendly: generous spacing and clean layout */
-    line-height: 1.55;
-    letter-spacing: 0.03em;
-    word-spacing: 0.06em;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* ── Demo watermark ── */
-  .pp-demo-watermark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 100;
-    transform: rotate(-40deg);
-  }
-
-  .pp-demo-watermark span {
-    font-size: 46pt;
-    font-weight: 900;
-    color: rgba(200, 0, 0, 0.28);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    line-height: 1;
-  }
-
-  /* ── Header ── */
-  .pp-header {
-    text-align: center;
-    padding-bottom: 8pt;
-    border-bottom: 2pt solid #000;
-  }
-
-  /* Date sits at the top-left before the logo row */
-  .pp-header-top {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 4pt;
-  }
-
-  .pp-date {
-    font-size: 9pt;
-    color: #555;
-  }
-
-  .pp-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10pt;
-    margin-bottom: 4pt;
-  }
-
-  .pp-logo-svg {
-    width: 52pt;
-    height: auto;
-    flex-shrink: 0;
-  }
-
-  .pp-title {
-    font-size: 38pt;
-    font-weight: 900;
-    color: #000;
-    line-height: 1.1;
-    letter-spacing: -0.5pt;
-  }
-
-  .pp-subtitles {
-    display: flex;
-    flex-direction: column;
-    gap: 2pt;
-  }
-
-  .pp-subtitle {
-    font-size: 11pt;
-    font-weight: 600;
-    color: #000;
-  }
-
-  /* ── QR + URL (QR left, text right) ── */
-  .pp-qr-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16pt;
-  }
-
-  .pp-qr-box {
-    border: 2pt solid #000;
-    padding: 5pt;
-    background: #fff;
-    line-height: 0;
-    flex-shrink: 0;
-  }
-
-  .pp-qr-text {
-    display: flex;
-    flex-direction: column;
-    gap: 6pt;
-  }
-
-  .pp-url {
-    font-size: 24pt;
-    font-weight: 900;
-    letter-spacing: 1pt;
-    color: #000;
-    line-height: 1.1;
-  }
-
-  .pp-scan-prompts {
-    display: flex;
-    flex-direction: column;
-    gap: 2pt;
-  }
-
-  .pp-scan-prompt {
-    font-size: 13pt;
-    font-weight: 700;
-    color: #000;
-  }
-
-  /* ── Feature columns ── */
-  .pp-features {
-    display: grid;
-    gap: 14pt;
-    border-top: 1pt solid #888;
-    padding: 10pt 0;
-  }
-
-  .pp-features--1 { grid-template-columns: 1fr; }
-  .pp-features--2 { grid-template-columns: 1fr 1fr; }
-  .pp-features--3 { grid-template-columns: 1fr 1fr 1fr; }
-
-  .pp-feature-col {
-    padding-left: 0;
-  }
-
-  .pp-features--2 .pp-feature-col:not(:first-child),
-  .pp-features--3 .pp-feature-col:not(:first-child) {
-    border-left: 1pt solid #aaa;
-    padding-left: 14pt;
-  }
-
-  .pp-lang-label {
-    font-size: 10pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 6pt;
-    padding-bottom: 3pt;
-    border-bottom: 1pt solid #000;
-    color: #000;
-  }
-
-  .pp-feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 5pt;
-  }
-
-  .pp-feature-item {
-    font-size: 11pt;
-    padding-left: 14pt;
-    position: relative;
-    line-height: 1.45;
-    color: #000;
-  }
-
-  .pp-feature-item::before {
-    content: '\2014'; /* em dash */
-    position: absolute;
-    left: 0;
-    font-weight: 700;
-  }
-
-  /* ── Tear-off tabs (always at page bottom) ── */
-  .pp-tabs-container {
-    margin-top: auto;
-    padding-top: 8pt;
-    flex-shrink: 1;
-  }
-
-  .pp-cut-line {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0;
-  }
-
-  .pp-cut-dashes {
-    display: block;
-    flex: 1;
-    border-top: 1pt dashed #555;
-  }
-
-  .pp-tabs {
-    display: flex;
-    flex-direction: row;
-    border-top: 1.5pt dashed #000;
-    min-height: 80pt;
-  }
-
-  .pp-tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4pt;
-    border-right: 1pt dashed #666;
-    padding: 4pt 2pt;
-    box-sizing: border-box;
-  }
-
-  .pp-tab:last-child {
-    border-right: none;
-  }
-
-  .pp-tab-qr {
-    line-height: 0;
-    flex-shrink: 0;
-  }
-
-  .pp-tab-text {
-    font-size: 6pt;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    color: #000;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
   }
 }
