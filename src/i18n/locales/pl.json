@@ -116,7 +116,7 @@
     "splashTitle": "To jest demo",
     "splashBody": "Ta aplikacja nie jest prawdziwa ani działająca. Wszystkie pokazane lokalizacje, nazwy i dane są fikcyjnymi elementami zastępczymi. Nie polegaj na żadnych z tych informacji.",
     "splashContinue": "Rozumiem",
-    "posterWatermark": "NIE DYSTRYBUOWAĆ"
+    "posterWatermark": "DEMO — NIE DRUKOWAĆ"
   },
   "wifi": {
     "networksLabel": "Sieci Wi-Fi",

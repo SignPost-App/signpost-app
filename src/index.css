@@ -1329,153 +1329,6 @@ html, body, #root {
   color: var(--color-muted);
 }
 
-/* ---- Poster Page ---- */
-.poster-page {
-  min-height: 100vh;
-  background: #1a1a2e;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 24px 16px;
-  gap: 20px;
-}
-
-.poster-controls {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.poster-preview-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-}
-
-.poster-preview {
-  width: 100%;
-  background: #fff;
-  border-radius: var(--radius-md);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  overflow: hidden;
-}
-
-.poster-demo-watermark {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 10;
-  transform: rotate(-40deg);
-}
-
-.poster-demo-watermark span {
-  font-size: clamp(28px, 7vw, 48px);
-  font-weight: 900;
-  color: rgba(200, 0, 0, 0.45);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  line-height: 1;
-}
-
-.poster-inner {
-  padding: 40px 36px;
-  text-align: center;
-  border: 6px solid var(--color-primary);
-  margin: 12px;
-  border-radius: 8px;
-}
-
-.poster-headline {
-  font-size: 36px;
-  font-weight: 900;
-  color: var(--color-primary);
-  margin-bottom: 4px;
-  letter-spacing: -1px;
-}
-
-.poster-subtitle {
-  font-size: 14px;
-  color: var(--color-muted);
-  margin-bottom: 28px;
-  font-weight: 500;
-}
-
-.poster-qr {
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 24px;
-  background: #f3f4f6;
-  border: 2px dashed #d1d5db;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--color-muted);
-  font-size: 13px;
-}
-
-.poster-qr-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  width: 100px;
-  height: 100px;
-  opacity: 0.25;
-}
-
-.poster-qr-cell {
-  border-radius: 1px;
-}
-
-.poster-scan-text {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: 16px;
-}
-
-.poster-feature-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 24px;
-  text-align: left;
-  max-width: 280px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.poster-feature {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--color-text);
-}
-
-.poster-url {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--color-primary);
-  letter-spacing: 0.5px;
-  margin-top: 8px;
-}
-
-.poster-legal {
-  font-size: 10px;
-  color: #9ca3af;
-  margin-top: 16px;
-  line-height: 1.5;
-  padding: 10px;
-  border-top: 1px solid #e5e7eb;
-}
 
 /* ---- Utility ---- */
 .divider {
@@ -1771,7 +1624,6 @@ html, body, #root {
   /* Hide app content by class — not by hiding #root itself — so React's DOM
      tree stays intact and modals inside #root don't flash during the transition */
   .app-shell,
-  .poster-page,
   .page-container,
   .skip-link {
     display: none !important;
@@ -1802,6 +1654,7 @@ html, body, #root {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     position: relative;
+    overflow: hidden;
   }
 
   /* ── Demo watermark ── */
@@ -1820,7 +1673,7 @@ html, body, #root {
   }
 
   .pp-demo-watermark span {
-    font-size: 72pt;
+    font-size: 46pt;
     font-weight: 900;
     color: rgba(200, 0, 0, 0.28);
     text-transform: uppercase;

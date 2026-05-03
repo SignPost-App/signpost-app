@@ -116,7 +116,7 @@
     "splashTitle": "これはデモ版です",
     "splashBody": "このアプリは実際には稼働していません。表示されているすべての場所、名前、データは架空のものです。この情報を信頼しないでください。",
     "splashContinue": "理解しました",
-    "posterWatermark": "配布禁止"
+    "posterWatermark": "デモ — 印刷禁止"
   },
   "wifi": {
     "networksLabel": "Wi-Fi ネットワーク",

@@ -8,11 +8,12 @@ Vite was chosen over Create React App (unmaintained) and Next.js (see below). It
 
 ## Routing
 
-Three routes via react-router-dom v6:
+Two routes via react-router-dom v6:
 
 - `/` — main map view (the primary experience)
 - `/admin` — moderation panel, gated by access code
-- `/poster` — printable QR code poster
+
+The printable poster is not a route. It is triggered from the About modal ("Print a poster →"), which opens a language-selection dialog and then calls `window.print()`. The poster is rendered as a React portal into `document.body` and hidden on screen; `@media print` reveals it and hides the app shell.
 
 The router is client-side only (BrowserRouter). Static hosting needs a rewrite rule that serves `index.html` for all paths. This is one line in Netlify/Vercel/nginx and is documented in the deployment notes.
 

@@ -116,7 +116,7 @@
     "splashTitle": "这是演示版本",
     "splashBody": "此应用程序并非真实或正式运营。所显示的所有地点、名称和数据均为虚构占位符。请勿依赖这些信息。",
     "splashContinue": "我明白了",
-    "posterWatermark": "禁止传播"
+    "posterWatermark": "演示版 — 禁止打印"
   },
   "wifi": {
     "networksLabel": "Wi-Fi 网络",

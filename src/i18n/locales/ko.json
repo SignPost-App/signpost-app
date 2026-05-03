@@ -116,7 +116,7 @@
     "splashTitle": "이것은 데모 버전입니다",
     "splashBody": "이 앱은 실제로 운영되지 않습니다. 표시된 모든 위치, 이름 및 데이터는 가상의 것입니다. 이 정보를 신뢰하지 마세요.",
     "splashContinue": "이해했습니다",
-    "posterWatermark": "배포 금지"
+    "posterWatermark": "데모 — 인쇄 금지"
   },
   "wifi": {
     "networksLabel": "Wi-Fi 네트워크",

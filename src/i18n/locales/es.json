@@ -130,7 +130,7 @@
     "splashTitle": "Esto es una demostración",
     "splashBody": "Esta aplicación no es real ni está en funcionamiento. Todas las ubicaciones, nombres y datos mostrados son marcadores de posición ficticios. No confíe en ninguna de esta información.",
     "splashContinue": "Entendido",
-    "posterWatermark": "NO DISTRIBUIR"
+    "posterWatermark": "DEMO — NO IMPRIMIR"
   },
   "wifi": {
     "networksLabel": "Redes Wi-Fi",

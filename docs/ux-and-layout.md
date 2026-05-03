@@ -115,13 +115,12 @@ Submitting a valid form (name + at least one type required) immediately adds the
 
 ## Navigation structure
 
-The app has three pages: map (`/`), admin (`/admin`), and poster (`/poster`). Navigation is intentionally minimal:
+The app has two pages: map (`/`) and admin (`/admin`). Navigation is intentionally minimal:
 - Header has a link to About; the About modal contains the "Print a poster" entry point
-- Both non-map pages have a back link to the map
 - The Admin panel (`/admin`) is not linked from the header — it is accessible by direct URL only. This keeps it invisible to end users and reduces curiosity-clicks from people who have no reason to be there.
 - No bottom navigation bar — the map is the entire experience, not one of several tabs
 
-A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Poster is accessed infrequently enough that a link inside the About modal is fine.
+A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Poster printing is accessed infrequently enough that a link inside the About modal is fine.
 
 ## About modal
 
@@ -169,11 +168,11 @@ The current date is printed at the upper left of the poster header, within the c
 
 ### Demo mode watermark
 
-When `VITE_DEMO_MODE=true`, the printed poster renders a large diagonal "DO NOT DISTRIBUTE" watermark (translated into the app's current UI language via the `demo.posterWatermark` i18n key) at 18% red opacity over the entire page. This makes demo prints immediately distinguishable from production prints without obscuring the underlying content.
+When `VITE_DEMO_MODE=true`, the printed poster renders a large diagonal "DEMO — DO NOT PRINT" watermark across the page. The text is translated into the app's current UI language via the `demo.posterWatermark` i18n key (all 26 locales are covered). The watermark renders at 28% red opacity so the underlying poster content remains readable. The font size (46pt) is calibrated so the full text fits within the page bounds at a −40° angle for the longest supported translations.
 
 ### Implementation note
 
-The printable poster is rendered into a React portal directly on `document.body` (separate from the `#root` div) and hidden with `display: none` on screen. The `@media print` rule shows `#print-poster-root` and hides the app UI by targeting specific classes (`.app-shell`, `.poster-page`, `.page-container`, `.skip-link`) rather than hiding `#root` itself. This keeps React's DOM tree intact during the print transition so that any open modals (e.g. the About modal) do not flash hidden and reappear when the print dialog opens and closes.
+The printable poster is rendered into a React portal directly on `document.body` (separate from the `#root` div) and hidden with `display: none` on screen. The `@media print` rule shows `#print-poster-root` and hides the app UI by targeting specific classes (`.app-shell`, `.page-container`, `.skip-link`) rather than hiding `#root` itself. This keeps React's DOM tree intact during the print transition so that any open modals (e.g. the About modal) do not flash hidden and reappear when the print dialog opens and closes.
 
 ## Disclaimer banner
 

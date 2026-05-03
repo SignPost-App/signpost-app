@@ -130,7 +130,7 @@
     "splashTitle": "This is a demo",
     "splashBody": "This app is not real or operational. All locations, names, and data shown are made-up placeholders. Do not rely on any of this information.",
     "splashContinue": "I understand",
-    "posterWatermark": "DO NOT DISTRIBUTE"
+    "posterWatermark": "DEMO — DO NOT PRINT"
   },
   "wifi": {
     "networksLabel": "Wi-Fi Networks",

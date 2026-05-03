@@ -5,6 +5,7 @@ import FeedbackModal from './FeedbackModal';
 import LanguageSelectModal from './LanguageSelectModal';
 import PrintablePoster from './PrintablePoster';
 
+
 interface Props {
   onClose: () => void;
 }
@@ -165,7 +166,12 @@ export default function AboutModal({ onClose }: Props) {
           onDone={handleFeedbackDone}
         />
       )}
-      {printLanguages.length > 0 && <PrintablePoster languages={printLanguages} />}
+      {printLanguages.length > 0 && (
+        <PrintablePoster
+          languages={printLanguages}
+          demoMode={import.meta.env.VITE_DEMO_MODE === 'true'}
+        />
+      )}
     </>
   );
 }

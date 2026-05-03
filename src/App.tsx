@@ -9,7 +9,6 @@ import AddResourceModal from './components/AddResourceModal';
 import DisclaimerBanner from './components/DisclaimerBanner';
 import DemoBanner from './components/DemoBanner';
 import AdminPage from './components/AdminPage';
-import PosterPage from './components/PosterPage';
 import { Resource, ResourceTag, Comment, AddDraft, isOpenNow } from './types';
 import { mockResources } from './mockData';
 
@@ -126,7 +125,6 @@ export default function App() {
       <Routes>
         <Route path="/"       element={<MainPage />} />
         <Route path="/admin"  element={<AdminPage />} />
-        <Route path="/poster" element={<PosterPage />} />
       </Routes>
     </BrowserRouter>
   );
