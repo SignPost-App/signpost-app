@@ -1,5 +1,6 @@
 {
   "name": "signpost-app",
+  "description": "A community resource map for finding and sharing local services like shelters, food banks, and more.",
   "private": true,
   "version": "0.1.0",
   "type": "module",
