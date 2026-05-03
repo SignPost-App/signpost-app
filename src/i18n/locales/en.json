@@ -98,7 +98,7 @@
   },
   "disclaimer": {
     "short": "This map is provided for informational purposes only. Conditions change — always use your own judgment and stay safe.",
-    "long": "SignPost is a community-maintained resource map. The developers make no warranties about the accuracy, safety, or availability of listed resources. This platform is not intended to facilitate illegal activity of any kind. Use of this map constitutes acceptance of these terms. If you see inaccurate or harmful content, please use the report feature. Developer contact: signpost.app/about.",
+    "long": "SignPost is a community-maintained resource map. The developers make no warranties about the accuracy, safety, or availability of listed resources. This platform is not intended to facilitate illegal activity of any kind. Use of this map constitutes acceptance of these terms. If you see inaccurate or harmful content, please use the report feature. Developer contact:",
     "fullDisclaimer": "Full disclaimer",
     "less": "Less",
     "dismiss": "Dismiss"
@@ -129,7 +129,8 @@
   "demo": {
     "splashTitle": "This is a demo",
     "splashBody": "This app is not real or operational. All locations, names, and data shown are made-up placeholders. Do not rely on any of this information.",
-    "splashContinue": "I understand"
+    "splashContinue": "I understand",
+    "posterWatermark": "DO NOT DISTRIBUTE"
   },
   "wifi": {
     "networksLabel": "Wi-Fi Networks",
@@ -162,7 +163,7 @@
     "featureWater": "Drinking water and bathrooms",
     "featureParks": "Safe parks and covered areas",
     "featureHarm": "Harm reduction services",
-    "legal": "This map is maintained by community volunteers. Resources may change — verify before use. Not for illegal activity. Developers disclaim all warranties. signpost.app/about",
+    "legal": "This map is maintained by community volunteers. Resources may change — verify before use. Not for illegal activity. Developers disclaim all warranties.",
     "langLabel": "English"
   }
 }

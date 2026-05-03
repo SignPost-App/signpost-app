@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Kaartaan kun odeeffannoof qofa dha. Haalli jijjiiramu danda'a — yeroo hunduma of-murteessitummaasaa fayyadami nagaan turi.",
-    "long": "SignPost kaartaa qabeenya hawaasaan to'atamudha. Guddistoonni sirreessa, nagummaa, ykn argamuu qabeenyaa tarreefameef kakuu kamiiyyuu hinkennan. Marsariitiin kun hojii seeraan alaa gargaaruuf hinqophaa'ne. Kaartaa kana fayyadamuun haala kana fudhachuu ta'a. Odeeffannoo dogoggoraa ykn miidhaa qabu yoo argartan, gabaasaa fayyadamaa. Teessoo guddistootaa: signpost.app/about.",
+    "long": "SignPost kaartaa qabeenya hawaasaan to'atamudha. Guddistoonni sirreessa, nagummaa, ykn argamuu qabeenyaa tarreefameef kakuu kamiiyyuu hinkennan. Marsariitiin kun hojii seeraan alaa gargaaruuf hinqophaa'ne. Kaartaa kana fayyadamuun haala kana fudhachuu ta'a. Odeeffannoo dogoggoraa ykn miidhaa qabu yoo argartan, gabaasaa fayyadamaa. Teessoo guddistootaa:",
     "fullDisclaimer": "Ibsa guutuu",
     "less": "Xiqqaa",
     "dismiss": "Cufii"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Kun demo dha",
     "splashBody": "Appiin kun dhugaa ykn hojjetaa miti. Bakki, maqaan fi odeeffannoon argaman hundi bakka bu'aa waan ta'an. Odeeffannoo kana irratti hirkachuu hin dandeessu.",
-    "splashContinue": "Nan hubadhe"
+    "splashContinue": "Nan hubadhe",
+    "posterWatermark": "HIN RAABINAA"
   },
   "wifi": {
     "networksLabel": "Networkoota Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Bishaan dhugaatii fi mana fincaanii",
     "featureParks": "Parki nagaa fi bakka haguugame",
     "featureHarm": "Tajaajila miidhaa hir'isuu",
-    "legal": "Kaartaan hawaasa kaayyeeffattoota gargaarsaan to'atama. Qabeenya jijjiiramu danda'a — fayyadamuu dura mirkaneessi. Hojii seeraan alaatiif miti. Guddistoonni kakuu kamiiyyuu hinkennine. signpost.app/about",
+    "legal": "Kaartaan hawaasa kaayyeeffattoota gargaarsaan to'atama. Qabeenya jijjiiramu danda'a — fayyadamuu dura mirkaneessi. Hojii seeraan alaatiif miti. Guddistoonni kakuu kamiiyyuu hinkennine.",
     "langLabel": "Afaan Oromoo"
   }
 }

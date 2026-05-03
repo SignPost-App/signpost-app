@@ -143,29 +143,33 @@ This step is deliberate friction: silently printing in the current app language 
 
 ### Print design constraints
 
-The PDF output is designed for a standard US letter sheet (8.5 × 11 in, 0.45 in margins) on any black-and-white printer. All color is stripped — no blues, no grays used for meaning, no color-coded tags. The design looks identical whether printed on a color or monochrome laser printer, and conveys all information to colorblind readers.
+The PDF output is designed for a standard US letter sheet (8.5 × 11 in, 0.5 in margins) on any black-and-white printer. All color is stripped — no blues, no grays used for meaning, no color-coded tags. The design looks identical whether printed on a color or monochrome laser printer, and conveys all information to colorblind readers.
 
 The font stack is Arial → Helvetica Neue → Helvetica. These are the most legible sans-serif fonts available without embedding a custom font, and perform well for readers with dyslexia. Additional dyslexia-friendly choices applied: `line-height: 1.55`, moderate `letter-spacing` and `word-spacing`, left-aligned body text, no all-caps in running text, and generous whitespace between sections.
 
-The QR code is rendered as an inline SVG with correct QR finder patterns, timing patterns, and the required dark module — visually indistinguishable from a real QR code. The URL `signpost.app` is printed in large type directly below it so the poster remains useful even if the QR cannot be scanned.
+The QR code is generated at print time using the `qrcode` library (`QRCode.create()`, synchronous), encoding the site origin URL. It renders as an inline SVG. The hostname is printed in large type to the right of the QR code so the poster remains useful even if the QR cannot be scanned. All QR codes in the poster — both the main code and the tab codes — are real and scannable.
 
 ### Multi-language layout
 
-When two or three languages are selected, the feature list is split into equal-width columns (one per language), each headed by a language label. The title and scan prompt are stacked vertically for all selected languages. Legal text is repeated per language in small type.
+When two or three languages are selected, the feature list is split into equal-width columns (one per language), each headed by a language label. The scan prompt is shown once per language to the right of the QR code. Legal text is repeated per language in small type.
 
-A single language produces a spacious single-column layout. Two languages produces a side-by-side split. Three columns is compact but readable at 11pt. All three cases fit on one letter-size page without page breaks.
+A single language produces a spacious single-column layout. Two languages produces a side-by-side split. Three columns is compact but readable at 11pt. The poster is constrained to one page; the layout has been verified to fit all three-language combinations on US letter paper with standard printer margins.
 
 ### Tear-off tabs
 
-Eight tear-off tabs run along the bottom of the page, separated from the body by a dashed cut line with a scissors symbol (✂). Each tab contains `signpost.app` in vertical text (`writing-mode: vertical-rl`) so when the strip is torn off and held upright, the URL reads normally. This is the standard tear-off flyer convention.
+Eight tear-off tabs run along the bottom of the page, separated from the body by a dashed cut line with a scissors symbol (✂). Each tab contains a small scannable QR code (same URL as the main code) plus the hostname in small type. The QR code makes the tab immediately actionable once torn off, without requiring the recipient to manually type a URL.
 
-The tabs are always pinned to the physical bottom of the printed page using flex layout (`margin-top: auto` on the tabs container) and `min-height: 11in` on the page. This ensures the cut line appears at the paper edge regardless of how much content is above it.
+The tabs are always pinned to the physical bottom of the printed page using flex layout (`margin-top: auto` on the tabs container) and `min-height: 11in` on the page.
 
 ### Print margins and date
 
-The `@page` margin is set to zero to suppress the browser's built-in header/footer text (page number, tab title, and origin URL) that would otherwise appear in the printed margins and collide with the tear tabs and poster title. Content padding is handled by `.pp-page` instead.
+The `@page` margin is set to zero to suppress the browser's built-in header/footer text (page number, tab title, and origin URL) that would otherwise appear in the printed margins and collide with the tear tabs and poster title. Content padding is handled by `.pp-page` (0.5 in on all sides, matching standard printer margin assumptions).
 
-The current date is printed in small type in the poster header so volunteers know when the poster was generated. The time is not included — only the date — to avoid the poster appearing stale after a few hours.
+The current date is printed at the upper left of the poster header, within the content padding, so volunteers know when the poster was generated and the date falls in a reliably printable area.
+
+### Demo mode watermark
+
+When `VITE_DEMO_MODE=true`, the printed poster renders a large diagonal "DO NOT DISTRIBUTE" watermark (translated into the app's current UI language via the `demo.posterWatermark` i18n key) at 18% red opacity over the entire page. This makes demo prints immediately distinguishable from production prints without obscuring the underlying content.
 
 ### Implementation note
 

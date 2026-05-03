@@ -1764,23 +1764,61 @@ html, body, #root {
     /* Fill the full page height so tabs reach the bottom */
     min-height: 11in;
     box-sizing: border-box;
-    padding: 0.45in;
+    padding: 0.5in;
     display: flex;
     flex-direction: column;
-    gap: 10pt;
+    gap: 8pt;
     /* Dyslexia-friendly: generous spacing and clean layout */
     line-height: 1.55;
     letter-spacing: 0.03em;
     word-spacing: 0.06em;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    position: relative;
+  }
+
+  /* ── Demo watermark ── */
+  .pp-demo-watermark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 100;
+    transform: rotate(-40deg);
+  }
+
+  .pp-demo-watermark span {
+    font-size: 72pt;
+    font-weight: 900;
+    color: rgba(200, 0, 0, 0.18);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    line-height: 1;
   }
 
   /* ── Header ── */
   .pp-header {
     text-align: center;
-    padding-bottom: 10pt;
+    padding-bottom: 8pt;
     border-bottom: 2pt solid #000;
+  }
+
+  /* Date sits at the top-left before the logo row */
+  .pp-header-top {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 4pt;
+  }
+
+  .pp-date {
+    font-size: 9pt;
+    color: #555;
   }
 
   .pp-title-row {
@@ -1792,13 +1830,13 @@ html, body, #root {
   }
 
   .pp-logo-svg {
-    width: 56pt;
+    width: 52pt;
     height: auto;
     flex-shrink: 0;
   }
 
   .pp-title {
-    font-size: 40pt;
+    font-size: 38pt;
     font-weight: 900;
     color: #000;
     line-height: 1.1;
@@ -1812,37 +1850,44 @@ html, body, #root {
   }
 
   .pp-subtitle {
-    font-size: 12pt;
+    font-size: 11pt;
     font-weight: 600;
     color: #000;
   }
 
-  /* ── QR + URL ── */
+  /* ── QR + URL (QR left, text right) ── */
   .pp-qr-section {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 6pt;
+    gap: 16pt;
   }
 
   .pp-qr-box {
     border: 2pt solid #000;
-    padding: 6pt;
+    padding: 5pt;
     background: #fff;
-    line-height: 0; /* remove inline-block gap */
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
+  .pp-qr-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6pt;
   }
 
   .pp-url {
-    font-size: 26pt;
+    font-size: 24pt;
     font-weight: 900;
     letter-spacing: 1pt;
     color: #000;
+    line-height: 1.1;
   }
 
   .pp-scan-prompts {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 2pt;
   }
 
@@ -1850,7 +1895,6 @@ html, body, #root {
     font-size: 13pt;
     font-weight: 700;
     color: #000;
-    text-align: center;
   }
 
   /* ── Feature columns ── */
@@ -1858,7 +1902,6 @@ html, body, #root {
     display: grid;
     gap: 14pt;
     border-top: 1pt solid #888;
-    border-bottom: 1pt solid #888;
     padding: 10pt 0;
   }
 
@@ -1911,46 +1954,17 @@ html, body, #root {
     font-weight: 700;
   }
 
-  /* ── Legal ── */
-  .pp-legal-section {
-    display: flex;
-    flex-direction: column;
-    gap: 3pt;
-  }
-
-  .pp-legal {
-    font-size: 7.5pt;
-    color: #444;
-    line-height: 1.4;
-    margin: 0;
-  }
-
-  /* ── Date ── */
-  .pp-date {
-    font-size: 9pt;
-    color: #555;
-    margin-top: 3pt;
-  }
-
   /* ── Tear-off tabs (always at page bottom) ── */
   .pp-tabs-container {
     margin-top: auto;
-    padding-top: 10pt;
+    padding-top: 8pt;
+    flex-shrink: 1;
   }
 
   .pp-cut-line {
     display: flex;
     align-items: center;
-    gap: 5pt;
-    font-size: 8pt;
-    color: #555;
     margin-bottom: 0;
-  }
-
-  .pp-cut-symbol {
-    font-size: 11pt;
-    line-height: 1;
-    flex-shrink: 0;
   }
 
   .pp-cut-dashes {
@@ -1963,28 +1977,39 @@ html, body, #root {
     display: flex;
     flex-direction: row;
     border-top: 1.5pt dashed #000;
-    height: 72pt;
+    min-height: 80pt;
   }
 
   .pp-tab {
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 4pt;
     border-right: 1pt dashed #666;
+    padding: 4pt 2pt;
+    box-sizing: border-box;
   }
 
   .pp-tab:last-child {
     border-right: none;
   }
 
+  .pp-tab-qr {
+    line-height: 0;
+    flex-shrink: 0;
+  }
+
   .pp-tab-text {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 8pt;
+    font-size: 6pt;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     white-space: nowrap;
     color: #000;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 }

@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Questa mappa è fornita solo a scopo informativo. Le condizioni cambiano — usa sempre il tuo giudizio e stai al sicuro.",
-    "long": "SignPost è una mappa di risorse gestita dalla comunità. Gli sviluppatori non forniscono garanzie sull'accuratezza, sicurezza o disponibilità delle risorse elencate. Questa piattaforma non è destinata a facilitare attività illegali. L'utilizzo di questa mappa costituisce accettazione di questi termini. Se vedi contenuti imprecisi o dannosi, usa la funzione di segnalazione. Contatto sviluppatore: signpost.app/about.",
+    "long": "SignPost è una mappa di risorse gestita dalla comunità. Gli sviluppatori non forniscono garanzie sull'accuratezza, sicurezza o disponibilità delle risorse elencate. Questa piattaforma non è destinata a facilitare attività illegali. L'utilizzo di questa mappa costituisce accettazione di questi termini. Se vedi contenuti imprecisi o dannosi, usa la funzione di segnalazione. Contatto sviluppatore:",
     "fullDisclaimer": "Dichiarazione completa",
     "less": "Meno",
     "dismiss": "Chiudi"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Questa è una demo",
     "splashBody": "Questa app non è reale né operativa. Tutte le posizioni, i nomi e i dati mostrati sono segnaposto fittizi. Non fare affidamento su queste informazioni.",
-    "splashContinue": "Ho capito"
+    "splashContinue": "Ho capito",
+    "posterWatermark": "NON DISTRIBUIRE"
   },
   "wifi": {
     "networksLabel": "Reti Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Acqua potabile e bagni",
     "featureParks": "Parchi sicuri e aree coperte",
     "featureHarm": "Servizi di riduzione del danno",
-    "legal": "Mappa gestita da volontari. Le risorse possono cambiare — verifica prima dell'uso. Non per attività illegali. Gli sviluppatori declinano ogni garanzia. signpost.app/about",
+    "legal": "Mappa gestita da volontari. Le risorse possono cambiare — verifica prima dell'uso. Non per attività illegali. Gli sviluppatori declinano ogni garanzia.",
     "langLabel": "Italiano"
   }
 }

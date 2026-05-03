@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Bản đồ này chỉ cung cấp thông tin tham khảo. Điều kiện có thể thay đổi — hãy luôn tự phán xét và giữ an toàn.",
-    "long": "SignPost là bản đồ nguồn hỗ trợ do cộng đồng duy trì. Các nhà phát triển không đảm bảo tính chính xác, an toàn hoặc tính khả dụng của các nguồn được liệt kê. Nền tảng này không nhằm mục đích tạo điều kiện cho bất kỳ hoạt động bất hợp pháp nào. Việc sử dụng bản đồ này đồng nghĩa với việc chấp nhận các điều khoản này. Nếu bạn thấy nội dung không chính xác hoặc có hại, hãy sử dụng tính năng báo cáo. Liên hệ nhà phát triển: signpost.app/about.",
+    "long": "SignPost là bản đồ nguồn hỗ trợ do cộng đồng duy trì. Các nhà phát triển không đảm bảo tính chính xác, an toàn hoặc tính khả dụng của các nguồn được liệt kê. Nền tảng này không nhằm mục đích tạo điều kiện cho bất kỳ hoạt động bất hợp pháp nào. Việc sử dụng bản đồ này đồng nghĩa với việc chấp nhận các điều khoản này. Nếu bạn thấy nội dung không chính xác hoặc có hại, hãy sử dụng tính năng báo cáo. Liên hệ nhà phát triển:",
     "fullDisclaimer": "Tuyên bố miễn trách đầy đủ",
     "less": "Thu gọn",
     "dismiss": "Đóng"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Đây là phiên bản demo",
     "splashBody": "Ứng dụng này không thật hoặc đang hoạt động. Tất cả các địa điểm, tên và dữ liệu hiển thị đều là hư cấu. Không dựa vào bất kỳ thông tin nào trong số này.",
-    "splashContinue": "Tôi hiểu"
+    "splashContinue": "Tôi hiểu",
+    "posterWatermark": "KHÔNG PHÂN PHỐI"
   },
   "wifi": {
     "networksLabel": "Mạng Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Nước uống và nhà vệ sinh",
     "featureParks": "Công viên an toàn và khu vực có mái che",
     "featureHarm": "Dịch vụ giảm hại",
-    "legal": "Bản đồ do tình nguyện viên cộng đồng duy trì. Nguồn hỗ trợ có thể thay đổi — kiểm tra trước khi sử dụng. Không dùng cho mục đích bất hợp pháp. Nhà phát triển không chịu trách nhiệm bảo đảm. signpost.app/about",
+    "legal": "Bản đồ do tình nguyện viên cộng đồng duy trì. Nguồn hỗ trợ có thể thay đổi — kiểm tra trước khi sử dụng. Không dùng cho mục đích bất hợp pháp. Nhà phát triển không chịu trách nhiệm bảo đảm.",
     "langLabel": "Tiếng Việt"
   }
 }

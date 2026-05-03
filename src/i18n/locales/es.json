@@ -98,7 +98,7 @@
   },
   "disclaimer": {
     "short": "Este mapa es solo para fines informativos. Las condiciones cambian — usa tu propio criterio y mantente seguro.",
-    "long": "SignPost es un mapa de recursos mantenido por la comunidad. Los desarrolladores no garantizan la exactitud, seguridad o disponibilidad de los recursos listados. Esta plataforma no está destinada a facilitar actividades ilegales de ningún tipo. El uso de este mapa constituye la aceptación de estos términos. Si ves contenido inexacto o dañino, usa la función de reporte. Contacto del desarrollador: signpost.app/about.",
+    "long": "SignPost es un mapa de recursos mantenido por la comunidad. Los desarrolladores no garantizan la exactitud, seguridad o disponibilidad de los recursos listados. Esta plataforma no está destinada a facilitar actividades ilegales de ningún tipo. El uso de este mapa constituye la aceptación de estos términos. Si ves contenido inexacto o dañino, usa la función de reporte. Contacto del desarrollador:",
     "fullDisclaimer": "Descargo completo",
     "less": "Menos",
     "dismiss": "Cerrar aviso"
@@ -129,7 +129,8 @@
   "demo": {
     "splashTitle": "Esto es una demostración",
     "splashBody": "Esta aplicación no es real ni está en funcionamiento. Todas las ubicaciones, nombres y datos mostrados son marcadores de posición ficticios. No confíe en ninguna de esta información.",
-    "splashContinue": "Entendido"
+    "splashContinue": "Entendido",
+    "posterWatermark": "NO DISTRIBUIR"
   },
   "wifi": {
     "networksLabel": "Redes Wi-Fi",
@@ -162,7 +163,7 @@
     "featureWater": "Agua potable y banos",
     "featureParks": "Parques seguros y areas cubiertas",
     "featureHarm": "Servicios de reduccion de danos",
-    "legal": "Este mapa es mantenido por voluntarios de la comunidad. Los recursos pueden cambiar — verifique antes de depender de la informacion. No para uso ilegal. Los desarrolladores renuncian a toda garantia. signpost.app/about",
+    "legal": "Este mapa es mantenido por voluntarios de la comunidad. Los recursos pueden cambiar — verifique antes de depender de la informacion. No para uso ilegal. Los desarrolladores renuncian a toda garantia.",
     "langLabel": "Espanol"
   }
 }

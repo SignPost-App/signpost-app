@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Ta mapa służy wyłącznie celom informacyjnym. Warunki się zmieniają — zawsze używaj własnego osądu i dbaj o bezpieczeństwo.",
-    "long": "SignPost to mapa zasobów prowadzona przez społeczność. Twórcy nie udzielają żadnych gwarancji co do dokładności, bezpieczeństwa ani dostępności wymienionych zasobów. Platforma ta nie ma na celu ułatwiania nielegalnych działań. Korzystanie z tej mapy oznacza akceptację tych warunków. Jeśli widzisz niedokładną lub szkodliwą treść, skorzystaj z funkcji zgłaszania. Kontakt: signpost.app/about.",
+    "long": "SignPost to mapa zasobów prowadzona przez społeczność. Twórcy nie udzielają żadnych gwarancji co do dokładności, bezpieczeństwa ani dostępności wymienionych zasobów. Platforma ta nie ma na celu ułatwiania nielegalnych działań. Korzystanie z tej mapy oznacza akceptację tych warunków. Jeśli widzisz niedokładną lub szkodliwą treść, skorzystaj z funkcji zgłaszania. Kontakt:",
     "fullDisclaimer": "Pełne zastrzeżenie",
     "less": "Mniej",
     "dismiss": "Zamknij"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "To jest demo",
     "splashBody": "Ta aplikacja nie jest prawdziwa ani działająca. Wszystkie pokazane lokalizacje, nazwy i dane są fikcyjnymi elementami zastępczymi. Nie polegaj na żadnych z tych informacji.",
-    "splashContinue": "Rozumiem"
+    "splashContinue": "Rozumiem",
+    "posterWatermark": "NIE DYSTRYBUOWAĆ"
   },
   "wifi": {
     "networksLabel": "Sieci Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Woda pitna i toalety",
     "featureParks": "Bezpieczne parki i zadaszone miejsca",
     "featureHarm": "Usługi redukcji szkód",
-    "legal": "Mapa prowadzona przez wolontariuszy. Zasoby mogą się zmieniać — sprawdź przed użyciem. Nie do celów nielegalnych. Twórcy nie udzielają żadnych gwarancji. signpost.app/about",
+    "legal": "Mapa prowadzona przez wolontariuszy. Zasoby mogą się zmieniać — sprawdź przed użyciem. Nie do celów nielegalnych. Twórcy nie udzielają żadnych gwarancji.",
     "langLabel": "Polski"
   }
 }

@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Map a bụ maka ozi naanị. Ọnọdụ nwere ike ịgbanwe — mgbe niile jiri uche gị ma nọ n'ahụ ike.",
-    "long": "SignPost bụ map ihe o nwere nke obodo na-achịkwa. Ndị mmepụta anaghị enye nkwa ọ bụla maka ịdị mma, nchekwa, ma ọ bụ inweta ihe ndị edepụtara. Ikpo okwu a emebeghi ka ọ kwado ọrụ ọ bụla megide iwu. Iji map a gosipụtara na ị nabatara ọnọdụ ndị a. Ọ bụrụ na ị hụ ihe ọdịmma adịghị mma ma ọ bụ ihe ọjọọ, jiri njirimara mkpesa. Adreesị ndị mmepụta: signpost.app/about.",
+    "long": "SignPost bụ map ihe o nwere nke obodo na-achịkwa. Ndị mmepụta anaghị enye nkwa ọ bụla maka ịdị mma, nchekwa, ma ọ bụ inweta ihe ndị edepụtara. Ikpo okwu a emebeghi ka ọ kwado ọrụ ọ bụla megide iwu. Iji map a gosipụtara na ị nabatara ọnọdụ ndị a. Ọ bụrụ na ị hụ ihe ọdịmma adịghị mma ma ọ bụ ihe ọjọọ, jiri njirimara mkpesa. Adreesị ndị mmepụta:",
     "fullDisclaimer": "Nkwupụta zuru ezu",
     "less": "Ọchebereke",
     "dismiss": "Mechie"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Nke a bụ demo",
     "splashBody": "Ngwa a abụghị nke eziokwu ma ọ bụ n'ọrụ. Ọnọdụ niile, aha, na data egosipụtara bụ ihe ngọngọ eziokwu. Ịgbaghị ntụkwasị obi na ozi a.",
-    "splashContinue": "Aghọtara m"
+    "splashContinue": "Aghọtara m",
+    "posterWatermark": "EKWELA IKESA"
   },
   "wifi": {
     "networksLabel": "Netwọọkụ Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Mmiri ọ nọọ na ụlọ nsi",
     "featureParks": "Ogige nchekwa na ebe nwere ihu elu",
     "featureHarm": "Ọrụ ibelata ihe ọjọọ",
-    "legal": "Map nke ndị ọrụ afọ ofufo obodo na-achịkwa. Ihe nwere ike ịgbanwe — kwenye tupu iji. Abụghị maka ebumnobi megide iwu. Ndị mmepụta jụrụ nkwa niile. signpost.app/about",
+    "legal": "Map nke ndị ọrụ afọ ofufo obodo na-achịkwa. Ihe nwere ike ịgbanwe — kwenye tupu iji. Abụghị maka ebumnobi megide iwu. Ndị mmepụta jụrụ nkwa niile.",
     "langLabel": "Igbo"
   }
 }

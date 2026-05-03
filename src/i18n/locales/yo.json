@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Maapu yii wa fun alaye nikan. Awọn ipo le yipada — nigbagbogbo lo idajọ ara rẹ ki o wa ni ailewu.",
-    "long": "SignPost jẹ maapu ohun-elo ti agbegbe n ṣakoso. Awọn olupilẹṣẹ ko fun ni iṣeduro kankan fun deede, ailewu, tabi wiwa awọn ohun-elo ti a ṣe atokọ. Pẹpẹ yii ko ṣe apẹrẹ lati ṣe irọrun eyikeyi iṣẹ ṣiṣe arufin. Lilo maapu yii jẹ itẹwọgba ti awọn ipo wọnyi. Ti o ba ri akoonu ti ko tọ tabi ti o lewu, lo ẹya ijabọ naa. Adiresi olupilẹṣẹ: signpost.app/about.",
+    "long": "SignPost jẹ maapu ohun-elo ti agbegbe n ṣakoso. Awọn olupilẹṣẹ ko fun ni iṣeduro kankan fun deede, ailewu, tabi wiwa awọn ohun-elo ti a ṣe atokọ. Pẹpẹ yii ko ṣe apẹrẹ lati ṣe irọrun eyikeyi iṣẹ ṣiṣe arufin. Lilo maapu yii jẹ itẹwọgba ti awọn ipo wọnyi. Ti o ba ri akoonu ti ko tọ tabi ti o lewu, lo ẹya ijabọ naa. Adiresi olupilẹṣẹ:",
     "fullDisclaimer": "Ifinufindo kikun",
     "less": "Die si",
     "dismiss": "Pa"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Eyi jẹ demo",
     "splashBody": "Ohun elo yii kii ṣe gidi tabi n ṣiṣẹ. Gbogbo awọn ipo, orukọ, ati data ti a fihan jẹ aaye aaye itan itan. Maṣe gbẹkẹle alaye yii.",
-    "splashContinue": "Mo loye"
+    "splashContinue": "Mo loye",
+    "posterWatermark": "MAṢE PÍNPÍN"
   },
   "wifi": {
     "networksLabel": "Awọn nẹtiwọọki Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Omi mimu ati ile-igbọnsẹ",
     "featureParks": "Awọn itura ailewu ati awọn ibi ti o ni orule",
     "featureHarm": "Awọn iṣẹ idinku ipalara",
-    "legal": "Maapu ti awọn atinuwa agbegbe n ṣakoso. Awọn ohun-elo le yipada — jẹrisi ṣaaju lilo. Ko fun awọn idi arufin. Awọn olupilẹṣẹ kọ gbogbo iṣeduro. signpost.app/about",
+    "legal": "Maapu ti awọn atinuwa agbegbe n ṣakoso. Awọn ohun-elo le yipada — jẹrisi ṣaaju lilo. Ko fun awọn idi arufin. Awọn olupilẹṣẹ kọ gbogbo iṣeduro.",
     "langLabel": "Yorùbá"
   }
 }

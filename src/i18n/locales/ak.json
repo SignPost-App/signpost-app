@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Map yi yɛ mfomsoɔ nko ara. Ɛtumi sesa — daadaa fa wo ho adwene na wo dwo.",
-    "long": "SignPost yɛ oman a ɔsɔ so nnwuma map. Awufoɔ no ntua hɔ ma nsɛmfua, ahotɔ, anaa nnwuma a wɔakyerɛ no ho nkodaa biara. Saa platform yi ayɛ na mmara a ɛmfata ho asɛm yɛ yiye. Map yi fa ho de kyerɛ sɛ wogree saa akwan yi. Sɛ wuhu nsɛm a ɛnnyɛ anaa ɛbɔ haw a, fa dawuro to ho. Awufoɔ ades: signpost.app/about.",
+    "long": "SignPost yɛ oman a ɔsɔ so nnwuma map. Awufoɔ no ntua hɔ ma nsɛmfua, ahotɔ, anaa nnwuma a wɔakyerɛ no ho nkodaa biara. Saa platform yi ayɛ na mmara a ɛmfata ho asɛm yɛ yiye. Map yi fa ho de kyerɛ sɛ wogree saa akwan yi. Sɛ wuhu nsɛm a ɛnnyɛ anaa ɛbɔ haw a, fa dawuro to ho. Awufoɔ ades:",
     "fullDisclaimer": "Nsɛm nyinaa",
     "less": "Kakra",
     "dismiss": "To mu"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Eyi yɛ demo",
     "splashBody": "Saa app yi nyɛ nokware anaa ɛreyɛ adwuma. Beae, din, ne data nyinaa a wɔakyerɛ yɛ placeholder. Mfa nsɛmfua yi so.",
-    "splashContinue": "Mete aseɛ"
+    "splashContinue": "Mete aseɛ",
+    "posterWatermark": "MMA WO NKYERƐ"
   },
   "wifi": {
     "networksLabel": "Wi-Fi Networks",
@@ -148,7 +149,7 @@
     "featureWater": "Nsuo a wonnom ne tiafi",
     "featureParks": "Parks a ahoguan ne bea a wɔahyehye",
     "featureHarm": "Ɔhaw to so dwumadie",
-    "legal": "Map a oman volunteers sɔ so. Nnwuma tumi sesa — hwɛ ansa na wofa. Mmara a ɛmfata ho asɛm nhia. Awufoɔ guan nkodaa nyinaa. signpost.app/about",
+    "legal": "Map a oman volunteers sɔ so. Nnwuma tumi sesa — hwɛ ansa na wofa. Mmara a ɛmfata ho asɛm nhia. Awufoɔ guan nkodaa nyinaa.",
     "langLabel": "Twi"
   }
 }

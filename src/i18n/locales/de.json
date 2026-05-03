@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Diese Karte dient nur zu Informationszwecken. Bedingungen können sich ändern — urteilen Sie selbst und bleiben Sie sicher.",
-    "long": "SignPost ist eine von der Community gepflegte Ressourcenkarte. Die Entwickler geben keine Garantien für die Richtigkeit, Sicherheit oder Verfügbarkeit der aufgelisteten Ressourcen. Diese Plattform ist nicht zur Erleichterung illegaler Aktivitäten bestimmt. Die Nutzung dieser Karte gilt als Zustimmung zu diesen Bedingungen. Bei ungenauen oder schädlichen Inhalten nutzen Sie bitte die Meldefunktion. Kontakt: signpost.app/about.",
+    "long": "SignPost ist eine von der Community gepflegte Ressourcenkarte. Die Entwickler geben keine Garantien für die Richtigkeit, Sicherheit oder Verfügbarkeit der aufgelisteten Ressourcen. Diese Plattform ist nicht zur Erleichterung illegaler Aktivitäten bestimmt. Die Nutzung dieser Karte gilt als Zustimmung zu diesen Bedingungen. Bei ungenauen oder schädlichen Inhalten nutzen Sie bitte die Meldefunktion. Kontakt:",
     "fullDisclaimer": "Vollständiger Haftungsausschluss",
     "less": "Weniger",
     "dismiss": "Schließen"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Dies ist eine Demo",
     "splashBody": "Diese App ist nicht real oder betriebsbereit. Alle angezeigten Standorte, Namen und Daten sind fiktive Platzhalter. Verlassen Sie sich nicht auf diese Informationen.",
-    "splashContinue": "Ich verstehe"
+    "splashContinue": "Ich verstehe",
+    "posterWatermark": "NICHT VERTEILEN"
   },
   "wifi": {
     "networksLabel": "WLAN-Netzwerke",
@@ -148,7 +149,7 @@
     "featureWater": "Trinkwasser und Toiletten",
     "featureParks": "Sichere Parks und überdachte Bereiche",
     "featureHarm": "Schadensminimierungsdienste",
-    "legal": "Karte von Freiwilligen gepflegt. Ressourcen können sich ändern — vor Nutzung prüfen. Nicht für illegale Zwecke. Entwickler schließen alle Garantien aus. signpost.app/about",
+    "legal": "Karte von Freiwilligen gepflegt. Ressourcen können sich ändern — vor Nutzung prüfen. Nicht für illegale Zwecke. Entwickler schließen alle Garantien aus.",
     "langLabel": "Deutsch"
   }
 }

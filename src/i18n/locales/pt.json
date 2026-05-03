@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Este mapa é fornecido apenas para fins informativos. As condições mudam — sempre use seu próprio julgamento e fique seguro.",
-    "long": "SignPost é um mapa de recursos mantido pela comunidade. Os desenvolvedores não oferecem garantias sobre a precisão, segurança ou disponibilidade dos recursos listados. Esta plataforma não tem como objetivo facilitar atividades ilegais. O uso deste mapa constitui aceitação destes termos. Se você ver conteúdo impreciso ou prejudicial, use o recurso de denúncia. Contato do desenvolvedor: signpost.app/about.",
+    "long": "SignPost é um mapa de recursos mantido pela comunidade. Os desenvolvedores não oferecem garantias sobre a precisão, segurança ou disponibilidade dos recursos listados. Esta plataforma não tem como objetivo facilitar atividades ilegais. O uso deste mapa constitui aceitação destes termos. Se você ver conteúdo impreciso ou prejudicial, use o recurso de denúncia. Contato do desenvolvedor:",
     "fullDisclaimer": "Declaração completa",
     "less": "Menos",
     "dismiss": "Fechar aviso"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Esta é uma demonstração",
     "splashBody": "Este aplicativo não é real nem operacional. Todos os locais, nomes e dados mostrados são espaços reservados fictícios. Não confie em nenhuma dessas informações.",
-    "splashContinue": "Entendi"
+    "splashContinue": "Entendi",
+    "posterWatermark": "NÃO DISTRIBUIR"
   },
   "wifi": {
     "networksLabel": "Redes Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Água potável e banheiros",
     "featureParks": "Parques seguros e áreas cobertas",
     "featureHarm": "Serviços de redução de danos",
-    "legal": "Mapa mantido por voluntários. Recursos podem mudar — verifique antes do uso. Não para atividades ilegais. Desenvolvedores isentam-se de garantias. signpost.app/about",
+    "legal": "Mapa mantido por voluntários. Recursos podem mudar — verifique antes do uso. Não para atividades ilegais. Desenvolvedores isentam-se de garantias.",
     "langLabel": "Português"
   }
 }

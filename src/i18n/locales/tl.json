@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Ang mapang ito ay para sa impormasyon lamang. Maaaring magbago ang mga kondisyon — palaging gamitin ang sariling pagpapasya at manatiling ligtas.",
-    "long": "Ang SignPost ay isang mapa ng mapagkukunan na pinapanatili ng komunidad. Hindi nagbibigay ng anumang garantiya ang mga developer tungkol sa katumpakan, kaligtasan, o availability ng mga nakalista na mapagkukunan. Ang platform na ito ay hindi nilayon na mapadali ang anumang ilegal na aktibidad. Ang paggamit ng mapang ito ay kumakatawan sa pagtanggap ng mga tuntuning ito. Kung makakita ka ng hindi tumpak o mapanganib na nilalaman, gamitin ang tampok na pag-uulat. Contact ng developer: signpost.app/about.",
+    "long": "Ang SignPost ay isang mapa ng mapagkukunan na pinapanatili ng komunidad. Hindi nagbibigay ng anumang garantiya ang mga developer tungkol sa katumpakan, kaligtasan, o availability ng mga nakalista na mapagkukunan. Ang platform na ito ay hindi nilayon na mapadali ang anumang ilegal na aktibidad. Ang paggamit ng mapang ito ay kumakatawan sa pagtanggap ng mga tuntuning ito. Kung makakita ka ng hindi tumpak o mapanganib na nilalaman, gamitin ang tampok na pag-uulat. Contact ng developer:",
     "fullDisclaimer": "Buong disclaimer",
     "less": "Mas kaunti",
     "dismiss": "Isara"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Ito ay isang demo",
     "splashBody": "Ang app na ito ay hindi tunay o gumagana. Lahat ng lokasyon, pangalan, at datos na ipinapakita ay mga kathang-isip na placeholder. Huwag umasa sa alinman sa impormasyong ito.",
-    "splashContinue": "Naiintindihan ko"
+    "splashContinue": "Naiintindihan ko",
+    "posterWatermark": "HUWAG IPAMAHAGI"
   },
   "wifi": {
     "networksLabel": "Mga Wi-Fi Network",
@@ -148,7 +149,7 @@
     "featureWater": "Inuming tubig at banyo",
     "featureParks": "Ligtas na mga parke at lugar na may bubong",
     "featureHarm": "Mga serbisyo ng pagbabawas ng pinsala",
-    "legal": "Pinapanatili ang mapa ng mga boluntaryo ng komunidad. Maaaring magbago ang mga mapagkukunan — suriin bago umasa. Hindi para sa ilegal na paggamit. Tinatanggihan ng mga developer ang lahat ng garantiya. signpost.app/about",
+    "legal": "Pinapanatili ang mapa ng mga boluntaryo ng komunidad. Maaaring magbago ang mga mapagkukunan — suriin bago umasa. Hindi para sa ilegal na paggamit. Tinatanggihan ng mga developer ang lahat ng garantiya.",
     "langLabel": "Filipino"
   }
 }

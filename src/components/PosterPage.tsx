@@ -28,9 +28,10 @@ export default function PosterPage() {
   const handlePrintConfirm = (langs: LanguageCode[]) => {
     setShowModal(false);
     setPrintLanguages(langs);
-    // Defer until React renders the portal into the DOM
     setTimeout(() => window.print(), 0);
   };
+
+  const demoMode = import.meta.env.VITE_DEMO_MODE === 'true';
 
   return (
     <div className="poster-page">
@@ -42,7 +43,7 @@ export default function PosterPage() {
       )}
 
       {printLanguages.length > 0 && (
-        <PrintablePoster languages={printLanguages} />
+        <PrintablePoster languages={printLanguages} demoMode={demoMode} />
       )}
 
       <div className="poster-controls">
@@ -123,12 +124,11 @@ export default function PosterPage() {
             ))}
           </div>
 
-          <div className="poster-url">signpost.app</div>
+          <div className="poster-url">{window.location.hostname}</div>
 
           <div className="poster-legal">
-            This map is maintained by community volunteers. Resources may change — always
-            verify before relying on listed information. Not intended for illegal use.
-            Developers disclaim all warranties. For support: signpost.app/about
+            This map is maintained by community volunteers. Resources may change — verify before
+            use. Not for illegal activity. Developers disclaim all warranties.
           </div>
         </div>
       </div>

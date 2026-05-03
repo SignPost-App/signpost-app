@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import QRCode from 'qrcode';
 import i18n from '../i18n/index';
 import type { LanguageCode } from '../i18n/index';
 
@@ -36,83 +37,40 @@ function LogoSvg() {
   );
 }
 
-// --- QR code visual (21×21 modules, correct finder + timing patterns) ---
-const QR_N = 21;
-const QR_PX = 8;
+// --- Real QR code using qrcode library ---
+function QRSvg({ url, pixelsPerModule = 6 }: { url: string; pixelsPerModule?: number }) {
+  const { data, size } = useMemo(() => {
+    const qr = QRCode.create(url, { errorCorrectionLevel: 'M' });
+    return { data: qr.modules.data, size: qr.modules.size };
+  }, [url]);
 
-function isFinderModule(r: number, c: number): boolean | null {
-  // Top-left finder (rows 0-6, cols 0-6)
-  if (r <= 6 && c <= 6) {
-    if (r === 0 || r === 6 || c === 0 || c === 6) return true;
-    if (r === 1 || r === 5 || c === 1 || c === 5) return false;
-    return true;
-  }
-  // Top-right finder (rows 0-6, cols 14-20)
-  if (r <= 6 && c >= 14) {
-    const fc = c - 14;
-    if (r === 0 || r === 6 || fc === 0 || fc === 6) return true;
-    if (r === 1 || r === 5 || fc === 1 || fc === 5) return false;
-    return true;
-  }
-  // Bottom-left finder (rows 14-20, cols 0-6)
-  if (r >= 14 && c <= 6) {
-    const fr = r - 14;
-    if (fr === 0 || fr === 6 || c === 0 || c === 6) return true;
-    if (fr === 1 || fr === 5 || c === 1 || c === 5) return false;
-    return true;
-  }
-  return null;
-}
+  const svgSize = size * pixelsPerModule;
 
-function getQRModule(r: number, c: number): boolean {
-  const finder = isFinderModule(r, c);
-  if (finder !== null) return finder;
-
-  // Separator rows/cols (always white)
-  if (r === 7 && c <= 7) return false;
-  if (c === 7 && r <= 7) return false;
-  if (r === 7 && c >= 13) return false;
-  if (c === 13 && r <= 7) return false;
-  if (r >= 13 && c === 7) return false;
-  if (r === 13 && c <= 7) return false;
-
-  // Timing patterns
-  if (r === 6 && c >= 8 && c <= 12) return c % 2 === 0;
-  if (c === 6 && r >= 8 && r <= 12) return r % 2 === 0;
-
-  // Required dark module
-  if (r === 13 && c === 8) return true;
-
-  // Data area — deterministic pseudo-random fill
-  return (r * 43 + c * 17 + r * c * 7) % 5 < 3;
-}
-
-function QRSvg() {
-  const size = QR_N * QR_PX;
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
+      width={svgSize}
+      height={svgSize}
+      viewBox={`0 0 ${svgSize} ${svgSize}`}
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label="QR code — scan or visit signpost.app"
+      aria-label={`QR code — scan or visit ${url}`}
     >
-      <rect width={size} height={size} fill="#fff" />
-      {Array.from({ length: QR_N }, (_, r) =>
-        Array.from({ length: QR_N }, (_, c) =>
-          getQRModule(r, c) ? (
-            <rect
-              key={`${r}-${c}`}
-              x={c * QR_PX}
-              y={r * QR_PX}
-              width={QR_PX}
-              height={QR_PX}
-              fill="#000"
-            />
-          ) : null
-        )
-      )}
+      <rect width={svgSize} height={svgSize} fill="#fff" />
+      {Array.from(data).map((dark, i) => {
+        if (!dark) return null;
+        const r = Math.floor(i / size);
+        const c = i % size;
+        return (
+          <rect
+            key={i}
+            x={c * pixelsPerModule}
+            y={r * pixelsPerModule}
+            width={pixelsPerModule}
+            height={pixelsPerModule}
+            fill="#000"
+          />
+        );
+      })}
     </svg>
   );
 }
@@ -132,22 +90,33 @@ const TAB_COUNT = 8;
 
 interface Props {
   languages: LanguageCode[];
+  demoMode?: boolean;
 }
 
-export default function PrintablePoster({ languages }: Props) {
+export default function PrintablePoster({ languages, demoMode }: Props) {
   const translators = useMemo(
     () => languages.map(lang => ({ lang, t: i18n.getFixedT(lang) })),
     [languages]
   );
 
   const multiLang = languages.length > 1;
+  const url = window.location.origin;
 
   const poster = (
     <div id="print-poster-root" aria-hidden="true">
       <div className="pp-page">
 
+        {demoMode && (
+          <div className="pp-demo-watermark" aria-hidden="true">
+            <span>{i18n.t('demo.posterWatermark')}</span>
+          </div>
+        )}
+
         {/* ── Header ── */}
         <header className="pp-header">
+          <div className="pp-header-top">
+            <div className="pp-date">{formatPrintDate()}</div>
+          </div>
           <div className="pp-title-row">
             <LogoSvg />
             <div className="pp-title">SignPost</div>
@@ -159,21 +128,22 @@ export default function PrintablePoster({ languages }: Props) {
               </div>
             ))}
           </div>
-          <div className="pp-date">{formatPrintDate()}</div>
         </header>
 
-        {/* ── QR + URL ── */}
+        {/* ── QR + URL (horizontal: QR left, text right) ── */}
         <div className="pp-qr-section">
           <div className="pp-qr-box">
-            <QRSvg />
+            <QRSvg url={url} pixelsPerModule={6} />
           </div>
-          <div className="pp-url">signpost.app</div>
-          <div className="pp-scan-prompts">
-            {translators.map(({ lang, t }) => (
-              <div key={lang} className="pp-scan-prompt">
-                {t('poster.scanPrompt')}
-              </div>
-            ))}
+          <div className="pp-qr-text">
+            <div className="pp-url">{window.location.hostname}</div>
+            <div className="pp-scan-prompts">
+              {translators.map(({ lang, t }) => (
+                <div key={lang} className="pp-scan-prompt">
+                  {t('poster.scanPrompt')}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -195,25 +165,18 @@ export default function PrintablePoster({ languages }: Props) {
           ))}
         </div>
 
-        {/* ── Legal ── */}
-        <div className="pp-legal-section">
-          {translators.map(({ lang, t }) => (
-            <p key={lang} className="pp-legal">
-              {t('poster.legal')}
-            </p>
-          ))}
-        </div>
-
         {/* ── Tear-off tabs ── */}
         <div className="pp-tabs-container">
           <div className="pp-cut-line">
-            <span className="pp-cut-symbol">&#x2702;</span>
             <span className="pp-cut-dashes" aria-hidden="true" />
           </div>
           <div className="pp-tabs">
             {Array.from({ length: TAB_COUNT }, (_, i) => (
               <div key={i} className="pp-tab">
-                <span className="pp-tab-text">signpost.app</span>
+                <span className="pp-tab-text">{window.location.hostname}</span>
+                <div className="pp-tab-qr">
+                  <QRSvg url={url} pixelsPerModule={3} />
+                </div>
               </div>
             ))}
           </div>

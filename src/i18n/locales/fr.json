@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Cette carte est fournie à titre informatif uniquement. Les conditions changent — utilisez toujours votre propre jugement et restez en sécurité.",
-    "long": "SignPost est une carte de ressources maintenue par la communauté. Les développeurs ne font aucune garantie quant à l'exactitude, la sécurité ou la disponibilité des ressources répertoriées. Cette plateforme n'est pas destinée à faciliter des activités illégales de quelque nature que ce soit. L'utilisation de cette carte constitue l'acceptation de ces conditions. Si vous voyez un contenu inexact ou nuisible, veuillez utiliser la fonction de signalement. Contact du développeur : signpost.app/about.",
+    "long": "SignPost est une carte de ressources maintenue par la communauté. Les développeurs ne font aucune garantie quant à l'exactitude, la sécurité ou la disponibilité des ressources répertoriées. Cette plateforme n'est pas destinée à faciliter des activités illégales de quelque nature que ce soit. L'utilisation de cette carte constitue l'acceptation de ces conditions. Si vous voyez un contenu inexact ou nuisible, veuillez utiliser la fonction de signalement. Contact du développeur :",
     "fullDisclaimer": "Avis complet",
     "less": "Moins",
     "dismiss": "Fermer"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Ceci est une démo",
     "splashBody": "Cette application n'est pas réelle ni opérationnelle. Tous les emplacements, noms et données affichés sont des espaces réservés fictifs. Ne vous fiez à aucune de ces informations.",
-    "splashContinue": "Je comprends"
+    "splashContinue": "Je comprends",
+    "posterWatermark": "NE PAS DISTRIBUER"
   },
   "wifi": {
     "networksLabel": "Réseaux Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Eau potable et toilettes",
     "featureParks": "Parcs sûrs et zones couvertes",
     "featureHarm": "Services de réduction des risques",
-    "legal": "Carte maintenue par des bénévoles. Les ressources peuvent changer — vérifiez avant utilisation. Pas d'activité illégale. Les développeurs déclinent toute garantie. signpost.app/about",
+    "legal": "Carte maintenue par des bénévoles. Les ressources peuvent changer — vérifiez avant utilisation. Pas d'activité illégale. Les développeurs déclinent toute garantie.",
     "langLabel": "Français"
   }
 }

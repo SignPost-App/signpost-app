@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Khariidaddan waxay u taagan tahay macluumaad keliya. Xaaladaha waxay is bedeli karaan — had iyo jeer isticmaal xukumkaaga nafeedda oo ahaanaanso badbaado.",
-    "long": "SignPost waa khariidad kheyraadka ah oo ay bulshaду xukumto. Horumariyayaashu ma bixiyaan wax dammaanad ah oo ku saabsan saxnaanta, badbaadada, ama helitaanka kheyraadka ku jira liistada. Goobtan laguma talagalin inay fududeyso wax falal sharci-darro ah. Isticmaalka khariidaddan waxay u taagan tahay aqbalida shuruudahaas. Haddaad aragto macluumaad khaldan ama waxyeelada ah, isticmaal shaqada warbixinta. Xiriirka horumariyaha: signpost.app/about.",
+    "long": "SignPost waa khariidad kheyraadka ah oo ay bulshaду xukumto. Horumariyayaashu ma bixiyaan wax dammaanad ah oo ku saabsan saxnaanta, badbaadada, ama helitaanka kheyraadka ku jira liistada. Goobtan laguma talagalin inay fududeyso wax falal sharci-darro ah. Isticmaalka khariidaddan waxay u taagan tahay aqbalida shuruudahaas. Haddaad aragto macluumaad khaldan ama waxyeelada ah, isticmaal shaqada warbixinta. Xiriirka horumariyaha:",
     "fullDisclaimer": "Beelitaan buuxda",
     "less": "Yar",
     "dismiss": "Xir"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Kani waa demo",
     "splashBody": "Abkanu ma ahan mid runta ah ama shaqaynaya. Dhammaan goobaha, magacyada, iyo xogta la muujiyay waa meelo bannaan been-abuur ah. Ha ku kalsoonaanin macluumaadkan.",
-    "splashContinue": "Waan fahmay"
+    "splashContinue": "Waan fahmay",
+    "posterWatermark": "HA FAAFIN"
   },
   "wifi": {
     "networksLabel": "Shabakadaha Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Biyaha la cabbi karo iyo suuliyada",
     "featureParks": "Beero badbaado leh iyo goobaha dabooban",
     "featureHarm": "Adeegyada yaraynta waxyeelada",
-    "legal": "Khariidadda waxay xukumaan ololeyaasha bulshada. Kheyraadku waa isbedeli karaa — xaqiiji ka hor adeegsasho. Falala sharci-darro ah looma isticmaalo. Horumariyayaashu waxa ay diidaan dammaanad kasta. signpost.app/about",
+    "legal": "Khariidadda waxay xukumaan ololeyaasha bulshada. Kheyraadku waa isbedeli karaa — xaqiiji ka hor adeegsasho. Falala sharci-darro ah looma isticmaalo. Horumariyayaashu waxa ay diidaan dammaanad kasta.",
     "langLabel": "Soomaali"
   }
 }

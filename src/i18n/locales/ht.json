@@ -84,7 +84,7 @@
   },
   "disclaimer": {
     "short": "Kat sa a se pou enfòmasyon sèlman. Kondisyon yo ka chanje — toujou itilize jijman pwòp ou epi rete an sekirite.",
-    "long": "SignPost se yon kat resous kominote a jere. Devlopè yo pa bay okenn garanti sou egzaktitid, sekirite, oswa disponibilite resous ki nan lis yo. Platfòm sa a pa fèt pou fasilite okenn aktivite ilegal. Itilizasyon kat sa a reprezante akseptasyon kondisyon sa yo. Si ou wè kontni ki pa egzak oswa danjere, itilize fonksyon rapò a. Kontakte devlopè yo: signpost.app/about.",
+    "long": "SignPost se yon kat resous kominote a jere. Devlopè yo pa bay okenn garanti sou egzaktitid, sekirite, oswa disponibilite resous ki nan lis yo. Platfòm sa a pa fèt pou fasilite okenn aktivite ilegal. Itilizasyon kat sa a reprezante akseptasyon kondisyon sa yo. Si ou wè kontni ki pa egzak oswa danjere, itilize fonksyon rapò a. Kontakte devlopè yo:",
     "fullDisclaimer": "Deklarasyon konplè",
     "less": "Mwens",
     "dismiss": "Fèmen"
@@ -115,7 +115,8 @@
   "demo": {
     "splashTitle": "Sa se yon demo",
     "splashBody": "Aplikasyon sa a pa reyèl ni operasyonèl. Tout kote, non, ak done ki montre yo se espas rezève fiktif. Pa fè konfyans nan okenn enfòmasyon sa yo.",
-    "splashContinue": "Mwen konprann"
+    "splashContinue": "Mwen konprann",
+    "posterWatermark": "PA DISTRIBYE"
   },
   "wifi": {
     "networksLabel": "Rezo Wi-Fi",
@@ -148,7 +149,7 @@
     "featureWater": "Dlo pòtab ak twalèt",
     "featureParks": "Pak ki an sekirite ak espas kouvri",
     "featureHarm": "Sèvis reduksyon dòmaj",
-    "legal": "Kat jere pa volontè kominote. Resous yo ka chanje — verifye anvan itilize. Pa pou aktivite ilegal. Devlopè yo rejte tout garanti. signpost.app/about",
+    "legal": "Kat jere pa volontè kominote. Resous yo ka chanje — verifye anvan itilize. Pa pou aktivite ilegal. Devlopè yo rejte tout garanti.",
     "langLabel": "Kreyòl ayisyen"
   }
 }
