@@ -17,6 +17,10 @@ Copy `.env.demo` to `.env` to configure the app:
 |----------|-------------|
 | `VITE_DEMO_MODE` | Set to `true` to enable demo mode (uses sample data instead of a live backend) |
 
+## Deployment
+
+See [docs/deploy.md](docs/deploy.md) for instructions on deploying to a VPS.
+
 ## Scripts
 
 | Command | Description |

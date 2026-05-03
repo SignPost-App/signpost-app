@@ -14,6 +14,7 @@ A decision documented here doesn't mean it's permanent — it means anyone who w
 | [data-model.md](data-model.md) | Resource schema, tag taxonomy, community-editing model, anonymity |
 | [moderation.md](moderation.md) | Admin access model, moderator workflow, export and data portability |
 | [legal.md](legal.md) | Disclaimer design, intended-use framing, open source posture |
+| [deploy.md](deploy.md) | VPS deployment, nginx config, least-privilege user setup, HTTPS |
 
 ## How to update these docs
 
