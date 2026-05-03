@@ -393,9 +393,10 @@ html, body, #root {
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-/* Edit mode needs more vertical space to show the full form */
+/* Edit and Review Changes modes: fixed tall height so both states look the same */
 @media (max-width: 767px) {
   .resource-panel--editing {
+    height: 90vh;
     max-height: 90vh;
   }
 }
