@@ -11,7 +11,7 @@ function createPinIcon(tags: ResourceTag[], selected: boolean) {
   const primary = tags[0];
   const cfg = TAG_CONFIG[primary];
   const isAvoid = tags.includes('avoid');
-  const size = selected ? 42 : 36;
+  const size = selected ? 48 : 42;
   const borderWidth = selected ? 3.5 : 3;
 
   // Only rotate the diamond shape when avoid is the sole tag
@@ -21,10 +21,10 @@ function createPinIcon(tags: ResourceTag[], selected: boolean) {
   const maxEmojis = 3;
   const shown = tags.slice(0, maxEmojis);
   const extra = tags.length > maxEmojis ? tags.length - maxEmojis : 0;
-  const emojiSize = shown.length > 2 ? 12 : shown.length > 1 ? 14 : 17;
+  const emojiSize = shown.length > 2 ? 16 : shown.length > 1 ? 18 : 22;
 
   // Pill grows wider for each additional emoji
-  const width = size + (shown.length - 1) * 18 + (extra > 0 ? 14 : 0);
+  const width = size + (shown.length - 1) * 22 + (extra > 0 ? 14 : 0);
 
   const emojisHtml =
     shown.map(t => `<span>${TAG_CONFIG[t].icon}</span>`).join('') +
@@ -95,12 +95,12 @@ function createClusterCustomIcon(cluster: any): L.DivIcon {
   let emojiHtml: string;
   if (shown.length <= 2) {
     emojiHtml = `
-      <div style="display:flex;gap:3px;font-size:16px;line-height:1;">
+      <div style="display:flex;gap:3px;font-size:21px;line-height:1;">
         ${shown.map(t => `<span>${TAG_CONFIG[t].icon}</span>`).join('')}
       </div>`;
   } else {
     emojiHtml = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;font-size:13px;line-height:1.1;text-align:center;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;font-size:17px;line-height:1.1;text-align:center;">
         ${shown.map(t => `<span>${TAG_CONFIG[t].icon}</span>`).join('')}
       </div>`;
   }
@@ -108,8 +108,8 @@ function createClusterCustomIcon(cluster: any): L.DivIcon {
   return L.divIcon({
     html: `
       <div style="
-        width: 58px;
-        height: 58px;
+        width: 70px;
+        height: 70px;
         background: white;
         border: 3px solid #6366f1;
         border-radius: 50%;
@@ -140,8 +140,8 @@ function createClusterCustomIcon(cluster: any): L.DivIcon {
       </div>
     `,
     className: '',
-    iconSize: L.point(58, 68),
-    iconAnchor: L.point(29, 39),
+    iconSize: L.point(70, 80),
+    iconAnchor: L.point(35, 45),
   });
 }
 
