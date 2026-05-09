@@ -5,7 +5,9 @@ import { useOutsideClick } from '../hooks/useOutsideClick';
 
 interface DropdownPos { top: number; right: number; }
 
-export default function LanguageSelector() {
+interface Props { zoomFactor?: number; }
+
+export default function LanguageSelector({ zoomFactor = 1 }: Props) {
   const { i18n, t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState<DropdownPos | null>(null);
@@ -69,8 +71,6 @@ export default function LanguageSelector() {
       >
         {/* Globe SVG — universally recognized language icon */}
         <svg
-          width="18"
-          height="18"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -95,7 +95,7 @@ export default function LanguageSelector() {
           role="listbox"
           aria-label={t('header.selectLanguage')}
           className="lang-dropdown"
-          style={{ top: pos.top, right: pos.right }}
+          style={{ top: pos.top, right: pos.right, zoom: zoomFactor }}
           onKeyDown={handleDropdownKeyDown}
         >
           {SUPPORTED_LANGUAGES.map(lang => (

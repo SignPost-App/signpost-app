@@ -162,13 +162,19 @@ interface Props {
   resources: Resource[];
   selectedId: string | null;
   onSelect: (r: Resource) => void;
+  zoomLevel: number;
 }
 
-export default function MapView({ resources, selectedId, onSelect }: Props) {
+export default function MapView({ resources, selectedId, onSelect, zoomLevel }: Props) {
   const mapRef = useRef<L.Map | null>(null);
   const [locating, setLocating] = useState(false);
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
   const flyPendingRef = useRef(false);
+
+  useEffect(() => {
+    const id = setTimeout(() => { mapRef.current?.invalidateSize(); }, 150);
+    return () => clearTimeout(id);
+  }, [zoomLevel]);
 
   useEffect(() => {
     if (!navigator.geolocation) return;

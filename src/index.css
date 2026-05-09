@@ -31,11 +31,52 @@ html, body, #root {
 }
 
 /* ---- Layout ---- */
+
+/* Fixed brand bar — outside zoom-wrapper on mobile so it never scales */
+.header-top-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 82px;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 9990;
+}
+
+/* Stack logo and name vertically inside the fixed header */
+.header-top-fixed .header-brand {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+/* Not shown on desktop — the brand lives inside the zoom-wrapper header on desktop */
+@media (min-width: 768px) {
+  .header-top-fixed { display: none; }
+}
+
+.zoom-wrapper {
+  width: 100dvw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+
 .app-shell {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
+  height: 100%;
   overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .app-shell {
+    padding-top: calc(82px / var(--zoom-factor, 1));
+  }
 }
 
 .map-area {
@@ -56,15 +97,96 @@ html, body, #root {
 /* ---- Header ---- */
 .header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 16px;
-  height: 56px;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
   background: var(--color-primary);
   color: #fff;
   flex-shrink: 0;
   z-index: 100;
+}
+
+/* Row 1 (desktop only): brand. On mobile this row is hidden — brand is in
+   .header-top-fixed which lives outside the zoom-wrapper and never scales. */
+.header-top {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 16px;
+}
+
+/* Hide the brand row inside the zoom-wrapper on mobile */
+@media (max-width: 767px) {
+  .header-top { display: none; }
+}
+
+/* Row 2: action tabs — lighter blue, full-width split */
+.header-bottom {
+  display: flex;
+  align-items: stretch;
+  background: #3b82f6;
+  min-height: 44px;
+}
+
+/* ---- Header tabs (mobile) ---- */
+.header-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: var(--font);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.header-tab + .header-tab { border-left: 1px solid rgba(255, 255, 255, 0.25); }
+.header-tab:hover { background: rgba(0, 0, 0, 0.08); }
+.header-tab:focus-visible { outline: 3px solid #fff; outline-offset: -3px; }
+
+/* Hide the lang selector from the tab row on mobile (it lives in the zoom overlay) */
+.header-bottom .lang-selector { display: none; }
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 16px;
+    height: 56px;
+  }
+  .header-top { flex-shrink: 1; min-width: 0; padding: 0; min-height: unset; }
+  .header-bottom {
+    flex-shrink: 0;
+    background: transparent;
+    align-items: center;
+    min-height: unset;
+    gap: 8px;
+  }
+  /* Restore button-style appearance on desktop */
+  .header-tab {
+    flex: none;
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    font-weight: 600;
+  }
+  .header-tab + .header-tab { border-left: none; }
+  .header-tab.about-tab {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .header-tab.about-tab:hover { background: rgba(255, 255, 255, 0.25); }
+  .header-tab.add-tab { background: #fff; color: var(--color-primary); }
+  .header-tab.add-tab:hover { background: #eff6ff; }
+  /* Show lang selector in the tab row on desktop */
+  .header-bottom .lang-selector { display: flex; }
 }
 
 .header-brand {
@@ -74,18 +196,17 @@ html, body, #root {
   text-decoration: none;
   color: #fff;
   min-width: 0;
-  flex-shrink: 1;
   overflow: hidden;
 }
 
 .header-logo {
-  height: clamp(22px, 5.5vw, 34px);
+  height: clamp(28px, 7vw, 42px);
   width: auto;
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 .header-name {
-  font-size: clamp(14px, 4.2vw, 20px);
+  font-size: clamp(15px, 4.5vw, 22px);
   font-weight: 700;
   letter-spacing: -0.3px;
   white-space: nowrap;
@@ -101,12 +222,61 @@ html, body, #root {
   .header-tagline { display: block; }
 }
 
-.header-actions {
+/* ---- Zoom Controls (fixed overlay, mobile only) ---- */
+/* Positioned at the top-right of the screen, within the header band.
+   Lives outside zoom-wrapper so it never scales with zoom. */
+.zoom-controls {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 8px 16px 8px 8px;
+  z-index: 9999;
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+  gap: 4px;
 }
+
+@media (min-width: 768px) {
+  .zoom-controls { display: none; }
+}
+
+/* Override lang-btn appearance to match zoom buttons when inside the overlay */
+.zoom-controls .lang-btn {
+  height: 66px;
+  min-width: 66px;
+  width: auto;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.20);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  gap: 6px;
+}
+.zoom-controls .lang-btn:hover { background: rgba(255, 255, 255, 0.35); }
+
+/* Bigger globe icon in the zoom-controls context */
+.zoom-controls .lang-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
+.zoom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 66px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: rgba(255, 255, 255, 0.20);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.zoom-btn:hover { background: rgba(255, 255, 255, 0.35); }
+.zoom-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.zoom-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
 
 
 /* ---- Buttons ---- */
@@ -382,7 +552,7 @@ html, body, #root {
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   box-shadow: 0 -4px 30px rgba(0,0,0,0.18);
   z-index: 500;
-  max-height: 65vh;
+  max-height: 65%;
   display: flex;
   flex-direction: column;
   animation: slideUp 0.25s ease;
@@ -396,8 +566,8 @@ html, body, #root {
 /* Edit and Review Changes modes: fixed tall height so both states look the same */
 @media (max-width: 767px) {
   .resource-panel--editing {
-    height: 90vh;
-    max-height: 90vh;
+    height: 90%;
+    max-height: 90%;
   }
 }
 
@@ -644,7 +814,7 @@ html, body, #root {
   position: absolute;
   bottom: 20px;
   right: 16px;
-  z-index: 400;
+  z-index: 1100;
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -698,13 +868,28 @@ html, body, #root {
 /* ---- Modal ---- */
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  /* Compensate for the parent zoom-wrapper's CSS zoom so the overlay fills
+     exactly the real viewport. --zoom-factor is set as an inline CSS variable
+     on the zoom-wrapper. Falls back to 1 (no zoom) on desktop. */
+  width: calc(100dvw / var(--zoom-factor, 1));
+  height: calc(100dvh / var(--zoom-factor, 1));
   background: rgba(0,0,0,0.45);
   z-index: 800;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   animation: fadeIn 0.2s ease;
+}
+
+/* On mobile, push the modal card below the fixed 82px header so the X button
+   never overlaps with the zoom/language controls. The header-top-fixed is
+   outside the zoom-wrapper so its height is always 82 real pixels. */
+@media (max-width: 767px) {
+  .modal-overlay {
+    padding-top: calc(82px / var(--zoom-factor, 1));
+  }
 }
 
 @keyframes fadeIn {
@@ -737,14 +922,21 @@ html, body, #root {
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   width: 100%;
   max-width: 540px;
-  max-height: 90vh;
+  max-height: calc(90dvh / var(--zoom-factor, 1));
   display: flex;
   flex-direction: column;
   animation: slideUp 0.25s ease;
 }
 
 @media (min-width: 640px) {
-  .modal { border-radius: var(--radius-lg); max-height: 80vh; }
+  .modal { border-radius: var(--radius-lg); max-height: calc(80dvh / var(--zoom-factor, 1)); }
+}
+
+/* On mobile, cap the modal to the space below the fixed 82px header */
+@media (max-width: 767px) {
+  .modal {
+    max-height: calc((100dvh - 82px) / var(--zoom-factor, 1));
+  }
 }
 
 .modal-header {
@@ -1426,6 +1618,13 @@ html, body, #root {
   position: relative;
 }
 
+/* Base globe SVG size — overridden to larger in the zoom-controls context */
+.lang-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
 .lang-btn {
   display: inline-flex;
   align-items: center;
@@ -1498,7 +1697,10 @@ html, body, #root {
 /* ---- Language Select Modal (for print) ---- */
 .lang-modal-backdrop {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: calc(100dvw / var(--zoom-factor, 1));
+  height: calc(100dvh / var(--zoom-factor, 1));
   background: rgba(0, 0, 0, 0.65);
   display: flex;
   align-items: center;
@@ -1670,6 +1872,9 @@ body.pp-printing #root {
 }
 
 body.pp-printing .app-shell,
+body.pp-printing .zoom-wrapper,
+body.pp-printing .zoom-controls,
+body.pp-printing .header-top-fixed,
 body.pp-printing .page-container,
 body.pp-printing .skip-link {
   display: none !important;
@@ -1956,6 +2161,9 @@ body.pp-printing .pp-tab-text {
   }
 
   .app-shell,
+  .zoom-wrapper,
+  .zoom-controls,
+  .header-top-fixed,
   .page-container,
   .skip-link {
     display: none !important;
@@ -1965,3 +2173,13 @@ body.pp-printing .pp-tab-text {
     display: block !important;
   }
 }
+
+/* ---- Leaflet attribution ----
+   Counter-scale so it stays at a constant screen size regardless of app zoom.
+   Keep it small and low z-index so it stays behind the FAB and locate button. */
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  zoom: calc(1 / var(--zoom-factor, 1));
+  z-index: 300 !important;
+}
+

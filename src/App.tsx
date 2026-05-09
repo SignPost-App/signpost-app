@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ZoomIn, ZoomOut } from 'lucide-react';
 import Header from './components/Header';
+import LanguageSelector from './components/LanguageSelector';
 import FilterBar from './components/FilterBar';
 import MapView from './components/MapView';
 import ResourcePanel from './components/ResourcePanel';
@@ -12,6 +14,15 @@ import AdminPage from './components/AdminPage';
 import PosterPrintPage from './components/PosterPrintPage';
 import { Resource, ResourceTag, Comment, AddDraft, isOpenNow } from './types';
 import { mockResources } from './mockData';
+import logo from './assets/signpost-logo.svg';
+
+// Max zoom level proportional to device width.
+// Each level adds 0.20 zoom factor; effective content width must stay >= 240px.
+function computeMaxLevel(): number {
+  if (window.innerWidth >= 768) return 0;
+  const levels = Math.floor((window.innerWidth / 240 - 1) / 0.20);
+  return Math.min(Math.max(0, levels), 5);
+}
 
 function MainPage() {
   const { t } = useTranslation();
@@ -22,6 +33,26 @@ function MainPage() {
   const [showAdd, setShowAdd] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [addDraft, setAddDraft] = useState<AddDraft | null>(null);
+  const [maxLevel, setMaxLevel] = useState<number>(computeMaxLevel);
+  const [zoomLevel, setZoomLevel] = useState<number>(() => {
+    const saved = Number(localStorage.getItem('signpost-zoom'));
+    const initial = isNaN(saved) || saved < 0 ? 0 : saved;
+    return Math.min(initial, computeMaxLevel());
+  });
+
+  useEffect(() => {
+    localStorage.setItem('signpost-zoom', String(zoomLevel));
+  }, [zoomLevel]);
+
+  useEffect(() => {
+    const handler = () => {
+      const newMax = computeMaxLevel();
+      setMaxLevel(newMax);
+      setZoomLevel(z => Math.min(z, newMax));
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   const tagFiltered = activeFilters.length === 0
     ? resources
@@ -60,47 +91,96 @@ function MainPage() {
     setSelected(updated);
   };
 
+  const zoomFactor = 1 + zoomLevel * 0.20;
+
+  // Expose zoom factor as a CSS variable so descendant elements (modal-overlay)
+  // can compensate for the parent zoom when sizing fixed-position overlays.
+  const wrapperStyle = {
+    '--zoom-factor': zoomFactor,
+    ...(zoomLevel > 0 ? {
+      zoom: zoomFactor,
+      width: `calc(100dvw / ${zoomFactor})`,
+      height: `calc(100dvh / ${zoomFactor})`,
+    } : {}),
+  };
+
   return (
     <>
       <a href="#main-content" className="skip-link">{t('skipLink')}</a>
-      <div className="app-shell">
-        <Header onAddClick={() => setShowAdd(true)} />
-        <FilterBar
-          activeFilters={activeFilters}
-          onFilterChange={setActiveFilters}
-          openNow={openNow}
-          onOpenNowChange={setOpenNow}
-        />
-        {showDisclaimer && <DisclaimerBanner onDismiss={() => setShowDisclaimer(false)} />}
-        <main id="main-content" className="map-area">
-          <MapView
-            resources={filtered}
-            selectedId={selected?.id ?? null}
-            onSelect={setSelected}
+
+      {/* Fixed brand bar — outside zoom-wrapper so it never scales with zoom. */}
+      <div className="header-top-fixed" role="banner">
+        <Link to="/" className="header-brand" style={{ textDecoration: 'none' }}>
+          <img src={logo} alt="" aria-hidden="true" className="header-logo" />
+          <div className="header-brand-text">
+            <div className="header-name">SignPost</div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Zoom controls — also fixed outside zoom-wrapper. */}
+      <div className="zoom-controls">
+        <button
+          className="zoom-btn"
+          onClick={() => setZoomLevel(z => Math.max(0, z - 1))}
+          disabled={zoomLevel === 0}
+          aria-label={t('header.decreaseTextSize')}
+        >
+          <ZoomOut size={44} aria-hidden="true" />
+        </button>
+        <button
+          className="zoom-btn"
+          onClick={() => setZoomLevel(z => Math.min(maxLevel, z + 1))}
+          disabled={zoomLevel >= maxLevel}
+          aria-label={t('header.increaseTextSize')}
+        >
+          <ZoomIn size={44} aria-hidden="true" />
+        </button>
+        <LanguageSelector zoomFactor={zoomFactor} />
+      </div>
+
+      <div className="zoom-wrapper" data-zoom={String(zoomLevel)} style={wrapperStyle as React.CSSProperties}>
+        <div className="app-shell">
+          <Header onAddClick={() => setShowAdd(true)} />
+          <FilterBar
+            activeFilters={activeFilters}
+            onFilterChange={setActiveFilters}
+            openNow={openNow}
+            onOpenNowChange={setOpenNow}
+            zoomFactor={zoomFactor}
           />
-          <button
-            className="fab"
-            onClick={() => setShowAdd(true)}
-            aria-label={t('addModal.title')}
-          >
-            +
-          </button>
-        </main>
-        {selected && (
-          <ResourcePanel
-            resource={selected}
-            onClose={() => setSelected(null)}
-            onAddComment={handleAddComment}
-            onUpdateResource={handleUpdateResource}
-          />
-        )}
-        {showAdd && (
-          <AddResourceModal
-            onClose={handleAddClose}
-            onSubmit={handleAddSubmit}
-            draft={addDraft}
-          />
-        )}
+          {showDisclaimer && <DisclaimerBanner onDismiss={() => setShowDisclaimer(false)} />}
+          <main id="main-content" className="map-area">
+            <MapView
+              resources={filtered}
+              selectedId={selected?.id ?? null}
+              onSelect={setSelected}
+              zoomLevel={zoomLevel}
+            />
+            <button
+              className="fab"
+              onClick={() => setShowAdd(true)}
+              aria-label={t('addModal.title')}
+            >
+              +
+            </button>
+          </main>
+          {selected && (
+            <ResourcePanel
+              resource={selected}
+              onClose={() => setSelected(null)}
+              onAddComment={handleAddComment}
+              onUpdateResource={handleUpdateResource}
+            />
+          )}
+          {showAdd && (
+            <AddResourceModal
+              onClose={handleAddClose}
+              onSubmit={handleAddSubmit}
+              draft={addDraft}
+            />
+          )}
+        </div>
       </div>
     </>
   );

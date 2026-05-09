@@ -4,7 +4,10 @@
     "add": "+ Add",
     "poster": "Poster",
     "admin": "Admin",
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "textSize": "Text size",
+    "decreaseTextSize": "Decrease text size",
+    "increaseTextSize": "Increase text size"
   },
   "filter": {
     "all": "All",

@@ -54,3 +54,7 @@ The MVP is intentionally scoped to Seattle. This affects:
 - Any future geographic filtering or search radius logic
 
 The codebase has no hard geographic restriction — someone could add resources anywhere. "Seattle scope" is a product and moderation decision, not a technical one. If expansion is desired, the main thing to reconsider is the default viewport and how moderators are organized by region.
+
+## Leaflet attribution
+
+The Leaflet/CARTO attribution control is required for OSM tile usage compliance. At higher UI zoom levels the attribution text is scaled down in font size via CSS (e.g. `8px` at level 1, `7px` at level 2, `6px` at level 3) so it does not consume a disproportionate share of the narrower effective viewport. It remains visible and legible at these sizes. Do not remove it.

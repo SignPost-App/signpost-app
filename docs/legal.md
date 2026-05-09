@@ -9,7 +9,7 @@ The short version shown by default in the banner:
 
 This is honest and practical. It tells users something true and useful: the app is community-maintained, data may be stale, don't rely on it blindly.
 
-The full legal text is available via an expand link. It covers:
+The full legal text is available via a "Full disclaimer" button that opens a modal popup. It covers:
 - Community maintenance / no warranty on accuracy
 - No endorsement of illegal activity
 - Verify information before relying on it

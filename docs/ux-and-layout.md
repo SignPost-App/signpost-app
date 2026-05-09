@@ -11,6 +11,66 @@ Practical implications:
 - No hover-only affordances for primary actions
 - The viewport uses `100dvh` (dynamic viewport height) rather than `100vh` to account for mobile browser chrome (address bar, bottom nav) that can change height during scrolling
 
+## Supported screen sizes
+
+**Minimum width: 320 CSS pixels.** This covers iPhone SE (1st gen, 320×568) and older budget Android phones. All layouts — including all UI zoom levels — must remain usable at this width.
+
+**Minimum height: 568 CSS pixels.** This is the iPhone SE 1st gen height. At zoom-2 (1.4×), the effective usable height is ~406px — enough for the header, filter bar, and a meaningful map area.
+
+**Design baseline:** 375px width (iPhone SE 2nd/3rd gen, iPhone 12/13/14 mini). Most layout decisions are made against this baseline.
+
+| Breakpoint | Behavior |
+|---|---|
+| < 768px | Mobile: two-row header, bottom-sheet panels, zoom controls visible |
+| ≥ 768px | Desktop: single-row header, sidebar panels, zoom controls hidden |
+
+## UI zoom controls
+
+Two magnifying-glass buttons (zoom-out, zoom-in) are fixed to the top-right of the screen alongside the language selector. These live **outside** the zoom wrapper so they never scale regardless of zoom level — users with vision impairments can always reach them.
+
+Zoom levels are dynamically computed from the device's viewport width, keeping the effective content width at or above 240px. Each level adds 0.20 to the zoom factor; the maximum level is capped at 5. On desktop (≥ 768px) the max level is 0 (zoom controls are hidden; desktop users use browser zoom).
+
+```
+maxLevel = Math.min(5, Math.floor((innerWidth / 240 - 1) / 0.20))
+zoomFactor = 1 + zoomLevel × 0.20
+```
+
+| Device width | Max levels available | Max CSS zoom |
+|---|---|---|
+| 320px | 1 | 1.20 |
+| 375px | 2 | 1.40 |
+| 414px | 3 | 1.60 |
+| 480px+ | 5 (capped) | 2.00 |
+
+The zoom wrapper (`div.zoom-wrapper`) has its `width` and `height` reduced by the zoom factor before the `zoom` CSS property is applied, so the scaled content fills the viewport exactly without overflow. This "tricks" the app into laying out at a lower effective resolution — every element (header, map, panels, modals, icons, spacing) scales uniformly.
+
+The zoom level persists in `localStorage` under the key `signpost-zoom`.
+
+## Header layout
+
+**Mobile (< 768px) — two rows:**
+
+```
+┌─────────────────────────────────────────────────┐ ← primary blue (#2563eb)
+│  [Logo]                 [zoom−] [zoom+] [🌐]   │ ← zoom controls are fixed overlay
+│  SignPost                                       │
+├────────────────────────────────────────────────│
+│         About                  + Add            │ ← lighter blue (#3b82f6), tab-style
+└────────────────────────────────────────────────┘
+```
+
+Row 1 is the primary blue (82px tall). The logo and "SignPost" name are stacked vertically on the left — the name sits directly below the logo rather than beside it, keeping the brand compact and avoiding horizontal overlap with the zoom controls on the right. The zoom controls (`position: fixed; top: 0; right: 0`) float over the right side of row 1. Row 2 is a slightly lighter blue with two full-width tab-style buttons divided by a hairline.
+
+**Desktop (≥ 768px) — single row:**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  [Logo] SignPost      [🌐 EN]  [ About ]  [ + Add ]     │
+└──────────────────────────────────────────────────────────┘
+```
+
+The two-row structure collapses to a single flex row. The language selector returns to the header row. Zoom controls are hidden (desktop users use browser zoom).
+
 ## Resource panel: bottom sheet on mobile, sidebar on desktop
 
 When a map pin is selected, the resource detail opens as a bottom sheet that slides up from the bottom of the screen on mobile. On desktop (≥768px) it becomes a right sidebar. This is a standard pattern (Google Maps, Yelp) that mobile users recognize.
@@ -116,7 +176,7 @@ Submitting a valid form (name + at least one type required) immediately adds the
 ## Navigation structure
 
 The app has two pages: map (`/`) and admin (`/admin`). Navigation is intentionally minimal:
-- Header has a link to About; the About modal contains the "Print a poster" entry point
+- On mobile the header bottom row has "About" and "+ Add" as full-width tabs; on desktop they appear as buttons in the single header row. Both open the same modals.
 - The Admin panel (`/admin`) is not linked from the header — it is accessible by direct URL only. This keeps it invisible to end users and reduces curiosity-clicks from people who have no reason to be there.
 - No bottom navigation bar — the map is the entire experience, not one of several tabs
 
@@ -124,7 +184,7 @@ A bottom nav bar was considered but rejected. It would take up vertical space pe
 
 ## About modal
 
-An "About" button in the header (between the language selector and the "+ Add" button) opens a modal that explains what SignPost is, how to use it, and the app's privacy posture. It is aimed at first-time users who arrive via a poster QR scan and have no other context. The modal is dismissed with the ✕ button, a click outside it, or Escape.
+An "About" button (bottom tab row on mobile; header button on desktop) opens a modal that explains what SignPost is, how to use it, and the app's privacy posture. It is aimed at first-time users who arrive via a poster QR scan and have no other context. The modal is dismissed with the ✕ button, a click outside it, or Escape.
 
 The About modal also contains a "How To Help" section with four subsections:
 
@@ -183,4 +243,4 @@ The printable poster is rendered into a React portal directly on `document.body`
 
 The disclaimer is a dismissible banner at the top of the main view, not a modal that blocks use. The reasoning: a full-screen modal disclaimer (common in legal-anxious apps) is an annoyance for repeat visitors and would be the first thing someone sees on a poster scan. Show it prominently but don't block the map. After dismissal it's gone for the session.
 
-The banner shows a short summary by default with an expand link to the full legal text, so it doesn't dominate the screen on first load.
+The banner always shows a short summary. A "Full disclaimer" button opens a modal popup with the complete legal text — keeping the banner compact while making the full text accessible without cluttering the map view.

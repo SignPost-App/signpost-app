@@ -8,11 +8,12 @@ interface Props {
   onFilterChange: (filters: ResourceTag[]) => void;
   openNow: boolean;
   onOpenNowChange: (v: boolean) => void;
+  zoomFactor?: number;
 }
 
 type PanelState = 'closed' | 'open' | 'closing';
 
-export default function FilterBar({ activeFilters, onFilterChange, openNow, onOpenNowChange }: Props) {
+export default function FilterBar({ activeFilters, onFilterChange, openNow, onOpenNowChange, zoomFactor = 1 }: Props) {
   const { t } = useTranslation();
   const [overflowing, setOverflowing] = useState(false);
   const [panel, setPanel] = useState<PanelState>('closed');
@@ -26,17 +27,19 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
   const barRef = useRef<HTMLElement>(null);
 
   // Measure the true single-row height from a rendered chip.
-  // closedH = 8px top-padding + chipHeight + 5px (partial gap — clips just before row 2 starts)
+  // getBoundingClientRect returns post-zoom screen pixels; divide by zoomFactor to get
+  // CSS-space pixels, which is what the inline maxHeight style expects.
+  // Row 2 starts at: 8 (top pad) + chipH_css + 6 (gap) = chipH_css + 14
+  // Setting max-height to chipH_css + 13 clips 1px before row 2 → row 2 fully hidden
   useLayoutEffect(() => {
     const el = panelRef.current;
     if (!el) return;
     const chip = el.querySelector<HTMLElement>('.filter-chip');
     if (chip) {
-      // Row 2 starts at: 8 (top pad) + chipH + 6 (gap) = chipH + 14
-      // Setting max-height to chipH + 13 clips 1px before row 2 → row 2 fully hidden
-      setClosedH(Math.ceil(chip.getBoundingClientRect().height) + 13);
+      const chipHcss = chip.getBoundingClientRect().height / zoomFactor;
+      setClosedH(Math.ceil(chipHcss) + 13);
     }
-  }, []);
+  }, [zoomFactor]);
 
   useEffect(() => {
     setTransitionReady(true);
@@ -54,9 +57,9 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
     const el = panelRef.current;
     if (!el) return;
     const chip = el.querySelector<HTMLElement>('.filter-chip');
-    // scrollHeight doesn't include Less button, divider, or Open Now (not yet rendered).
+    // scrollHeight is in CSS-space; divide getBoundingClientRect by zoomFactor to match.
     // Extra: Less (chipH + 6 gap) + divider (~26px) + Open Now (chipH + 6 gap) + padding
-    const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height) : 33;
+    const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height / zoomFactor) : 33;
     setOpenMaxH(el.scrollHeight + chipH * 2 + 54);
     setPanel('open');
   };
@@ -92,7 +95,7 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
     if (!el || !bar) return;
     const recalc = () => {
       const chip = el.querySelector<HTMLElement>('.filter-chip');
-      const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height) : 33;
+      const chipH = chip ? Math.ceil(chip.getBoundingClientRect().height / zoomFactor) : 33;
       setOpenMaxH(el.scrollHeight + chipH + 8);
     };
     // Delay until after the open animation completes so we don't jump mid-animation
@@ -100,7 +103,7 @@ export default function FilterBar({ activeFilters, onFilterChange, openNow, onOp
     const obs = new ResizeObserver(recalc);
     obs.observe(bar);
     return () => { clearTimeout(timer); obs.disconnect(); };
-  }, [panel]);
+  }, [panel, zoomFactor]);
 
   const isExpanded = panel === 'open' || panel === 'closing';
 
