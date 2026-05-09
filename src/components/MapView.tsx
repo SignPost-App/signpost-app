@@ -169,41 +169,22 @@ export default function MapView({ resources, selectedId, onSelect, zoomLevel }: 
   const mapRef = useRef<L.Map | null>(null);
   const [locating, setLocating] = useState(false);
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
-  const flyPendingRef = useRef(false);
 
   useEffect(() => {
     const id = setTimeout(() => { mapRef.current?.invalidateSize(); }, 150);
     return () => clearTimeout(id);
   }, [zoomLevel]);
 
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        const latlng: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-        setUserPos(latlng);
-        setLocating(false);
-        if (flyPendingRef.current) {
-          mapRef.current?.flyTo(latlng, 15, { animate: true, duration: 1.5 });
-          flyPendingRef.current = false;
-        }
-      },
-      () => setLocating(false),
-      { timeout: 10000, maximumAge: 30000 },
-    );
-  }, []);
-
   const handleLocate = () => {
     if (userPos) {
       mapRef.current?.flyTo(userPos, 15, { animate: true, duration: 1.5 });
       return;
     }
-    if (locating) {
-      flyPendingRef.current = true;
+    if (locating) return;
+    if (!navigator.geolocation) {
+      alert('Location access is not available in your browser.');
       return;
     }
-    if (!navigator.geolocation) return;
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       pos => {
@@ -212,8 +193,13 @@ export default function MapView({ resources, selectedId, onSelect, zoomLevel }: 
         mapRef.current?.flyTo(latlng, 15, { animate: true, duration: 1.5 });
         setLocating(false);
       },
-      () => setLocating(false),
-      { timeout: 10000, maximumAge: 30000 },
+      err => {
+        setLocating(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          alert('Location access was denied for this site. In Chrome, tap the lock icon in the address bar → Permissions → Location → Allow.');
+        }
+      },
+      { timeout: 10000, maximumAge: 30000, enableHighAccuracy: true },
     );
   };
 
