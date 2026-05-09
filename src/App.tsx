@@ -171,6 +171,7 @@ function MainPage() {
               onClose={() => setSelected(null)}
               onAddComment={handleAddComment}
               onUpdateResource={handleUpdateResource}
+              zoomFactor={zoomFactor}
             />
           )}
           {showAdd && (

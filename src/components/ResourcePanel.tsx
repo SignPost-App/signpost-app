@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Navigation } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
@@ -302,21 +303,47 @@ interface Props {
   onClose: () => void;
   onAddComment: (resourceId: string, text: string) => void;
   onUpdateResource: (resource: Resource) => void;
+  zoomFactor?: number;
 }
 
-function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: string }) {
+function DirectionsMenu({ lat, lng, name, zoomFactor = 1 }: { lat: number; lng: number; name: string; zoomFactor?: number }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const menuId = `directions-menu-${lat}-${lng}`;
+
+  const handleToggle = () => {
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setMenuPos({
+        top: r.bottom / zoomFactor,
+        left: r.left / zoomFactor,
+        width: r.width / zoomFactor,
+      });
+    }
+    setOpen(o => !o);
+  };
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const close = (e: MouseEvent) => {
+      if (
+        menuRef.current && !menuRef.current.contains(e.target as Node) &&
+        btnRef.current && !btnRef.current.contains(e.target as Node)
+      ) setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const closeOnScroll = () => setOpen(false);
+    document.addEventListener('mousedown', close);
+    document.addEventListener('scroll', closeOnScroll, true);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('scroll', closeOnScroll, true);
+    };
   }, [open]);
 
   const encoded = encodeURIComponent(name);
@@ -324,16 +351,16 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
   const appleUrl  = `https://maps.apple.com/?daddr=${lat},${lng}&q=${encoded}`;
 
   return (
-    <div ref={ref} style={{ position: 'relative', flex: 1 }}>
-      <button className="btn-directions" onClick={() => setOpen(o => !o)}
+    <div style={{ flex: 1 }}>
+      <button ref={btnRef} className="btn-directions" onClick={handleToggle}
         aria-haspopup="true" aria-expanded={open} aria-controls={menuId}>
         <Navigation size={15} aria-hidden="true" /> {t('panel.directions')} <span aria-hidden="true">▾</span>
       </button>
-      {open && (
-        <div id={menuId} role="menu" style={{
-          position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
-          background: '#fff', border: '1px solid var(--color-border)', borderRadius: 10,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.14)', overflow: 'hidden', zIndex: 10,
+      {open && menuPos && createPortal(
+        <div ref={menuRef} id={menuId} role="menu" style={{
+          position: 'fixed', top: menuPos.top, left: menuPos.left, width: menuPos.width,
+          background: '#fff', border: '1px solid var(--color-border)', borderRadius: '0 0 10px 10px',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.14)', overflow: 'hidden', zIndex: 9999, zoom: zoomFactor,
         }}>
           <a href={googleUrl} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setOpen(false)}
             style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '13px 16px', textDecoration: 'none',
@@ -348,7 +375,8 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
             <span aria-hidden="true" style={{ fontSize: 20, lineHeight: 1, flexShrink: 0 }}>🍎</span>
             {t('panel.appleMaps')}
           </a>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -388,7 +416,7 @@ function WifiNetworkRow({ network }: { network: WifiNetwork }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function ResourcePanel({ resource, onClose, onAddComment, onUpdateResource }: Props) {
+export default function ResourcePanel({ resource, onClose, onAddComment, onUpdateResource, zoomFactor = 1 }: Props) {
   const { t } = useTranslation();
   const [commentText, setCommentText] = useState('');
   const [votes, setVotes] = useState<Record<string, 'accurate' | 'outdated'>>({});
@@ -692,7 +720,7 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
           </div>
 
           <div className="panel-directions-wrap">
-            <DirectionsMenu lat={resource.lat} lng={resource.lng} name={resource.name} />
+            <DirectionsMenu lat={resource.lat} lng={resource.lng} name={resource.name} zoomFactor={zoomFactor} />
           </div>
 
           <dl className="panel-meta">
