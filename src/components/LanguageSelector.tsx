@@ -19,7 +19,10 @@ export default function LanguageSelector({ zoomFactor = 1 }: Props) {
   const openDropdown = () => {
     const rect = buttonRef.current?.getBoundingClientRect();
     if (rect) {
-      setPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+      setPos({
+        top: (rect.bottom + 6) / zoomFactor,
+        right: (window.innerWidth - rect.right) / zoomFactor,
+      });
     }
     setOpen(true);
   };
