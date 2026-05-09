@@ -83,6 +83,10 @@ A drag handle is shown on mobile to suggest dismissibility. The panel closes on 
 
 The **Post Note** button is active (not disabled-only). Submitting a non-empty note appends it to the resource's comment list in state and clears the textarea. The new note appears immediately in the comments section with today's date. In production this would write to the backend.
 
+### Get Directions
+
+A **Get Directions** button sits above the address/metadata row in view mode, making it the first actionable element a user sees after the resource type tags. Tapping it opens a small dropdown with two choices: Google Maps and Apple Maps. The button uses the `Navigation` icon from lucide-react. This placement prioritizes wayfinding — the most common action for someone actively trying to reach a resource — over secondary actions like Edit and Report, which remain in the footer.
+
 ### Edit mode
 
 Tapping **✏️ Edit** transforms the panel into an inline edit form. The footer swaps to **Cancel** and **Save Changes** buttons. The edit form exposes:
