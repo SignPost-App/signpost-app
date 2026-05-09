@@ -37,11 +37,14 @@ Center: `[47.6062, -122.3321]` (downtown Seattle), zoom 13. This puts the majori
 
 ## Locate button (go to my location)
 
-A crosshair button is overlaid on the bottom-right of the map (above the FAB). Tapping it calls `navigator.geolocation.getCurrentPosition()` and, on success, flies the map to the user's position at zoom 15 and drops a blue dot marker at that location. The button shows a muted loading state while the browser is resolving the position.
+A crosshair button is overlaid on the bottom-right of the map (above the FAB). On mount, `MapView` immediately calls `navigator.geolocation.getCurrentPosition()` in the background, which triggers the browser permission prompt on first visit and pre-fetches the user's position. The button shows a spinning arc icon while the position is being resolved.
 
-The blue dot uses `L.divIcon` styled as a filled circle with a white border and a faint blue halo ring, matching the visual convention of Google Maps / Apple Maps. It is NOT a standard resource pin and has no click handler.
+When tapped:
+- If the position is already known, the map flies there immediately.
+- If the background fetch is still in progress, the map will fly to the position as soon as it arrives (no second fetch needed).
+- If geolocation failed or was denied, a fresh `getCurrentPosition()` call is made.
 
-Geolocation is entirely on-demand (no auto-request on load) to avoid the browser permission prompt appearing before the user has any reason to share their location.
+On success the map flies to the user's position at zoom 15 and a blue dot marker is dropped there. The blue dot uses `L.divIcon` styled as a filled circle with a white border and a faint blue halo ring, matching the visual convention of Google Maps / Apple Maps. It is NOT a standard resource pin and has no click handler.
 
 ## Scope: Seattle and Greater Seattle Area
 

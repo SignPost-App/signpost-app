@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -168,9 +168,36 @@ export default function MapView({ resources, selectedId, onSelect }: Props) {
   const mapRef = useRef<L.Map | null>(null);
   const [locating, setLocating] = useState(false);
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
+  const flyPendingRef = useRef(false);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const latlng: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserPos(latlng);
+        setLocating(false);
+        if (flyPendingRef.current) {
+          mapRef.current?.flyTo(latlng, 15, { animate: true, duration: 1.5 });
+          flyPendingRef.current = false;
+        }
+      },
+      () => setLocating(false),
+      { timeout: 10000, maximumAge: 30000 },
+    );
+  }, []);
 
   const handleLocate = () => {
-    if (!navigator.geolocation || locating) return;
+    if (userPos) {
+      mapRef.current?.flyTo(userPos, 15, { animate: true, duration: 1.5 });
+      return;
+    }
+    if (locating) {
+      flyPendingRef.current = true;
+      return;
+    }
+    if (!navigator.geolocation) return;
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       pos => {
@@ -222,17 +249,23 @@ export default function MapView({ resources, selectedId, onSelect }: Props) {
       <button
         className={`locate-btn${locating ? ' locate-btn--loading' : ''}`}
         onClick={handleLocate}
-        disabled={locating}
         aria-label="Go to my location"
         title="Go to my location"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="18" height="18" aria-hidden="true">
-          <circle cx="12" cy="12" r="4" />
-          <line x1="12" y1="2" x2="12" y2="6" />
-          <line x1="12" y1="18" x2="12" y2="22" />
-          <line x1="2" y1="12" x2="6" y2="12" />
-          <line x1="18" y1="12" x2="22" y2="12" />
-        </svg>
+        {locating ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="18" height="18" aria-hidden="true" className="locate-spinner">
+            <circle cx="12" cy="12" r="9" strokeOpacity="0.25" />
+            <path d="M12 3a9 9 0 0 1 9 9" strokeLinecap="round" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="18" height="18" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <line x1="12" y1="2" x2="12" y2="6" />
+            <line x1="12" y1="18" x2="12" y2="22" />
+            <line x1="2" y1="12" x2="6" y2="12" />
+            <line x1="18" y1="12" x2="22" y2="12" />
+          </svg>
+        )}
       </button>
     </div>
   );
