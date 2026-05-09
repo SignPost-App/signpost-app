@@ -6,7 +6,7 @@ The primary users — people who are unhoused or in a crisis — are almost excl
 
 Practical implications:
 - Touch targets are at minimum 44px tall
-- The FAB sits in the bottom-right corner (thumb reachable on both hands)
+- Primary actions (About, + Add) are anchored to the bottom of the screen on mobile — thumb-reachable on both hands
 - Text is large enough to read in sunlight
 - No hover-only affordances for primary actions
 - The viewport uses `100dvh` (dynamic viewport height) rather than `100vh` to account for mobile browser chrome (address bar, bottom nav) that can change height during scrolling
@@ -21,8 +21,8 @@ Practical implications:
 
 | Breakpoint | Behavior |
 |---|---|
-| < 768px | Mobile: two-row header, bottom-sheet panels, zoom controls visible |
-| ≥ 768px | Desktop: single-row header, sidebar panels, zoom controls hidden |
+| < 768px | Mobile: single-row brand header, bottom nav bar (About / + Add), bottom-sheet panels, zoom controls visible |
+| ≥ 768px | Desktop: single-row header with all actions inline, sidebar panels, zoom controls hidden |
 
 ## UI zoom controls
 
@@ -48,18 +48,21 @@ The zoom level persists in `localStorage` under the key `signpost-zoom`.
 
 ## Header layout
 
-**Mobile (< 768px) — two rows:**
+**Mobile (< 768px):**
 
 ```
-┌─────────────────────────────────────────────────┐ ← primary blue (#2563eb)
+┌─────────────────────────────────────────────────┐ ← primary blue (#2563eb), 82px, fixed
 │  [Logo]                 [zoom−] [zoom+] [🌐]   │ ← zoom controls are fixed overlay
 │  SignPost                                       │
-├────────────────────────────────────────────────│
-│         About                  + Add            │ ← lighter blue (#3b82f6), tab-style
-└────────────────────────────────────────────────┘
+├─────────────────────────────────────────────────┤
+│  [filter bar]                                   │
+│  [map]                                          │
+├─────────────────────────────────────────────────┤
+│         About                  + Add            │ ← lighter blue (#3b82f6), 44px, bottom
+└─────────────────────────────────────────────────┘
 ```
 
-Row 1 is the primary blue (82px tall). The logo and "SignPost" name are stacked vertically on the left — the name sits directly below the logo rather than beside it, keeping the brand compact and avoiding horizontal overlap with the zoom controls on the right. The zoom controls (`position: fixed; top: 0; right: 0`) float over the right side of row 1. Row 2 is a slightly lighter blue with two full-width tab-style buttons divided by a hairline.
+The brand bar (82px, `position: fixed`, outside the zoom-wrapper) always stays at the top. The zoom controls float over its right side. The About and + Add actions live in a bottom nav bar (44px, lighter blue, full-width tab-style buttons divided by a hairline) at the very bottom of the app. Both the brand bar and the bottom nav are flex children of (or fixed relative to) the zoom-wrapper so the bottom nav scales with the text-size zoom, matching the map and filter bar. When any pane opens (resource detail, About modal, Add modal), it visually covers the bottom nav — the nav is in the normal flow at a lower z-index than modals (800) and the resource panel (500).
 
 **Desktop (≥ 768px) — single row:**
 
@@ -69,7 +72,7 @@ Row 1 is the primary blue (82px tall). The logo and "SignPost" name are stacked 
 └──────────────────────────────────────────────────────────┘
 ```
 
-The two-row structure collapses to a single flex row. The language selector returns to the header row. Zoom controls are hidden (desktop users use browser zoom).
+The bottom nav is hidden. All actions collapse into a single flex header row. The language selector appears in the header row. Zoom controls are hidden (desktop users use browser zoom).
 
 ## Resource panel: bottom sheet on mobile, sidebar on desktop
 
@@ -135,9 +138,9 @@ When active, "Open Now" filters the map to resources whose current hours indicat
 
 **What was considered and rejected:** A dropdown filter or a collapsible sidebar. Both require an extra tap to reach. The chip bar keeps filters one tap away at all times, which matters when someone is standing on a street corner trying to find the nearest bathroom.
 
-## Add resource: FAB + modal
+## Add resource modal
 
-The FAB (floating action button) is the primary entry point for adding a resource. It's also accessible from the header "+ Add" button for users who have already scrolled past the map controls. Both open the same modal.
+The **+ Add** button is the entry point for adding a resource — it appears in the bottom nav bar on mobile and in the header row on desktop. Tapping it opens the Add modal.
 
 The modal slides up from the bottom on mobile (matching the bottom sheet pattern) and centers as a dialog on larger screens.
 
@@ -180,11 +183,10 @@ Submitting a valid form (name + at least one type required) immediately adds the
 ## Navigation structure
 
 The app has two pages: map (`/`) and admin (`/admin`). Navigation is intentionally minimal:
-- On mobile the header bottom row has "About" and "+ Add" as full-width tabs; on desktop they appear as buttons in the single header row. Both open the same modals.
+- On mobile, "About" and "+ Add" appear as full-width tabs in a bottom nav bar (44px). On desktop they appear as buttons in the single header row. Both open the same modals.
+- The bottom nav is inside the zoom-wrapper so it scales with the text-size zoom. When any pane opens it is covered by the pane (modals at z-index 800, resource panel at z-index 500; bottom nav is in normal flow with no z-index).
 - The Admin panel (`/admin`) is not linked from the header — it is accessible by direct URL only. This keeps it invisible to end users and reduces curiosity-clicks from people who have no reason to be there.
-- No bottom navigation bar — the map is the entire experience, not one of several tabs
-
-A bottom nav bar was considered but rejected. It would take up vertical space permanently, pushing the map content up. Given that the map is ~95% of the user's time in the app, the tradeoff is wrong. Poster printing is accessed infrequently enough that a link inside the About modal is fine.
+- Poster printing is accessed infrequently enough that a link inside the About modal is fine.
 
 ## About modal
 

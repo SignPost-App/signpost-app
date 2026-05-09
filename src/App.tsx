@@ -8,6 +8,7 @@ import FilterBar from './components/FilterBar';
 import MapView from './components/MapView';
 import ResourcePanel from './components/ResourcePanel';
 import AddResourceModal from './components/AddResourceModal';
+import AboutModal from './components/AboutModal';
 import DisclaimerBanner from './components/DisclaimerBanner';
 import DemoBanner from './components/DemoBanner';
 import AdminPage from './components/AdminPage';
@@ -31,6 +32,7 @@ function MainPage() {
   const [resources, setResources] = useState<Resource[]>(mockResources);
   const [selected, setSelected] = useState<Resource | null>(null);
   const [showAdd, setShowAdd] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [addDraft, setAddDraft] = useState<AddDraft | null>(null);
   const [maxLevel, setMaxLevel] = useState<number>(computeMaxLevel);
@@ -141,7 +143,7 @@ function MainPage() {
 
       <div className="zoom-wrapper" data-zoom={String(zoomLevel)} style={wrapperStyle as React.CSSProperties}>
         <div className="app-shell">
-          <Header onAddClick={() => setShowAdd(true)} />
+          <Header onAddClick={() => setShowAdd(true)} onAboutClick={() => setShowAbout(true)} />
           <FilterBar
             activeFilters={activeFilters}
             onFilterChange={setActiveFilters}
@@ -157,13 +159,6 @@ function MainPage() {
               onSelect={setSelected}
               zoomLevel={zoomLevel}
             />
-            <button
-              className="fab"
-              onClick={() => setShowAdd(true)}
-              aria-label={t('addModal.title')}
-            >
-              +
-            </button>
           </main>
           {selected && (
             <ResourcePanel
@@ -181,6 +176,19 @@ function MainPage() {
               draft={addDraft}
             />
           )}
+          {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
+          <nav className="bottom-nav" aria-label="Main navigation">
+            <button
+              className="bottom-nav-tab"
+              onClick={() => setShowAbout(true)}
+              aria-label={t('about.button')}
+            >
+              {t('about.button')}
+            </button>
+            <button className="bottom-nav-tab" onClick={() => setShowAdd(true)}>
+              {t('header.add')}
+            </button>
+          </nav>
         </div>
       </div>
     </>

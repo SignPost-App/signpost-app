@@ -116,17 +116,23 @@ html, body, #root {
   padding: 0 16px;
 }
 
-/* Hide the brand row inside the zoom-wrapper on mobile */
+/* Hide the brand row inside the zoom-wrapper on mobile.
+   Brand lives in .header-top-fixed (outside the zoom-wrapper, never scales). */
 @media (max-width: 767px) {
   .header-top { display: none; }
 }
 
-/* Row 2: action tabs — lighter blue, full-width split */
+/* Row 2: action tabs — on mobile these live in .bottom-nav; on desktop they stay here */
 .header-bottom {
-  display: flex;
-  align-items: stretch;
-  background: #3b82f6;
-  min-height: 44px;
+  display: none;
+}
+@media (min-width: 768px) {
+  .header-bottom {
+    display: flex;
+    align-items: stretch;
+    background: #3b82f6;
+    min-height: 44px;
+  }
 }
 
 /* ---- Header tabs (mobile) ---- */
@@ -814,36 +820,13 @@ html, body, #root {
 }
 .btn-edit-panel:hover { background: var(--color-border); }
 
-/* ---- FAB (Floating Add Button) ---- */
-.fab {
-  position: absolute;
-  bottom: 20px;
-  right: 16px;
-  z-index: 1100;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  font-size: 26px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(37,99,235,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-.fab:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(37,99,235,0.45); }
-.fab:active { transform: scale(0.97); }
-
 /* ---- Locate (go to my location) button ---- */
 @keyframes locate-spin {
   to { transform: rotate(360deg); }
 }
 .locate-btn {
   position: absolute;
-  bottom: 82px;
+  bottom: 16px;
   right: 22px;
   z-index: 1000;
   width: 40px;
@@ -896,6 +879,42 @@ html, body, #root {
     padding-top: calc(82px / var(--zoom-factor, 1));
   }
 }
+
+/* ---- Bottom Nav (mobile only) ---- */
+/* Inside the zoom-wrapper as a flex child of app-shell, so it scales with zoom
+   exactly like the old header-bottom did. Modals (z-index 800) and the
+   ResourcePanel (z-index 500, position absolute) render above it. */
+.bottom-nav {
+  display: flex;
+  align-items: stretch;
+  background: #3b82f6;
+  min-height: 44px;
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  .bottom-nav { display: none; }
+}
+
+.bottom-nav-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: var(--font);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.bottom-nav-tab + .bottom-nav-tab { border-left: 1px solid rgba(255, 255, 255, 0.25); }
+.bottom-nav-tab:hover { background: rgba(0, 0, 0, 0.08); }
+.bottom-nav-tab:focus-visible { outline: 3px solid #fff; outline-offset: -3px; }
+
 
 @keyframes fadeIn {
   from { opacity: 0; }
