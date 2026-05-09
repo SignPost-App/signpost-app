@@ -134,6 +134,23 @@ export default function AboutModal({ onClose }: Props) {
                     </button>
                   </div>
 
+                  {/* Contribute to Development */}
+                  <div>
+                    <p style={subsectionLabelStyle}>{t('about.helpContribTitle')}</p>
+                    <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--color-text)', marginBottom: 8 }}>
+                      {t('about.helpContribDesc')}
+                    </p>
+                    <a
+                      className="btn btn-outline btn-sm"
+                      href="https://github.com/SignPost-App/signpost-app"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'inline-flex' }}
+                    >
+                      {t('about.helpContribLink')} →
+                    </a>
+                  </div>
+
                 </div>
               </div>
             </div>

@@ -126,7 +126,12 @@ A bottom nav bar was considered but rejected. It would take up vertical space pe
 
 An "About" button in the header (between the language selector and the "+ Add" button) opens a modal that explains what SignPost is, how to use it, and the app's privacy posture. It is aimed at first-time users who arrive via a poster QR scan and have no other context. The modal is dismissed with the ✕ button, a click outside it, or Escape.
 
-The About modal also contains the "Print a poster →" entry point. Clicking it opens the language-selection dialog directly — the user never navigates away from the map. After selecting languages and confirming, the browser print dialog opens (the poster is rendered as a React portal into `document.body`). The About modal remains open throughout and after printing.
+The About modal also contains a "How To Help" section with four subsections:
+
+- **Adding & Updating Resources** — directs users to the + Add button
+- **Printing Posters** — opens the language-selection dialog; the user never navigates away from the map; the modal remains open throughout and after printing
+- **Give Feedback** — opens the feedback form modal
+- **Contribute to Development** — links to the GitHub repository for code contributors
 
 ## Poster / downloadable PDF
 
