@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigation } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Resource, ResourceTag, TAG_CONFIG, ALL_TAGS, HoursValue, DayHours, DEFAULT_HOURS, parseHoursString, hoursToString, WifiNetwork } from '../types';
@@ -326,11 +327,11 @@ function DirectionsMenu({ lat, lng, name }: { lat: number; lng: number; name: st
     <div ref={ref} style={{ position: 'relative', flex: 1 }}>
       <button className="btn-directions" onClick={() => setOpen(o => !o)}
         aria-haspopup="true" aria-expanded={open} aria-controls={menuId}>
-        <span aria-hidden="true">🧭</span> {t('panel.directions')} <span aria-hidden="true">▾</span>
+        <Navigation size={15} aria-hidden="true" /> {t('panel.directions')} <span aria-hidden="true">▾</span>
       </button>
       {open && (
         <div id={menuId} role="menu" style={{
-          position: 'absolute', bottom: 'calc(100% + 6px)', left: 0, right: 0,
+          position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
           background: '#fff', border: '1px solid var(--color-border)', borderRadius: 10,
           boxShadow: '0 4px 16px rgba(0,0,0,0.14)', overflow: 'hidden', zIndex: 10,
         }}>
@@ -690,6 +691,10 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
             })}
           </div>
 
+          <div className="panel-directions-wrap">
+            <DirectionsMenu lat={resource.lat} lng={resource.lng} name={resource.name} />
+          </div>
+
           <dl className="panel-meta">
             {resource.address && (
               <div className="panel-meta-row">
@@ -801,7 +806,6 @@ export default function ResourcePanel({ resource, onClose, onAddComment, onUpdat
         </div>
       ) : (
         <div className="panel-actions">
-          <DirectionsMenu lat={resource.lat} lng={resource.lng} name={resource.name} />
           <button className="btn-edit-panel" onClick={startEdit} aria-label={t('panel.edit')}>
             <span aria-hidden="true">✏️</span> {t('panel.edit')}
           </button>

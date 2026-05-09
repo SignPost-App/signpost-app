@@ -658,6 +658,10 @@ html, body, #root {
   font-weight: 600;
 }
 
+.panel-directions-wrap {
+  margin-bottom: 12px;
+}
+
 .panel-meta {
   display: flex;
   flex-direction: column;
