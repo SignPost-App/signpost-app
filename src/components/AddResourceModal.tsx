@@ -244,7 +244,7 @@ export default function AddResourceModal({ onClose, onSubmit, draft }: Props) {
                   zoomControl
                   attributionControl={false}
                 >
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
                   <MapClickHandler onPin={(lat, lng) => { setPinLat(lat); setPinLng(lng); }} />
                   <FlyToPinEffect lat={pinLat} lng={pinLng} />
                   {pinLat !== null && pinLng !== null && (
